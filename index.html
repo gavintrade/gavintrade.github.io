@@ -816,7 +816,7 @@
 </style>
 
 <style id="ultimate-indicators-css">
-.ultimate-indicators{margin-top:14px;padding:14px;border-radius:18px;background:rgba(8,15,35,.78);border:1px solid rgba(148,163,184,.18);box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.ultimate-indicators{display:none;margin-top:14px;padding:14px;border-radius:18px;background:rgba(8,15,35,.78);border:1px solid rgba(148,163,184,.18);box-shadow:0 10px 30px rgba(0,0,0,.18)}
 .ultimate-title{font-weight:900;font-size:15px;letter-spacing:.4px;margin-bottom:10px;color:#f8fafc}
 .ultimate-sub{font-size:11px;color:#94a3b8;margin-bottom:12px}
 .ind-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -4204,20 +4204,28 @@ function checkOrderResult(nowPrice){
   if(remain <= 10 && remain > 0) el.timeDisplay.classList.add('urgent');
   else el.timeDisplay.classList.remove('urgent');
   if(elapsed >= ORDER_DURATION){
+    // ตัดสินแพ้/ชนะจากสีของ "แท่งเทียนที่ปิดล่าสุด" (เขียว=ปิดสูงกว่าเปิด, แดง=ปิดต่ำกว่าเปิด)
+    // แทนการเทียบราคาสดกับราคาเข้าออเดอร์แบบเดิม
+    const lastBar = bars30.length ? bars30[bars30.length-1] : null;
+    const isGreenCandle = lastBar ? (lastBar.c > lastBar.o) : null;
+    const isRedCandle = lastBar ? (lastBar.c < lastBar.o) : null;
+
+    const won = lastBar ? ((pendingOrder.dir==='BUY' && isGreenCandle) || (pendingOrder.dir==='SELL' && isRedCandle)) : false;
+    const lost = lastBar ? ((pendingOrder.dir==='BUY' && isRedCandle) || (pendingOrder.dir==='SELL' && isGreenCandle)) : false;
+
     let resultText;
-    if(nowPrice > pendingOrder.entryPrice) resultText = pendingOrder.dir==='BUY'?'ราคาปรับตัวสูงขึ้น':'ราคาปรับตัวลดลง';
-    else if(nowPrice < pendingOrder.entryPrice) resultText = pendingOrder.dir==='SELL'?'ราคาปรับตัวลดลง':'ราคาปรับตัวสูงขึ้น';
-    else resultText = 'ราคาทรงตัว';
-    el.resultBanner.textContent = `📊 ${resultText}`;
+    if(won) resultText = '✅ WIN — ชนะ';
+    else if(lost) resultText = '❌ LOSE — แพ้';
+    else resultText = '⚪ เสมอ (Doji)';
+
+    el.resultBanner.textContent = resultText;
     el.resultBanner.classList.remove('up','down','flat');
-    if(resultText.includes('สูงขึ้น')) el.resultBanner.classList.add('up');
-    else if(resultText.includes('ลดลง')) el.resultBanner.classList.add('down');
+    if(won) el.resultBanner.classList.add('up');
+    else if(lost) el.resultBanner.classList.add('down');
     else el.resultBanner.classList.add('flat');
     el.resultBanner.classList.add('show');
 
-    // นับแพ้/ชนะติดต่อกันจากผลจริงของออเดอร์ (ไม่ใช่ข้อความสุ่ม) แล้วเตือนเฉพาะตอนเกิดขึ้นจริงเท่านั้น
-    const won = (pendingOrder.dir==='BUY' && nowPrice>pendingOrder.entryPrice) || (pendingOrder.dir==='SELL' && nowPrice<pendingOrder.entryPrice);
-    const lost = (pendingOrder.dir==='BUY' && nowPrice<pendingOrder.entryPrice) || (pendingOrder.dir==='SELL' && nowPrice>pendingOrder.entryPrice);
+    // นับแพ้/ชนะติดต่อกันจากผลจริงของแท่งเทียนที่ปิดล่าสุด แล้วเตือนเฉพาะตอนเกิดขึ้นจริงเท่านั้น
     if(won){ consecutiveWins++; consecutiveLosses = 0; }
     else if(lost){ consecutiveLosses++; consecutiveWins = 0; }
     const nowTs = Date.now();
