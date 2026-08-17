@@ -473,45 +473,6 @@
     100%{left:112%;opacity:0;transform:translate3d(0,0,0) scale(.98)}
   }
 
-  .night-sky .rocket-label{
-    position:absolute; left:50%; top:48%; transform:translate(-50%,-50%) rotate(-90deg);
-    z-index:3; font-family:Arial,sans-serif; font-size:9px; font-weight:900;
-    letter-spacing:1.4px; color:#ffffff; text-shadow:0 0 4px #22D3EE, 0 0 8px #8B5CF6;
-    pointer-events:none; white-space:nowrap;
-  }
-  .night-sky .rocket{
-    position:absolute; left:50%; bottom:8px; font-size:62px;
-    transform:translateX(-50%) scale(1);
-    opacity:1; z-index:50; pointer-events:none;
-    filter:drop-shadow(0 0 10px #22D3EE) drop-shadow(0 0 20px #8B5CF6) drop-shadow(0 0 28px #F472B6);
-  }
-  .night-sky .rocket.launch{
-    animation:rocketLaunchFinal 2.4s cubic-bezier(.18,.78,.22,1) forwards,
-              rocketGlow 0.7s ease-in-out infinite;
-  }
-  @keyframes rocketGlow{
-    0%,100%{filter:drop-shadow(0 0 6px #22D3EE) drop-shadow(0 0 10px #8B5CF6);}
-    50%{filter:drop-shadow(0 0 10px #F472B6) drop-shadow(0 0 16px #34D399);}
-  }
-  .night-sky .rocket .flame{
-    position:absolute; left:50%; top:100%; transform:translateX(-50%);
-    width:10px; height:24px; border-radius:50%;
-    background:radial-gradient(circle,rgba(255,255,255,1) 0%,rgba(251,191,36,1) 28%,rgba(239,68,68,.9) 58%,rgba(139,92,246,.45) 75%,transparent 88%);
-    filter:blur(1.5px);
-    animation:flameFlickerFinal .12s ease-in-out infinite alternate;
-  }
-  @keyframes flameFlickerFinal{
-    0%{opacity:.75;height:18px;transform:translateX(-50%) scaleX(.8);}
-    100%{opacity:1;height:30px;transform:translateX(-50%) scaleX(1.15);}
-  }
-  @keyframes rocketLaunchFinal{
-    0%{bottom:8px;opacity:1;transform:translateX(-50%) scale(1);}
-    15%{bottom:18%;opacity:1;transform:translateX(-50%) scale(1.05);}
-    55%{bottom:58%;opacity:1;transform:translateX(-50%) scale(1.08);}
-    82%{bottom:88%;opacity:1;transform:translateX(-50%) scale(.9);}
-    100%{bottom:115%;opacity:0;transform:translateX(-50%) scale(.35);}
-  }
-
   .night-sky .firework{
     position:absolute; top:16px; left:50%; width:0; height:0;
   }
@@ -1377,341 +1338,6 @@ body > *:not(#loginMarketBg){position:relative;z-index:1}
 }
 </style>
 
-
-<style id="premium-rocket-realistic">
-#rocketEl{
-  display:inline-flex !important;
-  align-items:center;
-  justify-content:center;
-  transform-origin:50% 50%;
-  filter:
-    drop-shadow(0 5px 7px rgba(0,0,0,.48))
-    drop-shadow(0 0 9px rgba(212,175,55,.34));
-  text-shadow:0 1px 2px rgba(0,0,0,.65);
-}
-#rocketEl .rocket-label{
-  color:#fff4b8 !important;
-  font-weight:800;
-  letter-spacing:1px;
-  text-shadow:0 1px 3px rgba(0,0,0,.8);
-}
-#rocketEl .flame{
-  filter:
-    drop-shadow(0 0 5px rgba(255,180,40,.9))
-    drop-shadow(0 0 10px rgba(255,90,20,.55));
-}
-#rocketEl .rocket-icon{
-  display:inline-block;
-  transform:rotate(-45deg);
-  transform-origin:50% 50%;
-}
-</style>
-
-
-<style id="gavin-premium-realistic-rocket">
-.night-sky .rocket{
-  width:64px!important;height:158px!important;font-size:0!important;
-  display:block;left:50%;bottom:8px;transform:translateX(-50%) scale(1);
-  opacity:1;z-index:50;pointer-events:none;
-  filter:drop-shadow(0 0 5px rgba(255,255,255,.65))
-         drop-shadow(0 0 12px rgba(34,211,238,.72))
-         drop-shadow(0 0 25px rgba(139,92,246,.58));
-  transform-origin:50% 85%;
-}
-.night-sky .rocket-icon{
-  position:absolute;left:50%;top:0;width:64px;height:146px;
-  transform:translateX(-50%);display:block;overflow:visible;
-}
-.night-sky .rocket-label{
-  position:absolute!important;left:-20px!important;top:48px!important;
-  transform:rotate(-90deg)!important;transform-origin:center!important;
-  font:900 7px/1 Arial,sans-serif!important;letter-spacing:1.1px!important;
-  color:#e0f2fe!important;text-shadow:0 0 5px #22d3ee,0 0 10px #8b5cf6!important;
-  white-space:nowrap!important;z-index:3!important;
-}
-.night-sky .rocket .flame{
-  position:absolute;left:50%;top:136px!important;width:22px!important;height:39px!important;
-  transform:translateX(-50%);border-radius:45% 45% 55% 55%;
-  background:radial-gradient(ellipse at 50% 12%,#fff 0 12%,#fde68a 20%,#f59e0b 42%,#ef4444 62%,#8b5cf6 78%,transparent 92%);
-  filter:blur(1.2px) drop-shadow(0 0 8px #f59e0b) drop-shadow(0 0 15px #ef4444);
-  animation:premiumRocketFlame .10s ease-in-out infinite alternate!important;
-  z-index:-1;
-}
-.night-sky .rocket .flame:before,.night-sky .rocket .flame:after{
-  content:'';position:absolute;bottom:2px;width:7px;height:24px;border-radius:50%;
-  background:linear-gradient(#fde68a,#ef4444,transparent);filter:blur(1px);
-}
-.night-sky .rocket .flame:before{left:-4px;transform:rotate(8deg)}
-.night-sky .rocket .flame:after{right:-4px;transform:rotate(-8deg)}
-@keyframes premiumRocketFlame{
-  from{height:29px;transform:translateX(-50%) scaleX(.82);opacity:.82}
-  to{height:44px;transform:translateX(-50%) scaleX(1.16);opacity:1}
-}
-.night-sky .rocket.launch{
-  animation:rocketLaunchFinal 2.4s cubic-bezier(.18,.78,.22,1) forwards,
-            premiumRocketGlow .55s ease-in-out infinite!important;
-}
-@keyframes premiumRocketGlow{
-  0%,100%{filter:drop-shadow(0 0 5px rgba(255,255,255,.6)) drop-shadow(0 0 12px rgba(34,211,238,.7)) drop-shadow(0 0 24px rgba(139,92,246,.5))}
-  50%{filter:drop-shadow(0 0 8px rgba(255,255,255,.9)) drop-shadow(0 0 18px rgba(34,211,238,.95)) drop-shadow(0 0 34px rgba(244,114,182,.65))}
-}
-@media(max-width:420px){
- .night-sky .rocket{width:54px!important;height:140px!important}
- .night-sky .rocket-icon{width:54px;height:125px}
- .night-sky .rocket .flame{top:117px!important}
-}
-</style>
-
-<style id="rocket-straight-fix">
-/* จรวดตรงแนวตั้ง — ไม่เอียง */
-#rocketEl{
-  transform-origin: 50% 50%;
-  rotate: 0deg !important;
-}
-#rocketEl .rocket-icon,
-#rocketEl .rocket-body,
-#rocketEl svg{
-  transform: rotate(0deg) !important;
-  rotate: 0deg !important;
-}
-</style>
-
-<style id="rocket-alignment-fix">
-/* ===== จัดจรวด + ชื่อ + ไฟ ให้ตรงกัน ===== */
-#rocketEl{
-  display:inline-flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  justify-content:flex-start !important;
-  transform-origin:50% 100% !important;
-  rotate:0deg !important;
-}
-#rocketEl .rocket-label{
-  position:absolute !important;
-  left:50% !important;
-  transform:translateX(-50%) !important;
-  white-space:nowrap !important;
-  rotate:0deg !important;
-}
-#rocketEl .rocket-icon{
-  display:block !important;
-  transform:rotate(0deg) !important;
-  rotate:0deg !important;
-  line-height:1 !important;
-}
-#rocketEl .flame{
-  position:absolute !important;
-  left:50% !important;
-  transform:translateX(-50%) !important;
-  transform-origin:50% 0 !important;
-  rotate:0deg !important;
-}
-</style>
-
-<style id="rocket-final-alignment">
-/* FINAL: จัดชื่อ + ตัวจรวด + เปลวไฟให้อยู่แกนเดียวกัน */
-#rocketEl{
-  display:block !important;
-  width:64px !important;
-  height:158px !important;
-  left:50% !important;
-  transform-origin:50% 85% !important;
-}
-#rocketEl .rocket-icon{
-  position:absolute !important;
-  left:50% !important;
-  top:0 !important;
-  width:64px !important;
-  height:146px !important;
-  transform:translateX(-50%) !important;
-  rotate:0deg !important;
-}
-#rocketEl .rocket-label{
-  position:absolute !important;
-  left:50% !important;
-  top:54px !important;
-  width:auto !important;
-  transform:translateX(-50%) !important;
-  rotate:0deg !important;
-  writing-mode:horizontal-tb !important;
-  text-orientation:mixed !important;
-  white-space:nowrap !important;
-  z-index:20 !important;
-}
-#rocketEl .flame{
-  position:absolute !important;
-  left:50% !important;
-  top:136px !important;
-  margin:0 !important;
-  transform:translateX(-50%) !important;
-  rotate:0deg !important;
-  transform-origin:50% 0 !important;
-}
-@media(max-width:420px){
-  #rocketEl{width:54px !important;height:140px !important}
-  #rocketEl .rocket-icon{width:54px !important;height:125px !important}
-  #rocketEl .rocket-label{top:46px !important}
-  #rocketEl .flame{top:117px !important}
-}
-</style>
-
-<style id="rocket-vertical-sharp-label">
-/* ชื่อจรวดแนวตั้ง สีคมชัด */
-#rocketEl .rocket-label{
-  position:absolute !important;
-  left:50% !important;
-  top:50% !important;
-  width:auto !important;
-  transform:translate(-50%,-50%) rotate(90deg) !important;
-  transform-origin:center !important;
-  writing-mode:horizontal-tb !important;
-  white-space:nowrap !important;
-  z-index:50 !important;
-  color:#ffffff !important;
-  font-family:Arial,Helvetica,sans-serif !important;
-  font-size:10px !important;
-  font-weight:1000 !important;
-  letter-spacing:1.6px !important;
-  text-shadow:
-    0 0 2px #000,
-    0 0 5px rgba(0,229,255,.95),
-    0 1px 2px #000 !important;
-  filter:drop-shadow(0 0 3px rgba(0,229,255,.9)) !important;
-}
-@media(max-width:420px){
-  #rocketEl .rocket-label{
-    font-size:8px !important;
-    letter-spacing:1.3px !important;
-  }
-}
-</style>
-
-<style id="gavin-at-rocket-tail">
-/* ย้ายคำว่า Gavin ไปไว้ท้ายจรวด */
-#rocketEl .rocket-label{
-  top:128px !important;
-  left:50% !important;
-  transform:translate(-50%,-50%) rotate(90deg) !important;
-  color:#ffffff !important;
-  font-weight:1000 !important;
-  letter-spacing:1.7px !important;
-  text-shadow:
-    0 0 2px #000,
-    0 0 5px #00e5ff,
-    0 0 9px rgba(0,229,255,.9) !important;
-  z-index:60 !important;
-}
-@media(max-width:420px){
-  #rocketEl .rocket-label{
-    top:108px !important;
-    font-size:8px !important;
-  }
-}
-</style>
-
-<style id="gavin-full-length-rocket">
-/* ===== GAVIN พาดยาวตามลำตัวจรวด จากท้ายขึ้นถึงปลาย ===== */
-#rocketEl .rocket-label{
-  position:absolute !important;
-  left:50% !important;
-  top:50% !important;
-  width:130px !important;
-  height:18px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  transform:translate(-50%,-50%) rotate(-90deg) !important;
-  transform-origin:center !important;
-  writing-mode:horizontal-tb !important;
-  white-space:nowrap !important;
-  color:#ffffff !important;
-  font-family:Arial,Helvetica,sans-serif !important;
-  font-size:11px !important;
-  font-weight:1000 !important;
-  letter-spacing:3px !important;
-  text-align:center !important;
-  z-index:80 !important;
-  pointer-events:none !important;
-  text-shadow:
-    0 0 2px #000,
-    0 0 4px #00e5ff,
-    0 0 8px rgba(0,229,255,.95),
-    1px 1px 2px #000 !important;
-  filter:drop-shadow(0 0 3px rgba(0,229,255,.85)) !important;
-}
-@media(max-width:420px){
-  #rocketEl .rocket-label{
-    width:105px !important;
-    font-size:9px !important;
-    letter-spacing:2.5px !important;
-  }
-}
-</style>
-
-<style id="gavin-smaller-text">
-#rocketEl .rocket-label{
-  font-size:7px !important;
-  letter-spacing:1.8px !important;
-  width:112px !important;
-  height:12px !important;
-  text-shadow:
-    0 0 1px #000,
-    0 0 3px #00e5ff,
-    0 0 5px rgba(0,229,255,.8) !important;
-}
-@media(max-width:420px){
-  #rocketEl .rocket-label{
-    font-size:6px !important;
-    letter-spacing:1.4px !important;
-    width:92px !important;
-  }
-}
-</style>
-
-<style id="gavin-high-contrast">
-/* สีตัว Gavin คมชัด อ่านง่ายบนจรวด */
-#rocketEl .rocket-label{
-  color:#fff !important;
-  -webkit-text-fill-color:#fff !important;
-  font-weight:1000 !important;
-  text-shadow:
-    -1px -1px 0 #111,
-     1px -1px 0 #111,
-    -1px  1px 0 #111,
-     1px  1px 0 #111,
-     0 0 4px #00eaff,
-     0 0 7px rgba(0,234,255,.95) !important;
-  filter:drop-shadow(0 1px 2px rgba(0,0,0,.95)) !important;
-}
-</style>
-
-<style id="gavin-ultra-clear">
-/* Gavin: คมชัดมากขึ้น */
-#rocketEl .rocket-label{
-  color:#ffffff !important;
-  -webkit-text-fill-color:#ffffff !important;
-  font-family:Arial,Helvetica,sans-serif !important;
-  font-weight:1000 !important;
-  font-size:7px !important;
-  letter-spacing:1.5px !important;
-  paint-order:stroke fill !important;
-  -webkit-text-stroke:1.2px #050505 !important;
-  text-shadow:
-    0 0 1px #000,
-    0 0 3px #000,
-    0 0 6px #00eaff,
-    0 0 10px rgba(0,234,255,.85) !important;
-  filter:none !important;
-  opacity:1 !important;
-}
-@media(max-width:420px){
-  #rocketEl .rocket-label{
-    font-size:6px !important;
-    letter-spacing:1.2px !important;
-    -webkit-text-stroke:1px #050505 !important;
-  }
-}
-</style>
 
 <style id="lao-flag-plane-style">
 .lao-flag-plane{
@@ -3008,60 +2634,6 @@ body::before{
             </circle>
           </svg>
         </div>
-        <span class="rocket" id="rocketEl">
-  <span class="rocket-label">GAVIN • SPACE</span>
-  <svg class="rocket-icon" viewBox="0 0 90 150" aria-hidden="true">
-    <defs>
-      <linearGradient id="rocketBodyMetal" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="#64748b"/>
-        <stop offset=".18" stop-color="#e2e8f0"/>
-        <stop offset=".42" stop-color="#ffffff"/>
-        <stop offset=".68" stop-color="#cbd5e1"/>
-        <stop offset="1" stop-color="#475569"/>
-      </linearGradient>
-      <linearGradient id="rocketNose" x1=".2" y1="1" x2=".8" y2="0">
-        <stop offset="0" stop-color="#cbd5e1"/>
-        <stop offset=".5" stop-color="#ffffff"/>
-        <stop offset="1" stop-color="#64748b"/>
-      </linearGradient>
-      <linearGradient id="rocketFin" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#1e293b"/>
-        <stop offset=".5" stop-color="#475569"/>
-        <stop offset="1" stop-color="#0f172a"/>
-      </linearGradient>
-      <radialGradient id="rocketWindow">
-        <stop offset="0" stop-color="#e0f2fe"/>
-        <stop offset=".35" stop-color="#38bdf8"/>
-        <stop offset=".75" stop-color="#0369a1"/>
-        <stop offset="1" stop-color="#082f49"/>
-      </radialGradient>
-      <linearGradient id="rocketStripe" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="#ef4444"/>
-        <stop offset=".5" stop-color="#f43f5e"/>
-        <stop offset="1" stop-color="#991b1b"/>
-      </linearGradient>
-      <filter id="rocketMetalGlow" x="-50%" y="-30%" width="200%" height="170%">
-        <feGaussianBlur stdDeviation="1.2" result="b"/>
-        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-    <ellipse cx="45" cy="143" rx="15" ry="4" fill="#22d3ee" opacity=".35" filter="url(#rocketMetalGlow)"/>
-    <path d="M45 4 C30 18 24 35 24 58 L24 106 Q24 119 32 127 L58 127 Q66 119 66 106 L66 58 C66 35 60 18 45 4Z"
-          fill="url(#rocketBodyMetal)" stroke="#f8fafc" stroke-width="1.2"/>
-    <path d="M45 4 C39 13 34 22 32 34 L58 34 C56 22 51 13 45 4Z" fill="url(#rocketNose)"/>
-    <path d="M25 70 H65 V79 H25Z" fill="url(#rocketStripe)" opacity=".95"/>
-    <path d="M24 91 L8 108 L25 105Z" fill="url(#rocketFin)" stroke="#94a3b8" stroke-width="1"/>
-    <path d="M66 91 L82 108 L65 105Z" fill="url(#rocketFin)" stroke="#94a3b8" stroke-width="1"/>
-    <path d="M34 113 H56 V128 H34Z" fill="#334155"/>
-    <circle cx="45" cy="54" r="12" fill="#0f172a" stroke="#e2e8f0" stroke-width="2"/>
-    <circle cx="45" cy="54" r="8.5" fill="url(#rocketWindow)"/>
-    <circle cx="42" cy="51" r="2.8" fill="#fff" opacity=".75"/>
-    <path d="M34 116 Q45 123 56 116" fill="none" stroke="#f8fafc" stroke-opacity=".25" stroke-width="1"/>
-    <circle cx="31" cy="46" r="1.4" fill="#fff" opacity=".8"/>
-    <circle cx="59" cy="46" r="1.2" fill="#fff" opacity=".55"/>
-  </svg>
-  <span class="flame"></span>
-</span>
         <span class="firework" id="firework">
           <i class="spark sp1"></i><i class="spark sp2"></i><i class="spark sp3"></i>
           <i class="spark sp4"></i><i class="spark sp5"></i><i class="spark sp6"></i>
@@ -3140,48 +2712,6 @@ function playSignalDing(){
       osc.start(t0 + delay);
       osc.stop(t0 + delay + 0.5);
     });
-  }catch(e){}
-}
-
-function playRocketRoar(){
-  // เสียงจรวดพุ่งขึ้นแบบสเปซเอ็กซ์: เสียงคำรามความถี่ต่ำ ผสมเสียงลม/ควันแบบ white noise กรองความถี่
-  try{
-    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if(audioCtx.state === 'suspended') audioCtx.resume();
-    const dur = 2.4;
-    const t0 = audioCtx.currentTime;
-
-    const bufferSize = Math.floor(audioCtx.sampleRate * dur);
-    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const data = noiseBuffer.getChannelData(0);
-    for(let i=0;i<bufferSize;i++) data[i] = Math.random()*2-1;
-    const noise = audioCtx.createBufferSource();
-    noise.buffer = noiseBuffer;
-
-    const noiseFilter = audioCtx.createBiquadFilter();
-    noiseFilter.type = 'lowpass';
-    noiseFilter.frequency.setValueAtTime(280, t0);
-    noiseFilter.frequency.linearRampToValueAtTime(950, t0 + dur);
-
-    const noiseGain = audioCtx.createGain();
-    noiseGain.gain.setValueAtTime(0.0001, t0);
-    noiseGain.gain.exponentialRampToValueAtTime(0.45, t0 + 0.4);
-    noiseGain.gain.linearRampToValueAtTime(0.0001, t0 + dur);
-
-    noise.connect(noiseFilter); noiseFilter.connect(noiseGain); noiseGain.connect(audioCtx.destination);
-
-    const osc = audioCtx.createOscillator();
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(58, t0);
-    osc.frequency.linearRampToValueAtTime(32, t0 + dur);
-    const oscGain = audioCtx.createGain();
-    oscGain.gain.setValueAtTime(0.0001, t0);
-    oscGain.gain.exponentialRampToValueAtTime(0.28, t0 + 0.3);
-    oscGain.gain.linearRampToValueAtTime(0.0001, t0 + dur);
-    osc.connect(oscGain); oscGain.connect(audioCtx.destination);
-
-    noise.start(t0); noise.stop(t0 + dur);
-    osc.start(t0); osc.stop(t0 + dur);
   }catch(e){}
 }
 
@@ -3291,18 +2821,6 @@ document.addEventListener('touchend', ()=>{
   lastScreenTap = now;
 }, {passive:true});
 window.addEventListener('orientationchange', ()=>setTimeout(fitToScreen, 250));
-const rocketElTop = document.getElementById('rocketEl');
-if(rocketElTop){
-  rocketElTop.addEventListener('animationend', (e)=>{
-    if(e.animationName !== 'rocketLaunchFinal') return;
-    const moonEl = document.getElementById('moonEl');
-     if(moonEl){ moonHitAndFade(moonEl); }
-     const fw = document.getElementById('firework');
-    if(fw) fw.classList.add('burst');
-    const wrapEl = document.getElementById('chartWrap');
-    if(wrapEl) wrapEl.classList.remove('pre-reveal'); // เผยกราฟแท่งเทียนขึ้นมาหลังจรวดขึ้นสุด
-  });
-}
 new ResizeObserver(()=>fitToScreen()).observe(mainScreenEl);
 
 // จรวดชนดวงจันทร์ -> หายไป แล้วกลับมาทุก 10 วินาที
@@ -3407,21 +2925,7 @@ function tryLogin(){
     // เสียงต้อนรับตอนเข้าแอปทุกครั้ง (คิวเรียงกัน ไม่พูดทับกัน)
     setTimeout(()=>{ speakQueued('สัญญาณซื้อขายจะเริ่มขึ้น ตอนสิบห้าวินาที'); }, 900);
 
-    if(!window.__gavinRocketPlayed){
-      window.__gavinRocketPlayed = true;
-      setTimeout(()=>{
-        (()=>{
-          // จรวดพุ่งเพียงครั้งเดียวต่อการเข้าแอป และเริ่มหลังเสียง AI พูดจบ
-          const r = document.getElementById('rocketEl');
-          if(r){ r.classList.remove('launch'); void r.offsetWidth; r.classList.add('launch'); }
-          playRocketRoar();
-        });
-      }, 900);
-    }
-    // ซ่อนกราฟแท่งเทียนไว้ก่อน รอให้จรวดขึ้นสุดก่อนค่อยเผยกราฟขึ้นมา (มี timeout สำรองกันค้าง)
-    const wrapToReveal = document.getElementById('chartWrap');
-    if(wrapToReveal) wrapToReveal.classList.add('pre-reveal');
-    setTimeout(()=>{ if(wrapToReveal) wrapToReveal.classList.remove('pre-reveal'); }, 20000);
+
     // เสียงเตือนใจให้พักเป็นระยะ (ไม่ผูกกับผลแพ้/ชนะ เป็นคำเตือนทั่วไปเท่านั้น) เริ่มหลังใช้งาน 1 นาที แล้วพูดซ้ำทุก 5 นาที
     setTimeout(()=>{
       speakQueued('การลงทุนมีความเสี่ยง ควรศึกษาให้ดีก่อนลงทุนนะจ๊ะที่รัก จุ๊บๆ');
@@ -3459,7 +2963,8 @@ const el = {
   chartVolumeToggle: document.getElementById('chartVolumeToggle'),
   chartVolumeLabel: document.getElementById('chartVolumeLabel'),
   macdSignalAlert: document.getElementById('macdSignalAlert'),
-  macdGrid: document.querySelector('.grid')
+  macdGrid: document.querySelector('.grid'),
+  orderTimingBadge: document.getElementById('orderTimingBadge')
 };
 
 let symbol = 'BTCUSDT';
@@ -4746,12 +4251,20 @@ async function tick(){
     const cyclePos = nowSec % 30;
     const newCycleId = Math.floor(nowSec/30);
     countdown = cyclePos === 0 ? 30 : (30 - cyclePos);
+    // สลับบทบาทรอบด้วยความคี่/คู่ของรอบ (อิงเวลาจริง จึงคงที่แม้รีเฟรชหน้า): รอบคู่ = รอบออกสัญญาณ (ยิงตอน 15 วิ), รอบคี่ = รอบรอผล (ไม่มีสัญญาณใหม่ จนกว่าจะถึง 00)
+    const isSignalRound = (newCycleId % 2 === 0);
 
     prices.push({t:Date.now(), p});
     checkOrderResult(p);
 
     if(currentCycleId === null){
       currentCycleId = newCycleId;
+      if(el.orderTimingBadge){
+        el.orderTimingBadge.textContent = isSignalRound
+          ? '🔔 สัญญาณซื้อขายจะเริ่มขึ้นตอน 15 วินาที'
+          : '⏳ รอบนี้เป็นรอบรอผล รอจนถึงวินาทีที่ 00';
+      }
+      if(!isSignalRound) speakQueued('รอบนี้เป็นรอบรอผล รอจนถึงวินาทีที่ 00');
     } else if(newCycleId !== currentCycleId){
       const cyclesSkipped = newCycleId - currentCycleId;
       if(cyclesSkipped === 1){
@@ -4765,6 +4278,13 @@ async function tick(){
       candidateCond = null; candidateCount = 0;
       if(!pendingOrder) resetSignalDisplay();
       backfillLatestปริมาณการซื้อขาย();
+      if(el.orderTimingBadge){
+        el.orderTimingBadge.textContent = isSignalRound
+          ? '🔔 สัญญาณซื้อขายจะเริ่มขึ้นตอน 15 วินาที'
+          : '⏳ รอบนี้เป็นรอบรอผล รอจนถึงวินาทีที่ 00';
+      }
+      // ประกาศเสียงตอนเข้ารอบรอผลใหม่ทุกครั้ง (รอบสัญญาณไม่ต้องพูดซ้ำ เพราะมีเสียงประกาศ ซื้อ/ขาย ของตัวเองอยู่แล้วตอน 15 วิ)
+      if(!isSignalRound) speakQueued('รอบนี้เป็นรอบรอผล รอจนถึงวินาทีที่ 00');
     }
 
     const macd = calcMACD(closes30);
@@ -4777,7 +4297,7 @@ async function tick(){
     } else {
       candidateCond = null; candidateCount = 0;
     }
-    if(countdown <= 15 && countdown > 0 && !triggeredSignal && !pendingOrder){
+    if(isSignalRound && countdown <= 15 && countdown > 0 && !triggeredSignal && !pendingOrder){
       triggeredSignal = true;
       // รวบรวม Indicator ทุกตัวที่ "ตรงตามเงื่อนไขจริง" ในขณะนี้เท่านั้น แล้วสุ่มเลือกมา 1 ตัวเป็นเหตุผลออกสัญญาณ
       const pool = [];
