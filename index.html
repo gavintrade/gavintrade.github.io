@@ -451,7 +451,7 @@
   .chart-hint{ font-size:10px; color:var(--sub); margin-left:auto; }
 
   .signal-howto-panel{
-    background:rgba(15,23,42,0.65); border:1px solid rgba(148,163,184,0.18); border-radius:12px;
+    background:rgba(15,23,42,0.65); border:1px solid rgba(71,85,105,0.32); border-radius:12px;
     padding:10px 12px; margin:10px 0; display:flex; flex-direction:column; gap:7px;
   }
   .signal-howto-panel .howto-title{
@@ -548,6 +548,9 @@
   }
 
   .chart-canvas-wrap{
+    touch-action:none;
+    overscroll-behavior:contain;
+    -webkit-user-select:none; user-select:none;
     position:relative; z-index:1;
     width:100%; overflow:hidden; border-radius:12px;
     background:
@@ -567,7 +570,7 @@
   .chart-canvas-wrap.pre-reveal{ opacity:1; }
   /* Compact in-chart volume control */
   .chart-volume-toggle{
-    position:absolute; left:8px; bottom:8px; z-index:12;
+    position:absolute; left:8px; bottom:34px; z-index:30;
     display:inline-flex; align-items:center; gap:5px;
     height:24px; padding:0 8px; border-radius:7px;
     border:1px solid rgba(148,163,184,.24);
@@ -579,9 +582,10 @@
   }
   .chart-volume-toggle.on{ color:#67e8f9; border-color:rgba(34,211,238,.45); background:rgba(8,47,73,.68); }
   .chart-volume-toggle .vol-dot{ width:6px; height:6px; border-radius:50%; background:#64748b; }
-  .chart-volume-toggle.on .vol-dot{ background:#22d3ee; box-shadow:0 0 6px rgba(34,211,238,.8); }
+  .chart-volume-toggle.on .vol-dot{ background:#22c55e; box-shadow:0 0 6px rgba(34,197,94,.8); }
+  .chart-volume-toggle:not(.on) .vol-dot{ background:#ef4444; box-shadow:0 0 6px rgba(239,68,68,.75); }
   .chart-volume-label{
-    position:absolute; left:8px; bottom:36px; z-index:10; display:none;
+    position:absolute; left:86px; bottom:40px; z-index:10; display:none;
     color:rgba(148,163,184,.7); font:700 8px -apple-system,BlinkMacSystemFont,Arial,sans-serif;
     letter-spacing:.4px; pointer-events:none;
   }
@@ -1110,8 +1114,10 @@ body > *:not(#loginMarketBg){position:relative;z-index:1}
   #blankVolumePanel.volume-hidden{display:none !important;}
   #blankMarketVolumeToggle{
     position:absolute;
-    top:10px;
-    right:10px;
+    left:8px;
+    top:auto;
+    right:auto;
+    bottom:34px;
     z-index:50;
   }
 
@@ -2959,6 +2965,17 @@ canvas#blankMarketChart {
 </style>
 
 
+<style id="graph1-frame-same-as-graph2">
+/* GRAPH 1 — ใช้กรอบเดียวกับกราฟ 2 */
+#chartWrap.chart-canvas-wrap{
+  position:relative !important; box-sizing:border-box !important;
+  margin:16px calc(50% - 50vw) 14px !important; width:100vw !important; padding:0 !important;
+  border:1px solid rgba(59,130,246,.25) !important; border-radius:18px !important;
+  background:linear-gradient(135deg, rgba(7,21,40,.96) 0%, rgba(5,18,35,.98) 50%, rgba(8,22,42,.96) 100%),radial-gradient(circle at 50% 0%, rgba(59,130,246,.08), transparent 60%) !important;
+  box-shadow:0 25px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 20px rgba(59,130,246,.08),0 0 80px rgba(59,130,246,.06) !important;
+  overflow:hidden !important;
+}
+</style>
 <style id="remove-graph2-left-candle-logo">
 /* GRAPH 2: remove the decorative logo/icon on the left of the chart header only */
 #blankMarketChartCard .blank-chart-title{
@@ -3233,7 +3250,10 @@ canvas#blankMarketChart {
     font-size:8px !important;
   }
   #blankMarketVolumeToggle{
-    left:68px !important;
+    left:8px !important;
+    right:auto !important;
+    bottom:34px !important;
+    top:auto !important;
     min-width:74px !important;
     font-size:8px !important;
   }
@@ -3399,7 +3419,7 @@ canvas#blankMarketChart {
 /* โลโก้คู่เงินของกราฟที่ 2 — ย่อขนาดให้พอดีกับหัวข้อที่มีพื้นที่จำกัด
    เพื่อให้เห็นตัวอักษรครบทุกตัว (BTC / USDT) ไม่ถูกตัดหรือล้นกรอบ */
 #blankMarketChartCard #graph2PairPremiumCard{
-  width:auto !important; min-width:0 !important; min-height:0 !important;
+  width:150px !important; min-width:150px !important; max-width:150px !important; min-height:30px !important;
   flex:0 0 auto !important;
   flex-direction:row !important;
   align-items:center !important;
@@ -3425,7 +3445,7 @@ canvas#blankMarketChart {
 #blankMarketChartCard #graph2PairPremiumCard .pair-logo-gold i,
 #blankMarketChartCard #graph2PairPremiumCard .pair-logo-silver i{width:9px !important;height:5px !important;}
 #blankMarketChartCard #graph2PairPremiumCard .pair-name{
-  font-size:8px !important; letter-spacing:.1px !important; white-space:nowrap !important;
+  font-size:10px !important; letter-spacing:.1px !important; white-space:nowrap !important; overflow:visible !important; text-overflow:clip !important; min-width:72px !important;
 }
 @media(max-width:600px){
   #blankMarketChartCard #graph2PairPremiumCard{padding:2px 4px !important; gap:3px !important;}
@@ -3737,6 +3757,296 @@ canvas#blankMarketChart {
 }
 </style>
 
+
+<style id="graph2-pair-card-final-fix">
+#blankMarketChartCard #graph2PairPremiumCard{width:150px!important;min-width:150px!important;max-width:150px!important;flex:0 0 150px!important;box-sizing:border-box!important;overflow:visible!important;padding-left:10px!important;padding-right:10px!important;}
+#blankMarketChartCard #graph2PairPremiumCard .pair-logo-stack{flex:0 0 auto!important;}
+#blankMarketChartCard #graph2PairPremiumCard .pair-name{white-space:nowrap!important;overflow:visible!important;text-overflow:clip!important;width:auto!important;min-width:max-content!important;max-width:none!important;font-size:12px!important;}
+#blankMarketChartCard #graph2PairPremiumCard .pair-coin-quote{white-space:nowrap!important;}
+</style>
+
+<style id="graph2-search-full-btc-usdt-final">
+/* Graph 2 search box: keep BTC / USDT fully visible on phones */
+#blankMarketChartCard #graph2PairSearch .graph2-symbol-input-container{
+  min-width:155px !important;
+  width:155px !important;
+  max-width:155px !important;
+  box-sizing:border-box !important;
+  padding:3px 10px !important;
+  overflow:visible !important;
+}
+#blankMarketChartCard #graph2PairSearch #graph2SymbolBase{
+  width:48px !important;
+  min-width:48px !important;
+  max-width:48px !important;
+  text-align:center !important;
+}
+#blankMarketChartCard #graph2PairSearch #graph2SymbolQuote{
+  width:62px !important;
+  min-width:62px !important;
+  max-width:62px !important;
+  text-align:center !important;
+}
+#blankMarketChartCard #graph2PairSearch .graph2-symbol-separator{
+  flex:0 0 auto !important;
+  width:12px !important;
+  padding:0 !important;
+  text-align:center !important;
+}
+@media(max-width:420px){
+  #blankMarketChartCard #graph2PairSearch .graph2-symbol-input-container{
+    min-width:155px !important;
+    width:155px !important;
+    max-width:155px !important;
+    height:36px !important;
+    padding:3px 10px !important;
+  }
+  #blankMarketChartCard #graph2PairSearch #graph2SymbolBase{
+    width:48px !important; min-width:48px !important; max-width:48px !important;
+    font-size:15px !important;
+  }
+  #blankMarketChartCard #graph2PairSearch #graph2SymbolQuote{
+    width:62px !important; min-width:62px !important; max-width:62px !important;
+    font-size:15px !important;
+  }
+}
+</style>
+
+
+<style id="graph2-time-label-final">
+.graph2-time-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:78px;}
+.graph2-time-label{font-size:7px;line-height:1;font-weight:800;letter-spacing:.15px;color:#22c55e;white-space:nowrap;text-shadow:0 0 5px rgba(34,197,94,.25);}
+.graph2-time-wrap.is-wait .graph2-time-label{color:#FF1744!important;text-shadow:0 0 5px rgba(255,23,68,.45);font-weight:950!important;}
+.graph2-time-wrap.is-wait .graph2-time-display{border-color:rgba(255,23,68,.75)!important;background:linear-gradient(135deg,rgba(72,8,20,.96),rgba(100,18,28,.9))!important;box-shadow:0 0 15px rgba(255,23,68,.22),inset 0 1px 0 rgba(255,255,255,.08)!important;}
+.graph2-time-wrap.is-wait .graph2-time-number{color:#FF1744!important;text-shadow:0 0 7px rgba(255,23,68,.55)!important;}
+.graph2-time-wrap.is-wait .graph2-time-unit{color:#FF9AAA!important;}
+.graph2-time-wrap:not(.is-wait) .graph2-time-display{border-color:rgba(34,197,94,.62)!important;background:linear-gradient(135deg,rgba(6,45,28,.96),rgba(8,70,40,.9))!important;box-shadow:0 0 12px rgba(34,197,94,.18),inset 0 1px 0 rgba(255,255,255,.08)!important;}
+.graph2-time-wrap:not(.is-wait) .graph2-time-number{color:#22C55E!important;text-shadow:0 0 7px rgba(34,197,94,.45)!important;}
+.graph2-time-wrap:not(.is-wait) .graph2-time-unit{color:#9FF0B8!important;}
+@media(max-width:600px){.graph2-time-wrap{min-width:70px;}.graph2-time-label{font-size:7px;}}
+</style>
+
+
+<!-- NEW VOLUME DOT CONTROL: replaces the legacy Volume button -->
+<style id="final-graph1-frame-and-volume-label">
+/* GRAPH 1 — กรอบให้ตรงกับกราฟ 2 โดยไม่ทับข้อความส่วนอื่น */
+#chartWrap.chart-canvas-wrap{
+  width:100% !important;
+  max-width:100% !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  box-sizing:border-box !important;
+}
+
+/* แสดงคำว่า VOLUME ข้างปุ่ม Volume เหมือนกราฟ 2 */
+#chartWrap #chartVolumeLabel{
+  display:block !important;
+  left:30px !important;
+  bottom:6px !important;
+  z-index:13 !important;
+  height:24px !important;
+  line-height:24px !important;
+  margin:0 !important;
+  padding:0 4px !important;
+  color:#dce8f1 !important;
+  font:900 9px/24px Arial,sans-serif !important;
+  letter-spacing:1px !important;
+  background:transparent !important;
+}
+
+/* ลบตำแหน่งปุ่มเดิม แล้วสร้างปุ่มจุดใหม่ให้อยู่เหนือคำว่า VOLUME */
+#chartWrap #chartVolumeToggle{
+  position:absolute !important;
+  left:8px !important;
+  bottom:9px !important;
+  width:16px !important;
+  height:16px !important;
+  min-width:16px !important;
+  min-height:16px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:50% !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  z-index:30 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+#chartWrap #chartVolumeToggle .vol-dot{
+  display:block !important;
+  width:8px !important;
+  height:8px !important;
+  min-width:8px !important;
+  min-height:8px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:50% !important;
+}
+#chartWrap #chartVolumeToggle span:last-child{display:none !important;}
+#chartWrap #chartVolumeToggle.on .vol-dot{
+  background:#22c55e !important;
+  box-shadow:0 0 5px rgba(34,197,94,.75) !important;
+}
+#chartWrap #chartVolumeToggle:not(.on) .vol-dot{
+  background:#ef4444 !important;
+  box-shadow:0 0 5px rgba(239,68,68,.7) !important;
+}
+
+@media(max-width:600px){
+  #chartWrap #chartVolumeLabel{left:30px !important;}
+  #chartWrap #chartVolumeToggle{left:8px !important; bottom:9px !important;}
+}
+</style>
+
+
+
+
+
+
+<style id="FINAL_MULTI_MARK_LINES">
+.chart-mark-tools{
+  position:absolute!important;z-index:9999!important;top:7px!important;left:7px!important;
+  display:flex!important;gap:4px!important;pointer-events:auto!important;
+}
+.blank-mark-tools{left:auto!important;right:7px!important}
+.chart-mark-btn,.chart-mark-clear{
+  height:25px!important;min-width:43px!important;padding:0 7px!important;
+  border:1px solid rgba(96,165,250,.45)!important;border-radius:7px!important;
+  background:rgba(3,10,20,.94)!important;color:#d9f4ff!important;
+  font-size:10px!important;font-weight:900!important;touch-action:manipulation!important;
+}
+.chart-mark-btn.active{background:#075985!important;border-color:#22d3ee!important;color:#fff!important}
+.chart-mark-clear{min-width:25px!important;width:25px!important;padding:0!important;color:#fca5a5!important}
+.chart-mark-overlay{
+  position:absolute!important;left:0!important;top:0!important;width:100%!important;height:100%!important;
+  z-index:9998!important;pointer-events:none!important;
+}
+.chart-mark-line{
+  position:absolute!important;left:8px!important;right:54px!important;height:0!important;
+  border-top:2px dashed rgba(34,211,238,.95)!important;
+  filter:drop-shadow(0 0 2px rgba(34,211,238,.35))!important;
+  pointer-events:auto!important;cursor:pointer!important;
+}
+.chart-mark-line.alt{border-top-color:rgba(250,204,21,.95)!important}
+.chart-mark-label{
+  position:absolute!important;right:-1px!important;top:-13px!important;
+  font:900 8px Arial,sans-serif!important;padding:2px 4px!important;border-radius:4px!important;
+  background:rgba(3,10,20,.9)!important;color:#67e8f9!important;pointer-events:none!important;
+}
+.chart-mark-line.alt .chart-mark-label{color:#fde68a!important}
+</style>
+
+<style id="graph2-high-contrast">
+/* GRAPH 2 HIGH CONTRAST — พื้นขาว อ่านง่าย */
+#chart2, #graph2, .graph2 {
+  color: #0f172a !important;
+}
+#chart2 text, #graph2 text, .graph2 text {
+  fill: #0f172a !important;
+  opacity: 1 !important;
+}
+#chart2 line, #graph2 line, .graph2 line {
+  stroke-opacity: .55 !important;
+}
+</style>
+
+
+<style id="remove-line-x-labels">
+/* ซ่อนคำอธิบาย "เส้น" และตัว X บนกราฟทั้งสอง โดยไม่ลบ logic การคำนวณ */
+[id*="chart"] .line-label,
+[id*="graph"] .line-label,
+.graph1 .line-label,
+.graph2 .line-label,
+.line-label,
+.legend-line-label,
+.x-label,
+.legend-x-label {
+  display:none !important;
+}
+</style>
+
+
+<style id="remove-standalone-x-labels">
+/* ตัว X ที่เป็นคำอธิบาย/ป้าย ไม่แตะเครื่องหมาย X ที่ใช้ในระบบคำนวณ */
+.x-marker-label,
+.x-description,
+.legend-x,
+.x-key-label { display:none !important; }
+</style>
+
+
+<style id="remove-line-x-controls-final">
+/* ลบชุดปุ่ม "เส้น" และ "×" ของกราฟทั้งสอง */
+#chartMarkTools,
+#blankMarkTools,
+.chart-mark-tools,
+.blank-mark-tools {
+  display:none !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+</style>
+
+
+<style id="graph2-premium-crisp-colors">
+/* GRAPH 2 — Premium crisp colors (ไม่เปลี่ยนพื้นหลัง) */
+#chart2, #graph2, .graph2 {
+  --g2-black: #0b0f14;
+  --g2-red: #dc2626;
+  --g2-green: #16a34a;
+  --g2-blue: #1d4ed8;
+  --g2-grid: rgba(71,85,105,.32);
+  --g2-text: #0b0f14;
+}
+#chart2 text, #graph2 text, .graph2 text {
+  fill: #0b0f14 !important;
+  color: #0b0f14 !important;
+  opacity: 1 !important;
+}
+#chart2 line, #graph2 line, .graph2 line {
+  opacity: 1 !important;
+}
+#chart2 .support-label, #graph2 .support-label, .graph2 .support-label,
+#chart2 .resistance-label, #graph2 .resistance-label, .graph2 .resistance-label,
+#chart2 .ema9-label, #graph2 .ema9-label, .graph2 .ema9-label,
+#chart2 .ema21-label, #graph2 .ema21-label, .graph2 .ema21-label,
+#chart2 .vwap-label, #graph2 .vwap-label, .graph2 .vwap-label {
+  color:#0b0f14 !important;
+  fill:#0b0f14 !important;
+  opacity:1 !important;
+}
+</style>
+
+
+<style id="GRAPH2_HD_COLOR_CLARITY">
+/* GRAPH 2 ONLY — HD color clarity. Existing background is intentionally untouched. */
+#blankMarketChartCard canvas#blankMarketChart{
+  image-rendering:auto !important;
+  text-rendering:geometricPrecision !important;
+}
+#blankMarketChartCard .graph2-brand-name,
+#blankMarketChartCard .graph2-brand-sub,
+#blankMarketChartCard .graph2-volume-title,
+#blankMarketChartCard .blank-chart-sub{
+  text-shadow:0 0 1px currentColor !important;
+}
+#blankMarketChartCard .vbar{
+  opacity:1 !important;
+  filter:none !important;
+}
+#blankMarketChartCard #blankVolumePanel .vbar.up,
+#blankMarketChartCard #blankVolumePanel .vbar.green{
+  background:#00C853 !important;
+  box-shadow:0 0 4px rgba(0,200,83,.42) !important;
+}
+#blankMarketChartCard #blankVolumePanel .vbar.down,
+#blankMarketChartCard #blankVolumePanel .vbar.red{
+  background:#F5003D !important;
+  box-shadow:0 0 4px rgba(245,0,61,.38) !important;
+}
+</style>
 </head>
 <body>
 <!-- เครื่องบินลำเล็กติดธงลาว -->
@@ -3860,7 +4170,7 @@ canvas#blankMarketChart {
   <div class="sub"></div>
 </div>
 
-      <canvas id="chartCanvas" height="280"></canvas>
+      <canvas id="chartCanvas" height="280"></canvas><div class="chart-mark-overlay" id="mainMarkOverlay"></div>
       <div id="trendSignalPanel" class="trend-signal-panel" aria-live="polite">
         <div class="trend-signal-title">TREND SIGNAL — สัญญาณเทรนด์จากกราฟแท่งเทียน</div>
         <div class="trend-signal-legend">
@@ -3869,8 +4179,8 @@ canvas#blankMarketChart {
         </div>
         <div id="trendSignalLive" class="trend-signal-live">กำลังอ่านสัญญาณจากแท่งเทียน…</div>
       </div>
+      <button id="chartVolumeToggle" class="chart-volume-toggle on" type="button" aria-pressed="true" title="เปิด/ปิดปริมาณการซื้อขาย"><span class="vol-dot"></span></button>
       <div id="chartVolumeLabel" class="chart-volume-label">VOLUME</div>
-      <button id="chartVolumeToggle" class="chart-volume-toggle on" type="button" aria-pressed="true" title="เปิด/ปิดปริมาณการซื้อขาย"><span class="vol-dot"></span><span>เปิด Volume</span></button>
       <div id="chartLineIndicatorBox" class="chart-line-indicator-box" aria-label="Chart indicator names"></div>
       <div class="night-sky" id="nightSky">
         <span class="star s1">✦</span>
@@ -4029,8 +4339,6 @@ canvas#blankMarketChart {
   <div class="ind-grid" id="ultimateIndicatorGrid"><div class="ind-card ultimate-loading" style="--ic:#22d3ee"><div class="ind-name">LIVE ENGINE</div><div class="ind-value">กำลังโหลดข้อมูล...</div><div class="ind-signal">WAIT</div></div></div>
 </div>
 
-<div class="disclaimer-box">
-    <strong>📊 
 <div class="blank-market-chart" id="blankMarketChartCard">
   <div class="blank-chart-head">
     <div class="graph2-brand">
@@ -4051,8 +4359,11 @@ canvas#blankMarketChart {
 
   <div id="graph2PairSearch" aria-label="ค้นหาคู่เงินกราฟที่ 2">
     <div class="graph2-pair-toolbar">
-      <div class="graph2-time-display" id="graph2TimeDisplay" aria-label="เวลาที่เหลือ">
-        <span class="graph2-time-number">30</span><span class="graph2-time-unit">วิ</span>
+      <div class="graph2-time-wrap" id="graph2TimeWrap">
+        <div class="graph2-time-display" id="graph2TimeDisplay" aria-label="เวลาที่เหลือ">
+          <span class="graph2-time-number">30</span><span class="graph2-time-unit">วิ</span>
+        </div>
+        <div class="graph2-time-label" id="graph2TimeLabel">รอบสัญญาณ</div>
       </div>
       <div class="graph2-search-title">
         <span class="graph2-search-icon" aria-hidden="true"></span>
@@ -4077,15 +4388,16 @@ canvas#blankMarketChart {
   </div>
 
   <div class="blank-chart-wrap" id="blankMarketChartWrap">
-    <canvas id="blankMarketChart" height="460"></canvas><div id="blankVolumePanel"><span class="vlabel">VOLUME</span></div><button id="blankMarketVolumeToggle" class="chart-volume-toggle on" type="button" aria-pressed="true" title="เปิด/ปิด Volume"><span class="vol-dot"></span><span>VOL ON</span></button>
+    <canvas id="blankMarketChart" height="460"></canvas><div class="chart-mark-overlay" id="blankMarkOverlay"></div>
+      <div id="blankVolumePanel"><span class="vlabel">VOLUME</span></div><button id="blankMarketVolumeToggle" class="chart-volume-toggle on" type="button" aria-pressed="true" title="เปิด/ปิด Volume"><span class="vol-dot"></span><span>VOL ON</span></button>
     <div class="blank-chart-volume-label">VOLUME</div>
   </div>
   <div id="graph2-volume-switch-row">
-    <div class="graph2-volume-title">VOLUME</div>
     <button id="graph2-volume-switch" type="button" aria-label="เปิดหรือปิด Volume" aria-pressed="true" class="is-on">
       <span class="graph2-switch-track"><span class="graph2-switch-knob"></span></span>
       <span class="graph2-switch-text">เปิด</span>
     </button>
+    <div class="graph2-volume-title">VOLUME</div>
   </div>
   <div class="blank-price-scale-control" id="blankPriceScaleControl" aria-label="ปรับขนาด">
     <span class="blank-scale-icon">↕</span>
@@ -4094,10 +4406,15 @@ canvas#blankMarketChart {
     <span class="blank-scale-value" id="blankPriceScaleValue">173%</span>
   </div>
 </div>
-</strong><br>
-    🧮 <strong>% ซื้อ/ขาย</strong> คำนวณจาก Order Book จริง (ปริมาณคำสั่งซื้อ-ขายที่รออยู่ในตลาดขณะนั้น) ไม่ใช่การรับประกันทิศทางราคา<br>
+
+<div class="disclaimer-box graph-risk-disclaimer">
+  <div class="risk-line">
+    🧮 <strong>% ซื้อ/ขาย</strong> คำนวณจาก Order Book จริง (ปริมาณคำสั่งซื้อ-ขายที่รออยู่ในตลาดขณะนั้น) ไม่ใช่การรับประกันทิศทางราคา
+  </div>
+  <div class="risk-line">
     ⚠️ <strong>คำเตือน:</strong> การลงทุนมีความเสี่ยง ควรศึกษาให้ดีก่อนลงทุน ไม่แนะนำการลงทุนใดๆ ทั้งสิ้น เพราะคุณอาจหมดเงินทุนของคุณได้ในเวลาไม่กี่วินาที หากคุณกดซื้อขายและตัดสินใจลงทุน ทางระบบจะไม่รับผิดชอบใดๆ ทั้งสิ้น
   </div>
+</div>
 </div>
 </div>
 
@@ -4450,8 +4767,7 @@ function setChartVolume(active){
   if(el.chartVolumeToggle){
     el.chartVolumeToggle.classList.toggle('on', chartVolumeActive);
     el.chartVolumeToggle.setAttribute('aria-pressed', String(chartVolumeActive));
-    const text = el.chartVolumeToggle.querySelector('span:last-child');
-    if(text) text.textContent = chartVolumeActive ? 'เปิด Volume' : 'ปิด Volume';
+    // ปุ่มใหม่เป็นจุดอย่างเดียว จึงไม่ต้องเปลี่ยนข้อความภายในปุ่ม
   }
   if(el.chartVolumeLabel) el.chartVolumeLabel.classList.toggle('show', chartVolumeActive);
   drawChart();
@@ -4484,7 +4800,56 @@ let mainInitialCentered = false;
 let mainLastBarCount = 0;
 const MIN_VISIBLE = 10;
 const MAX_VISIBLE = 100;
-const LATEST_POSITION_RATIO = 0.52; // ค่าเดิมสำหรับการเคลื่อนกราฟตามรอบปกติ
+const LATEST_POSITION_RATIO = 0.76; // ให้แท่งล่าสุดอยู่ประมาณ 76% จากซ้าย แบบกราฟโบรกเกอร์
+// พื้นที่ว่างก่อนแท่งแรกแบบโบรกเกอร์จริง: อนุญาตให้ลากแท่งแรกเข้ามากลาง/ด้านขวาได้
+const FIRST_CANDLE_LEFT_SPACE_RATIO = 0.70;
+function getMainMinViewStart(){ return -Math.max(1, visibleBars * FIRST_CANDLE_LEFT_SPACE_RATIO); }
+function getMainMaxViewStart(total = bars30.length){
+  // เว้นพื้นที่ด้านขวาหลังแท่งล่าสุดแบบกราฟโบรกเกอร์ และยังลากต่อได้
+  const baseMax = Math.max(0, total - visibleBars);
+  const rightRoom = Math.max(1, visibleBars * 0.50);
+  return baseMax + rightRoom;
+}
+function clampMainViewStart(v, total = bars30.length){
+  const maxStart = getMainMaxViewStart(total);
+  return Math.max(getMainMinViewStart(), Math.min(maxStart, Number(v) || 0));
+}
+let mainUserMovedHorizontally = false;
+// Professional chart interaction state: fractional scrolling + tiny inertial settle.
+let chartDragVelocity = 0;
+let chartLastMoveTime = 0;
+let chartLastMoveX = 0;
+let chartInertiaFrame = 0;
+
+function stopChartInertia(){
+  if(chartInertiaFrame){ cancelAnimationFrame(chartInertiaFrame); chartInertiaFrame = 0; }
+}
+function startChartInertia(){
+  stopChartInertia();
+  let v = chartDragVelocity;
+  if(Math.abs(v) < 0.015) return;
+  const step = ()=>{
+    v *= 0.88;
+    const maxStart = getMainMaxViewStart();
+    const next = clampMainViewStart(viewStart + v);
+    if(next === viewStart || Math.abs(v) < 0.015){ chartInertiaFrame = 0; return; }
+    viewStart = next;
+    drawChart();
+    chartInertiaFrame = requestAnimationFrame(step);
+  };
+  chartInertiaFrame = requestAnimationFrame(step);
+}
+
+function getMainLiveViewStart(total = bars30.length){
+  const count = Math.max(1, Math.min(visibleBars, total));
+  const latestIndex = Math.max(0, total - 1);
+  const desired = Math.round(latestIndex - count * LATEST_POSITION_RATIO);
+  return Math.max(0, Math.min(Math.max(0, total - count), desired));
+}
+
+function isMainAtLivePosition(total = bars30.length){
+  return Math.abs(viewStart - getMainLiveViewStart(total)) <= 1;
+}
 
 // จัดแท่งเทียนล่าสุดให้อยู่ตรงกลางกราฟแบบพอดี
 // ใช้เฉพาะตอนเปิดแอป/โหลดข้อมูลใหม่/เปลี่ยนคู่เงิน ไม่รบกวนการลากกราฟของผู้ใช้
@@ -4493,15 +4858,16 @@ function centerLatestCandleOnMainChart(){
   if(total <= 0) return;
   const count = Math.max(1, Math.min(visibleBars, total));
   const latestIndex = total - 1;
-  const centerOffset = Math.floor(count / 2);
-  const maxStart = Math.max(0, total - count);
-  viewStart = Math.max(0, Math.min(maxStart, latestIndex - centerOffset));
+  const desiredStart = latestIndex - (count - 1) * LATEST_POSITION_RATIO;
+  viewStart = clampMainViewStart(desiredStart, total);
+  mainUserMovedHorizontally = false;
 }
 
 // บังคับให้ "ทั้งสองกราฟ" กลับไปอยู่กึ่งกลางทุกครั้งที่เข้าแอป/กลับมาที่หน้าแอป
 // (ทั้งแนวนอนและแนวตั้ง — ไม่รอให้ข้อมูลเปลี่ยนก่อนถึงจะจัดกึ่งกลาง)
 function recenterAllChartsOnAppEnter(){
-  centerLatestCandleOnMainChart();
+  // รักษาตำแหน่งที่ผู้ใช้ลากไว้ ไม่ดึงกลับไปตรงกลาง/แท่งล่าสุดทุกครั้งที่กลับเข้าแอป
+  if(!mainUserMovedHorizontally) centerLatestCandleOnMainChart();
   chartPanY = 0; // รีเซ็ตการเลื่อนแนวตั้งของกราฟที่ 1
   window.__blankUserMovedHorizontally = false;
   window.__blankUserVerticalPan = false;
@@ -4644,8 +5010,9 @@ function updateSymbol() {
     currentCycleId = null;
     obTickCounter = 0; obPctInitialized = false;
     viewStart = 0; visibleBars = 20; priceZoomFactor = 2;
+    mainUserMovedHorizontally = false;
     // เปลี่ยนคู่เงิน: บังคับให้กราฟทั้งสองตัวกลับมาเริ่มจากตำแหน่งกึ่งกลาง
-    blankViewStart = 0; blankVisibleBars = 40; blankPriceZoomFactor = 1.73; blankChartPanY = 0;
+    blankViewStart = 0; blankVisibleBars = 20; blankPriceZoomFactor = 2; blankChartPanY = 0;
     window.__blankUserMovedHorizontally = false;
     window.__blankUserVerticalPan = false;
     window.__blankInitialCentered = false;
@@ -4735,6 +5102,7 @@ async function loadHistory(){
     }
     loadedHistory = true;
     const total = bars30.length;
+    mainUserMovedHorizontally = false;
     centerLatestCandleOnMainChart();
     chartPanY = 0; // กันไม่ให้ค่าที่เลื่อนแนวตั้งเดิมค้างอยู่หลังโหลดข้อมูลใหม่
     window.__blankUserMovedHorizontally = false;
@@ -5395,7 +5763,7 @@ function drawBlankVolumePanel(){
   if(!panel) return;
   const on = window.blankMarketVolumeActive === true;
   panel.classList.toggle('volume-hidden', !on);
-  panel.innerHTML='<span class="vlabel">VOLUME</span>';
+  panel.innerHTML='';
   if(!on || !Array.isArray(bars30) || !bars30.length) return;
 
   const data=bars30.slice(-30);
@@ -5403,7 +5771,7 @@ function drawBlankVolumePanel(){
   data.forEach(b=>{
     const e=document.createElement('div');
     e.className='vbar';
-    e.style.height=Math.max(4,Math.round(((Number(b.v)||0)/maxV)*30))+'px';
+    e.style.height=Math.max(4,Math.round(((Number(b.v)||0)/maxV)*50))+'px';
     e.style.background=Number(b.c)>=Number(b.o)?'#00E676':'#FF1744';
     panel.appendChild(e);
   });
@@ -5433,6 +5801,21 @@ function drawBlankMarketChart(){
   const ctx = canvas.getContext('2d');
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.clearRect(0,0,w,h);
+
+  // GRAPH 2 — พื้นหลังสีขาวใสแบบ Premium ให้เข้ากับแท่งเทียนแดง/เขียว
+  // ใช้ความโปร่งใสเล็กน้อยเพื่อให้พื้นหลังเดิมยังดูนุ่ม ไม่แข็งจนเกินไป
+  const premiumBg = ctx.createLinearGradient(0,0,0,h);
+  premiumBg.addColorStop(0, 'rgba(255,255,255,0.98)');
+  premiumBg.addColorStop(0.52, 'rgba(255,255,255,0.96)');
+  premiumBg.addColorStop(1, 'rgba(241,245,249,0.94)');
+  ctx.fillStyle = premiumBg;
+  ctx.fillRect(0,0,w,h);
+
+  // ขอบด้านในบาง ๆ ให้กราฟดูสะอาดและพรีเมียม
+  ctx.strokeStyle = 'rgba(71,85,105,0.32)';
+  ctx.lineWidth = 1.25;
+  ctx.strokeRect(0.5,0.5,w-1,h-1);
+
   ctx.textRendering = 'optimizeLegibility';
   ctx.imageSmoothingEnabled = true;
 
@@ -5464,22 +5847,22 @@ function drawBlankMarketChart(){
   const volumeEnabled = window.blankMarketVolumeActive === true;
   const volumeH = volumeEnabled ? 48 : 0;
   const macdEnabled = window.blankMarketMacdActive !== false; // เปิดเป็นค่าเริ่มต้น
-  const macdH = macdEnabled ? 62 : 0;
+  const macdH = macdEnabled ? 100 : 0;
   const macdGapTop = macdEnabled ? 26 : 0;    // ช่องว่างระหว่างแท่งเทียนกับแผง MACD (เผื่อพื้นที่ป้ายคำอธิบาย)
   const macdGapBottom = macdEnabled ? 18 : 0; // ช่องว่างระหว่างแผง MACD กับแผง VOLUME (ขยับ MACD ขึ้น ไม่ให้ติดวอลุ่ม)
   const padT = 16, padB = 18 + volumeH + macdH + macdGapTop + macdGapBottom, padL = 8, padR = 54;
   const chartH = h - padT - padB;
   const chartW = w - padL - padR;
-  const slotW = chartW / vis.length;
-  const bodyW = Math.max(4, Math.min(14, slotW * 0.62));
+  const slotW = chartW / Math.max(1, blankVisibleBars);
+  const bodyW = Math.max(5, Math.min(16, slotW * 0.70));
   const halfBody = bodyW / 2;
   const yScale = p => padT + chartH/2 - ((p - priceMid) / rng) * chartH + blankChartPanY;
 
   // Empty chart background/grid only.
-  ctx.strokeStyle = 'rgba(148,163,184,0.07)';
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = 'rgba(71,85,105,0.62)';
+  ctx.lineWidth = 1.25;
   ctx.font = '10px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-  ctx.fillStyle = 'rgba(148,163,184,0.58)';
+  ctx.fillStyle = '#0F172A';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
 
@@ -5495,7 +5878,7 @@ function drawBlankMarketChart(){
 
   // Candles only — no indicators, arrows, volume, signal markers, or overlay.
   vis.forEach((b,i)=>{
-    const x = padL + slotW*i + slotW/2;
+    const x = padL + slotW*(i) + slotW/2;
     const yH = yScale(Number(b.h));
     const yL = yScale(Number(b.l));
     const yO = yScale(Number(b.o));
@@ -5505,8 +5888,8 @@ function drawBlankMarketChart(){
     const bodyBot = Math.max(yO,yC);
     const bodyH = Math.max(1, bodyBot-bodyTop);
 
-    ctx.strokeStyle = isUp ? 'rgba(16,185,129,.9)' : 'rgba(239,68,68,.9)';
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = isUp ? '#047857' : '#B91C1C';
+    ctx.lineWidth = 1.25;
     const wx = Math.round(x)+0.5;
     ctx.beginPath();
     ctx.moveTo(wx,yH); ctx.lineTo(wx,bodyTop);
@@ -5515,9 +5898,9 @@ function drawBlankMarketChart(){
 
     const bx = Math.round(x-halfBody);
     const bw = Math.round(bodyW);
-    ctx.fillStyle = isUp ? '#00E676' : '#FF1744';
-    ctx.strokeStyle = isUp ? '#34D399' : '#F87171';
-    ctx.lineWidth = 1;
+    ctx.fillStyle = isUp ? '#00C853' : '#F5003D';
+    ctx.strokeStyle = isUp ? '#059669' : '#DC2626';
+    ctx.lineWidth = 1.25;
     ctx.shadowBlur = 0;
     ctx.fillRect(bx,bodyTop,bw,bodyH);
     ctx.strokeRect(
@@ -5537,21 +5920,21 @@ function drawBlankMarketChart(){
         const idx = blankViewStart + i;
         const val = arr[idx];
         if(val==null) return;
-        const x = padL + slotW*i + slotW/2;
+        const x = padL + slotW*(i) + slotW/2;
         const y = yScale(val);
         if(!started){ ctx.moveTo(x,y); started = true; } else ctx.lineTo(x,y);
       });
       if(!started) return;
       ctx.setLineDash([]);
       ctx.strokeStyle = color;
-      ctx.lineWidth = 0.4;
-      ctx.shadowBlur = 6;
+      ctx.lineWidth = 1.2;
+      ctx.shadowBlur = 4;
       ctx.shadowColor = color;
       ctx.stroke();
       ctx.shadowBlur = 0;
     };
-    drawSRLine(supportArr, 'lime');
-    drawSRLine(resistanceArr, 'deeppink');
+    drawSRLine(supportArr, '#16A34A');
+    drawSRLine(resistanceArr, '#DC2626');
 
     // คำอธิบายเส้น Support/Resistance — โลโก้เป็นขีดเส้นสั้นตามสีเส้นจริง แสดงครั้งเดียวมุมกราฟ
     ctx.textAlign = 'left';
@@ -5566,11 +5949,11 @@ function drawBlankMarketChart(){
       ctx.moveTo(srLegendX, y);
       ctx.lineTo(srLegendX + 10, y);
       ctx.stroke();
-      ctx.fillStyle = color;
+      ctx.fillStyle = '#000000';
       ctx.fillText(label, srLegendX + 14, y);
     };
-    drawLineLegend(padT + 18, 'lime', '= แนวรับหลัก');
-    drawLineLegend(padT + 28, 'deeppink', '= แนวต้านหลัก');
+    drawLineLegend(padT + 18, '#16A34A', '= แนวรับหลัก');
+    drawLineLegend(padT + 28, '#DC2626', '= แนวต้านหลัก');
   }
 
   // ===== VWAP (30 แท่ง) + EMA 9/21 — เพิ่มเพื่อความแม่นยำในการออกออเดอร์ 30 วิ =====
@@ -5585,14 +5968,14 @@ function drawBlankMarketChart(){
       const idx = blankViewStart + i;
       const val = vwapArr[idx];
       if(val == null) return;
-      const x = padL + slotW*i + slotW/2;
+      const x = padL + slotW*(i) + slotW/2;
       const y = yScale(val);
       if(!started){ ctx.moveTo(x,y); started = true; } else ctx.lineTo(x,y);
     });
     if(started){
       ctx.setLineDash([5,3]);
       ctx.strokeStyle = '#FACC15';
-      ctx.lineWidth = 0.5;
+      ctx.lineWidth = 1.15;
       ctx.shadowBlur = 0;
       ctx.stroke();
       ctx.setLineDash([]);
@@ -5609,14 +5992,14 @@ function drawBlankMarketChart(){
         const idx = blankViewStart + i;
         const val = arr[idx];
         if(val == null) return;
-        const x = padL + slotW*i + slotW/2;
+        const x = padL + slotW*(i) + slotW/2;
         const y = yScale(val);
         if(!started){ ctx.moveTo(x,y); started = true; } else ctx.lineTo(x,y);
       });
       if(!started) return;
       ctx.setLineDash([]);
       ctx.strokeStyle = color;
-      ctx.lineWidth = 0.5;
+      ctx.lineWidth = 1.15;
       ctx.shadowBlur = 0;
       ctx.stroke();
     };
@@ -5639,7 +6022,7 @@ function drawBlankMarketChart(){
       ctx.lineTo(legX + 10, y);
       ctx.stroke();
       ctx.setLineDash([]);
-      ctx.fillStyle = color;
+      ctx.fillStyle = '#000000';
       ctx.fillText(label, legX + 14, y);
     };
     let legY = padT + 8;
@@ -5658,7 +6041,7 @@ function drawBlankMarketChart(){
       const sig = purpleSignals[idx];
       if(!sig) return;
       hasPurple = true;
-      const x = padL + slotW*i + slotW/2;
+      const x = padL + slotW*(i) + slotW/2;
       if(sig === 'BUY'){
         const y = yScale(Number(b.l)) + 10; // belowbar
         drawPurpleTriangle(ctx, Math.round(x), Math.round(y), true);
@@ -5676,7 +6059,7 @@ function drawBlankMarketChart(){
       ctx.fillStyle = 'purple';
       ctx.shadowBlur = 0;
       ctx.fillText('▲', legendX, legendY);
-      ctx.fillStyle = 'rgba(255,215,0,0.7)';
+      ctx.fillStyle = 'rgba(0,0,0,0.95)';
       ctx.fillText('= ความแรงของแท่งเทียน', legendX + 8, legendY);
     }
   }
@@ -5691,7 +6074,7 @@ function drawBlankMarketChart(){
       const idx = blankViewStart + i;
       const sig = gavinSignals[idx];
       if(!sig) return;
-      const x = padL + slotW*i + slotW/2;
+      const x = padL + slotW*(i) + slotW/2;
       if(sig === 'BUY'){
         const y = yScale(Number(b.l)) + 7; // belowbar, tiny
         drawGavinWinTriangle(ctx, Math.round(x), Math.round(y), true, 'green');
@@ -5713,7 +6096,7 @@ function drawBlankMarketChart(){
   const yLast = yScale(Number(lastBar.c));
   ctx.setLineDash([4,3]);
   ctx.strokeStyle = 'rgba(248,250,252,.22)';
-  ctx.lineWidth = 1;
+  ctx.lineWidth = 1.25;
   ctx.beginPath();
   ctx.moveTo(padL,yLast);
   ctx.lineTo(w-padR,yLast);
@@ -5740,7 +6123,7 @@ function drawBlankMarketChart(){
 
       // เส้นแบ่งพาแนล
       ctx.strokeStyle = 'rgba(148,163,184,0.14)';
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 1.25;
       ctx.beginPath();
       ctx.moveTo(padL, Math.round(macdPanelTop) + 0.5);
       ctx.lineTo(w - padR + 4, Math.round(macdPanelTop) + 0.5);
@@ -5762,8 +6145,8 @@ function drawBlankMarketChart(){
         // เส้นศูนย์ (zero line)
         if(0 >= minM && 0 <= maxM){
           ctx.setLineDash([3,3]);
-          ctx.strokeStyle = 'rgba(148,163,184,0.35)';
-          ctx.lineWidth = 1;
+          ctx.strokeStyle = 'rgba(71,85,105,0.55)';
+          ctx.lineWidth = 1.25;
           ctx.beginPath();
           ctx.moveTo(padL, Math.round(macdYScale(0)) + 0.5);
           ctx.lineTo(w - padR + 4, Math.round(macdYScale(0)) + 0.5);
@@ -5776,11 +6159,11 @@ function drawBlankMarketChart(){
           const idx = blankViewStart + i;
           const hv = macd.hist[idx];
           if(hv == null) return;
-          const x = padL + slotW*i + slotW/2;
+          const x = padL + slotW*(i) + slotW/2;
           const y0 = macdYScale(0);
           const y1 = macdYScale(hv);
-          const barW = Math.max(1, Math.min(3, slotW * 0.22));
-          ctx.fillStyle = hv >= 0 ? 'rgba(0,230,118,.75)' : 'rgba(255,23,68,.75)';
+          const barW = Math.max(2, Math.min(4, slotW * 0.28));
+          ctx.fillStyle = hv >= 0 ? 'rgba(21,128,61,.92)' : 'rgba(185,28,28,.92)';
           ctx.fillRect(Math.round(x - barW/2), Math.min(y0,y1), Math.round(barW), Math.max(1, Math.abs(y1-y0)));
         });
 
@@ -5792,18 +6175,18 @@ function drawBlankMarketChart(){
             const idx = blankViewStart + i;
             const val = arr[idx];
             if(val == null) return;
-            const x = padL + slotW*i + slotW/2;
+            const x = padL + slotW*(i) + slotW/2;
             const y = macdYScale(val);
             if(!started){ ctx.moveTo(x,y); started = true; } else ctx.lineTo(x,y);
           });
           if(!started) return;
           ctx.strokeStyle = color;
-          ctx.lineWidth = 0.5;
+          ctx.lineWidth = 1.15;
           ctx.shadowBlur = 0;
           ctx.stroke();
         };
-        drawMacdLine(macd.macdLine, '#06B6D4');
-        drawMacdLine(macd.signalLine, '#EC4899');
+        drawMacdLine(macd.macdLine, '#0E7490');
+        drawMacdLine(macd.signalLine, '#BE185D');
 
         // ป้ายชื่อพาแนล + ค่าล่าสุด
         const lastI = closesAll.length - 1;
@@ -5812,7 +6195,7 @@ function drawBlankMarketChart(){
         ctx.textBaseline = 'middle';
         ctx.font = 'bold 7px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
         ctx.shadowBlur = 0;
-        ctx.fillStyle = '#8fa8bb';
+        ctx.fillStyle = '#334155';
         ctx.fillText('MACD (12,26,9)', padL + 4, macdPanelTop - 16);
         if(mLast != null && sLast != null){
           ctx.fillStyle = '#06B6D4';
@@ -5823,6 +6206,10 @@ function drawBlankMarketChart(){
       }
     }
   }
+
+  // กราฟที่ 2 ไม่แสดงสัญญาณ/ลูกศรจากอินดิเคเตอร์ของกราฟที่ 1
+
+
 }
 
 
@@ -5830,9 +6217,13 @@ function resetBlankChartView(){
   window.__blankUserMovedHorizontally = false;
   window.__blankUserVerticalPan = false;
   blankChartPanY = 0;
-  blankViewStart = Math.max(0, bars30.length - Math.min(blankVisibleBars, bars30.length));
   blankVisibleBars = 40;
-  blankViewStart = Math.max(0, bars30.length - blankVisibleBars);
+  // Keep the latest candle around 76% from the left, leaving useful space on the right.
+  const latestOffset = Math.floor((blankVisibleBars - 1) * 0.76);
+  blankViewStart = Math.max(0, Math.min(
+    Math.max(0, bars30.length - blankVisibleBars),
+    bars30.length - 1 - latestOffset
+  ));
   blankPriceZoomFactor = 1.73;
   blankChartPanY = 0;
   const slider = document.getElementById('blankPriceScaleSlider');
@@ -5869,7 +6260,7 @@ function resetBlankChartView(){
 
   wrap.addEventListener('wheel', e=>{
     e.preventDefault();
-    const factor = e.deltaY > 0 ? 1.15 : 0.87;
+    const factor = e.deltaY > 0 ? 1.06 : 0.9434;
     blankVisibleBars = Math.max(BLANK_MIN_VISIBLE, Math.min(BLANK_MAX_VISIBLE, Math.round(blankVisibleBars * factor)));
     clampView();
     drawBlankMarketChart();
@@ -5899,7 +6290,7 @@ function resetBlankChartView(){
       const dist = Math.hypot(pts[1].pageX-pts[0].pageX, pts[1].pageY-pts[0].pageY) || 1;
       const rawScale = blankTouchStartDist / dist;
       // ซูมแบบนุ่มเหมือนกราฟที่ 1 ไม่กระชาก
-      const scale = Math.pow(rawScale, 0.55);
+      const scale = Math.pow(rawScale, 0.42);
       blankVisibleBars = Math.max(BLANK_MIN_VISIBLE, Math.min(BLANK_MAX_VISIBLE, Math.round(blankStartVisibleBars * scale)));
       // ไม่ย้อนกลับไปหาแท่งเก่า ให้พื้นที่ล่าสุดของกราฟยังอยู่เหมือนเดิม
       blankViewStart = Math.max(0, Math.min(Math.max(0, bars30.length - blankVisibleBars), blankStartViewStart));
@@ -5960,9 +6351,15 @@ function drawChart(){
   if(total < 8) return;
   updateTrendSignalLive();
 
-  viewStart = Math.max(0, Math.min(viewStart, total - visibleBars));
-  const endIdx = Math.min(total, viewStart + visibleBars);
-  const vis = bars30.slice(viewStart, endIdx);
+  // Professional chart rendering: keep horizontal position fractional so
+  // dragging and pinch-zooming move the candles smoothly instead of jumping
+  // one whole candle at a time.
+  viewStart = clampMainViewStart(viewStart, total);
+  const renderStart = Math.floor(viewStart);
+  const viewFraction = viewStart - renderStart;
+  const dataStart = Math.max(0, renderStart);
+  const endIdx = Math.min(total, renderStart + visibleBars);
+  const vis = bars30.slice(dataStart, Math.max(dataStart, endIdx));
 
   const dpr = Math.min(window.devicePixelRatio||2, 4);
   const w = canvas.clientWidth, h = 310;
@@ -5979,10 +6376,10 @@ function drawChart(){
   const minP = Math.min(...pricesAll);
   const rng = ((maxP - minP) * 1.12 || maxP * 0.002) * priceZoomFactor;
   const volumeH = chartVolumeActive ? 48 : 0;
-  const padT = 16, padB = 18 + volumeH, padL = 8, padR = 54;
+  const padT = 16, padB = 18 + volumeH, padL = 8, padR = 72;
   const chartH = h - padT - padB;
   const chartW = w - padL - padR;
-  const slotW = chartW / vis.length;
+  const slotW = chartW / Math.max(1, visibleBars);
   const bodyW = Math.max(4, Math.min(14, slotW * 0.62));
   const halfBody = bodyW / 2;
 
@@ -6004,7 +6401,9 @@ function drawChart(){
   }
 
   vis.forEach((b, i, arr) => {
-    const x = padL + slotW*i + slotW/2;
+    const actualIdx = dataStart + i;
+    const screenIndex = actualIdx - renderStart;
+    const x = padL + slotW*(screenIndex - viewFraction) + slotW/2;
     const yH = yScale(b.h);
     const yL = yScale(b.l);
     const yO = yScale(b.o);
@@ -6051,7 +6450,8 @@ function drawChart(){
     }
 
     // trend arrow: mark the first candle of a new up/down streak — วาดเป็นทรงลูกธนู (มีหัวลูกศร+หาง) แทนสามเหลี่ยมธรรมดา สีเข้มกว่าลูกศร ▲▼ จุดอื่นในแอปเพื่อให้แยกออกจากกันชัดเจน
-    const prevUp = i > 0 ? (arr[i-1].c >= arr[i-1].o) : null;
+    const prevBar = actualIdx > 0 ? bars30[actualIdx-1] : null;
+    const prevUp = prevBar ? (prevBar.c >= prevBar.o) : null;
     const isFirstOfแนวโน้ม = (prevUp === null) || (isUp !== prevUp);
     if(isFirstOfแนวโน้ม){
       ctx.shadowBlur = 0;
@@ -6076,7 +6476,9 @@ function drawChart(){
     vis.forEach((b,i)=>{
       const v = Number(b.v)||0;
       const vh = Math.max(1, (v/maxV)*(volumeH-14));
-      const x = padL + slotW*i + slotW/2;
+      const actualIdx = dataStart + i;
+      const screenIndex = actualIdx - renderStart;
+      const x = padL + slotW*(screenIndex - viewFraction) + slotW/2;
       const bw = Math.max(2, Math.min(10, slotW*.52));
       const up = b.c >= b.o;
       ctx.fillStyle = up ? 'rgba(0,230,118,.42)' : 'rgba(255,23,68,.42)';
@@ -6098,10 +6500,10 @@ function drawChart(){
       ctx.beginPath();
       let started = false;
       vis.forEach((b,i)=>{
-        const idx = viewStart + i;
+        const idx = dataStart + i;
         const val = arr[idx];
         if(val==null) return;
-        const x = padL + slotW*i + slotW/2;
+        const x = padL + slotW*(i - viewFraction) + slotW/2;
         const y = yScale(val);
         if(!started){ ctx.moveTo(x,y); started = true; } else ctx.lineTo(x,y);
       });
@@ -6151,11 +6553,11 @@ function drawChart(){
   // ป้ายชื่ออินดิเคเตอร์ (ตัวหนังสือเล็กๆ) โชว์เฉพาะจุดล่าสุดเท่านั้น — จุดเก่าจะมีแค่ลูกศร ไม่มีตัวหนังสือรก
   const latestMarker = signalMarkers.length ? signalMarkers[signalMarkers.length-1] : null;
   signalMarkers.forEach(m=>{
-    const relIdx = m.barIndex - viewStart;
+    const relIdx = m.barIndex - renderStart;
     if(relIdx < 0 || relIdx >= vis.length) return;
     const b = vis[relIdx];
     if(!b) return;
-    const x = padL + slotW*relIdx + slotW/2;
+    const x = padL + slotW*(relIdx - viewFraction) + slotW/2;
     const yRef = m.dir === 'BUY' ? yScale(b.l) + 15 : yScale(b.h) - 15;
     const markerColor = m.color || (m.dir==='BUY' ? '#00E676' : '#FF1744');
     ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
@@ -6199,6 +6601,7 @@ function drawChart(){
 }
 
 el.chartWrap.addEventListener('touchstart', e=>{
+  stopChartInertia();
   const pts = e.touches;
   if(pts.length === 2) {
     // Broker-style pinch zoom: keep the candle under the pinch center fixed.
@@ -6220,6 +6623,9 @@ el.chartWrap.addEventListener('touchstart', e=>{
     isPinching = false;
     touchStartX = pts[0].pageX;
     touchStartY = pts[0].pageY;
+    chartLastMoveX = pts[0].pageX;
+    chartLastMoveTime = performance.now();
+    chartDragVelocity = 0;
     startViewStart = viewStart;
     startChartPanY = chartPanY;
     isChartVerticalPan = false;
@@ -6236,7 +6642,7 @@ el.chartWrap.addEventListener('touchmove', e=>{
     // Pinch in = more visible bars (candles become narrower/smaller).
     const rawScale = touchStartDist / dist;
     // ซูมแบบนุ่มเหมือนกราฟหลัก: ลดความไว ไม่ให้แท่งกระชากเร็วเกินไป
-    const scale = Math.pow(rawScale, 0.55);
+    const scale = Math.pow(rawScale, 0.42);
     const oldVisible = visibleBars;
     visibleBars = Math.round(startVisibleCount * scale);
     visibleBars = Math.max(MIN_VISIBLE, Math.min(MAX_VISIBLE, visibleBars));
@@ -6251,9 +6657,9 @@ el.chartWrap.addEventListener('touchmove', e=>{
     if(Number.isFinite(anchorBar) && Number.isFinite(anchorX)) {
       const newSlot = plotWidth / Math.max(1, visibleBars);
       const desiredStart = anchorBar - ((anchorX - plotLeft) / newSlot);
-      viewStart = Math.max(0, Math.min(Math.max(0, bars30.length - visibleBars), desiredStart));
+      viewStart = clampMainViewStart(desiredStart);
     } else if(oldVisible !== visibleBars) {
-      viewStart = Math.max(0, Math.min(Math.max(0, bars30.length - visibleBars), viewStart));
+      viewStart = clampMainViewStart(viewStart);
     }
     drawChart();
   } else if(!isPinching && pts.length === 1 && isVerticalPriceDrag){
@@ -6261,27 +6667,39 @@ el.chartWrap.addEventListener('touchmove', e=>{
     priceZoomFactor = Math.max(PRICE_ZOOM_MIN, Math.min(PRICE_ZOOM_MAX, startPriceZoom * (1 + dy/300)));
     drawChart();
   } else if(!isPinching && pts.length === 1) {
+    const now = performance.now();
     const dx = pts[0].pageX - touchStartX;
     const dy = pts[0].pageY - touchStartY;
+    if(now > chartLastMoveTime){
+      const stepDx = pts[0].pageX - chartLastMoveX;
+      const dt = Math.max(8, now - chartLastMoveTime);
+      chartDragVelocity = -(stepDx / Math.max(1, (el.chartWrap.clientWidth - 24) / visibleBars)) * (16 / dt);
+      chartLastMoveX = pts[0].pageX;
+      chartLastMoveTime = now;
+    }
     // ลากขึ้น/ลง = เลื่อนแท่งเทียนขึ้น/ลง, ลากซ้าย/ขวา = เลื่อนกราฟไปมา
     if(!isChartVerticalPan && Math.abs(dy) > Math.abs(dx) + 4) isChartVerticalPan = true;
     if(isChartVerticalPan){
       chartPanY = Math.max(-120, Math.min(120, startChartPanY + dy));
     }else{
       const slotPx = (el.chartWrap.clientWidth - 24) / visibleBars;
-      viewStart = Math.max(0, Math.min(Math.max(0, bars30.length - visibleBars), startViewStart - Math.round(dx / slotPx)));
+      viewStart = clampMainViewStart(startViewStart - (dx / slotPx));
+      mainUserMovedHorizontally = true;
     }
     drawChart();
   }
 }, {passive:true});
 
 el.chartWrap.addEventListener('touchend', e=>{
+  const wasHorizontal = !isChartVerticalPan && !isVerticalPriceDrag;
   isVerticalPriceDrag = false;
   isChartVerticalPan = false;
   if(!e.touches || e.touches.length < 2){
     isPinching = false;
     window.__brokerZoomAnchorBar = null;
     window.__brokerZoomAnchorX = null;
+    if(wasHorizontal) startChartInertia();
+    if(isMainAtLivePosition()) mainUserMovedHorizontally = false;
   }
 }, {passive:true});
 
@@ -6289,16 +6707,18 @@ let isMouseDown = false, mouseStartX=0, mouseStartView=0;
 let isMouseVerticalDrag = false, mouseStartY=0, mouseStartPriceZoom=1;
 let isMouseChartVerticalPan = false, mouseStartChartPanY=0;
 el.chartWrap.addEventListener('mousedown', e=>{
+  stopChartInertia();
   mouseStartX = e.pageX; mouseStartY = e.pageY;
   isMouseVerticalDrag = false;
   {
     isMouseDown = true;
     isMouseChartVerticalPan = false;
     mouseStartView = viewStart;
+    chartLastMoveX = e.pageX; chartLastMoveTime = performance.now(); chartDragVelocity = 0;
     mouseStartChartPanY = chartPanY;
   }
 });
-window.addEventListener('mouseup', ()=>{ isMouseDown=false; isMouseVerticalDrag=false; isMouseChartVerticalPan=false; });
+window.addEventListener('mouseup', ()=>{ const wasHorizontal = isMouseDown && !isMouseChartVerticalPan; isMouseDown=false; isMouseVerticalDrag=false; isMouseChartVerticalPan=false; if(wasHorizontal) startChartInertia(); if(isMainAtLivePosition()) mainUserMovedHorizontally=false; });
 window.addEventListener('mousemove', e=>{
   if(isMouseVerticalDrag){
     const dy = e.pageY - mouseStartY;
@@ -6307,14 +6727,22 @@ window.addEventListener('mousemove', e=>{
     return;
   }
   if(!isMouseDown) return;
+  const now = performance.now();
   const dx = e.pageX - mouseStartX;
   const dy = e.pageY - mouseStartY;
+  if(now > chartLastMoveTime){
+    const stepDx = e.pageX - chartLastMoveX;
+    const dt = Math.max(8, now - chartLastMoveTime);
+    chartDragVelocity = -(stepDx / Math.max(1, (el.chartWrap.clientWidth - 24) / visibleBars)) * (16 / dt);
+    chartLastMoveX = e.pageX; chartLastMoveTime = now;
+  }
   if(!isMouseChartVerticalPan && Math.abs(dy) > Math.abs(dx) + 4) isMouseChartVerticalPan = true;
   if(isMouseChartVerticalPan){
     chartPanY = Math.max(-120, Math.min(120, mouseStartChartPanY + dy));
   }else{
     const slotPx = (el.chartWrap.clientWidth - 24) / visibleBars;
-    viewStart = Math.max(0, Math.min(Math.max(0, bars30.length - visibleBars), mouseStartView - Math.round(dx / slotPx)));
+    viewStart = clampMainViewStart(mouseStartView - (dx / slotPx));
+    mainUserMovedHorizontally = true;
   }
   drawChart();
 });
@@ -6342,12 +6770,12 @@ el.chartWrap.addEventListener('wheel', e=>{
   const oldSlot = plotWidth / oldVisible;
   const cursorX = Math.max(plotLeft, Math.min(rect.width - 12, e.clientX - rect.left));
   const anchorBar = viewStart + ((cursorX - plotLeft) / oldSlot);
-  const factor = e.deltaY > 0 ? 1.15 : 0.87;
+  const factor = e.deltaY > 0 ? 1.06 : 0.9434;
   visibleBars = Math.round(oldVisible * factor);
   visibleBars = Math.max(MIN_VISIBLE, Math.min(MAX_VISIBLE, visibleBars));
   const newSlot = plotWidth / Math.max(1, visibleBars);
   viewStart = anchorBar - ((cursorX - plotLeft) / newSlot);
-  viewStart = Math.max(0, Math.min(Math.max(0, bars30.length - visibleBars), viewStart));
+  viewStart = clampMainViewStart(viewStart);
   drawChart();
 }, {passive:false});
 
@@ -6362,6 +6790,12 @@ async function fetchPrice(){
 
 function makeBar(){
   if(prices.length===0) return;
+
+  // ถ้าผู้ใช้ยังอยู่ที่ตำแหน่งแท่งล่าสุด ให้กราฟเลื่อนไปข้างหน้าตามแท่งใหม่
+  // แต่ถ้าผู้ใช้ลากย้อนดูแท่งเก่า จะไม่ดึงกราฟกลับมาหาแท่งล่าสุดเอง
+  const oldTotal = bars30.length;
+  const wasFollowingLatest = !mainUserMovedHorizontally || isMainAtLivePosition(oldTotal);
+
   const o = prices[0].p, c = prices[prices.length-1].p;
   const h = Math.max(...prices.map(x=>x.p));
   const l = Math.min(...prices.map(x=>x.p));
@@ -6374,8 +6808,12 @@ function makeBar(){
   }
 
   const total = bars30.length;
-  const targetStart = Math.floor(total - visibleBars * LATEST_POSITION_RATIO);
-  viewStart = Math.max(0, targetStart);
+  if(wasFollowingLatest){
+    viewStart = getMainLiveViewStart(total);
+    mainUserMovedHorizontally = false;
+  }else{
+    viewStart = clampMainViewStart(viewStart, total);
+  }
 
   prices = [];
 }
@@ -7380,7 +7818,7 @@ document.addEventListener('DOMContentLoaded', updateGavinSnake);
         const visible = (typeof blankVisibleBars !== 'undefined' && blankVisibleBars > 0)
           ? blankVisibleBars : Math.min(60, bars30.length);
         const latest = bars30.length - 1;
-        const offset = Math.floor(visible / 2);
+        const offset = Math.floor((visible - 1) * 0.76);
         const maxStart = Math.max(0, bars30.length - visible);
         const desired = latest - offset;
         if(typeof blankViewStart !== 'undefined'){
@@ -7422,22 +7860,8 @@ document.addEventListener('DOMContentLoaded', updateGavinSnake);
     }
   });
 
-  // Keep the latest candle inside the chart's horizontal bounds.
-  // This runs only when the user has not manually dragged the chart.
-  setInterval(function(){
-    try{
-      if(window.__blankUserMovedHorizontally) return;
-      if(typeof bars30 === 'undefined' || !Array.isArray(bars30) || !bars30.length) return;
-      if(typeof blankVisibleBars === 'undefined') return;
-      const maxStart = Math.max(0, bars30.length - blankVisibleBars);
-      const desired = Math.max(0, Math.min(maxStart,
-        bars30.length - 1 - Math.floor(blankVisibleBars / 2)));
-      if(typeof blankViewStart !== 'undefined' && blankViewStart !== desired){
-        blankViewStart = desired;
-        if(typeof drawBlankMarketChart === 'function') drawBlankMarketChart();
-      }
-    }catch(e){}
-  }, 250);
+  // Do not continuously recenter graph 2 while it is running.
+  // The user-controlled horizontal position must remain stable.
 })();
 </script>
 
@@ -7547,7 +7971,18 @@ document.addEventListener('DOMContentLoaded', updateGavinSnake);
     const raw=sourceNum ? src.textContent.replace(sourceNum.textContent,'').trim() : src.textContent.trim();
     num.textContent=raw || '30';
     unit.textContent='วินาที';
-    dst.classList.toggle('urgent',src.classList.contains('urgent'));
+    // กราฟ 2 ต้องอิงสถานะ "รอบรอผล" จากกราฟ 1 โดยตรง
+    // ไม่ใช้ urgent 10 วินาทีเป็นตัวตัดสินอีกต่อไป เพราะ urgent คือช่วงท้ายรอบสัญญาณ
+    const graph1Badge=document.getElementById('orderTimingBadge');
+    const waiting=!!(graph1Badge && graph1Badge.classList.contains('waiting-round'));
+    const wrap=document.getElementById('graph2TimeWrap');
+    const label=document.getElementById('graph2TimeLabel');
+    dst.classList.toggle('urgent',waiting);
+    if(wrap) wrap.classList.toggle('is-wait',waiting);
+    if(label){
+      label.textContent = waiting ? 'รอบรอผล' : 'รอบสัญญาณ';
+      label.style.color = waiting ? '#FF1744' : '#22C55E';
+    }
   }
   window.addEventListener('load',function(){
     syncGraph2Time();
@@ -7622,6 +8057,230 @@ document.addEventListener('DOMContentLoaded', updateGavinSnake);
 }
 </style>
 
+
+<style id="graph1-left-align-no-overlap-v9">
+/* GRAPH 1 — ขยายไปทางซ้ายให้เสมอกรอบกราฟ 2 โดยไม่ทับข้อความ/ส่วนอื่น */
+#chartWrap.chart-canvas-wrap{
+  position:relative !important;
+  box-sizing:border-box !important;
+  left:0 !important;
+  right:auto !important;
+  width:100vw !important;
+  min-width:100vw !important;
+  max-width:100vw !important;
+  margin-left:calc(50% - 50vw) !important;
+  margin-right:0 !important;
+  margin-top:16px !important;
+  margin-bottom:14px !important;
+  padding:0 !important;
+  transform:none !important;
+  overflow:hidden !important;
+  z-index:1 !important;
+  isolation:isolate !important;
+}
+#chartWrap.chart-canvas-wrap > #chartCanvas,
+#chartWrap.chart-canvas-wrap canvas#chartCanvas{
+  display:block !important;
+  position:relative !important;
+  left:0 !important;
+  right:auto !important;
+  width:100% !important;
+  min-width:100% !important;
+  max-width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  box-sizing:border-box !important;
+}
+/* กันกราฟล้นไปทับตัวอักษรหรือส่วนอื่นด้านข้าง */
+#chartWrap.chart-canvas-wrap *{ box-sizing:border-box; }
+</style>
+
+<style id="FINAL-KEEP-GRAPH1-PRICE-LABELS-FULL">
+/* GRAPH 1 — แสดงค่าราคาด้านขวาให้ครบ ไม่ตัดตัวเลข */
+#chartWrap.chart-canvas-wrap{
+  overflow:visible !important;
+  padding-right:0 !important;
+}
+#chartWrap.chart-canvas-wrap > canvas#chartCanvas{
+  width:100% !important;
+  max-width:100% !important;
+  display:block !important;
+}
+.chart-card{
+  overflow:visible !important;
+}
+</style>
+
+<style id="volume-switch-exact-left-final">
+/* FINAL: Volume control sits immediately LEFT of the VOLUME label. */
+#blankMarketChartCard #graph2-volume-switch-row{
+  width:100% !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:8px !important;
+  padding:6px 10px !important;
+  margin:0 !important;
+  min-height:34px !important;
+}
+#blankMarketChartCard #graph2-volume-switch{
+  order:1 !important;
+  width:42px !important;
+  height:24px !important;
+  min-width:42px !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:12px !important;
+  background:transparent !important;
+  border:0 !important;
+}
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-track{
+  width:12px !important;
+  height:12px !important;
+  flex:0 0 12px !important;
+  border-radius:50% !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-on .graph2-switch-track{
+  background:#22c55e !important;
+  box-shadow:0 0 7px rgba(34,197,94,.8) !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-off .graph2-switch-track{
+  background:#ef4444 !important;
+  box-shadow:0 0 7px rgba(239,68,68,.7) !important;
+}
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-knob{display:none !important;}
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-text{display:none !important;}
+#blankMarketChartCard #graph2-volume-switch + .graph2-volume-title{
+  order:2 !important;
+  display:block !important;
+  color:#dce8f1 !important;
+  font:900 11px/1 Arial,sans-serif !important;
+  letter-spacing:1.2px !important;
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+<script id="FINAL_MARK_LINES_V12_DIRECT">
+(function(){
+  const M=100, st={main:{on:false,a:[]},blank:{on:false,a:[]}};
+  function q(w){
+    const main=w==='main';
+    return {
+      s:st[w],
+      wrap:document.getElementById(main?'chartWrap':'blankMarketChartWrap'),
+      btn:document.getElementById(main?'chartMarkToggle':'blankMarkToggle'),
+      clear:document.getElementById(main?'chartMarkClear':'blankMarkClear'),
+      ov:document.getElementById(main?'mainMarkOverlay':'blankMarkOverlay')
+    };
+  }
+  function set(w,on){
+    const a=q(w), b=q(w==='main'?'blank':'main');
+    a.s.on=!!on; b.s.on=false;
+    if(a.btn){a.btn.classList.toggle('active',a.s.on);a.btn.textContent=a.s.on?'✓ วางเส้น':'╱ เส้น';}
+    if(b.btn){b.btn.classList.remove('active');b.btn.textContent='╱ เส้น';}
+  }
+  function priceMain(y){
+    const c=document.getElementById('chartCanvas'); if(!c||!bars30?.length)return null;
+    const n=Math.max(1,Math.min(visibleBars,bars30.length)),s=Math.max(0,Math.min(Math.floor(viewStart),bars30.length-n));
+    const v=bars30.slice(s,s+n),p=v.flatMap(b=>[+b.o,+b.h,+b.l,+b.c]).filter(Number.isFinite);
+    const hi=Math.max(...p),lo=Math.min(...p),rng=((hi-lo)||hi*.002||1)*1.12*priceZoomFactor;
+    const h=c.clientHeight||300,vh=chartVolumeActive?48:0,pt=16,pb=18+vh,ch=h-pt-pb;
+    return (hi+lo)/2-((y-pt-ch/2-chartPanY)/ch)*rng;
+  }
+  function priceBlank(y){
+    const c=document.getElementById('blankMarketChart');if(!c||!bars30?.length)return null;
+    const s=Math.max(0,Math.min(blankViewStart,Math.max(0,bars30.length-blankVisibleBars)));
+    const v=bars30.slice(s,s+blankVisibleBars),p=v.flatMap(b=>[+b.o,+b.h,+b.l,+b.c]).filter(Number.isFinite);
+    const hi=Math.max(...p),lo=Math.min(...p),rng=((hi-lo)||hi*.002||1)*1.16*blankPriceZoomFactor;
+    const macd=window.blankMarketMacdActive!==false, vh=window.blankMarketVolumeActive===true?48:0, mh=macd?68:0,g=macd?44:0;
+    const h=c.clientHeight||300,pt=16,pb=18+vh+mh+g,ch=h-pt-pb;
+    return (hi+lo)/2-((y-pt-ch/2-blankChartPanY)/ch)*rng;
+  }
+  function yMain(price){
+    const c=document.getElementById('chartCanvas');if(!c||!bars30?.length)return null;
+    const n=Math.max(1,Math.min(visibleBars,bars30.length)),s=Math.max(0,Math.min(Math.floor(viewStart),bars30.length-n));
+    const v=bars30.slice(s,s+n),p=v.flatMap(b=>[+b.o,+b.h,+b.l,+b.c]).filter(Number.isFinite);
+    const hi=Math.max(...p),lo=Math.min(...p),rng=((hi-lo)||hi*.002||1)*1.12*priceZoomFactor;
+    const h=c.clientHeight||300,vh=chartVolumeActive?48:0,pt=16,pb=18+vh,ch=h-pt-pb;
+    return pt+ch/2-((price-(hi+lo)/2)/rng)*ch+chartPanY;
+  }
+  function yBlank(price){
+    const c=document.getElementById('blankMarketChart');if(!c||!bars30?.length)return null;
+    const s=Math.max(0,Math.min(blankViewStart,Math.max(0,bars30.length-blankVisibleBars)));
+    const v=bars30.slice(s,s+blankVisibleBars),p=v.flatMap(b=>[+b.o,+b.h,+b.l,+b.c]).filter(Number.isFinite);
+    const hi=Math.max(...p),lo=Math.min(...p),rng=((hi-lo)||hi*.002||1)*1.16*blankPriceZoomFactor;
+    const macd=window.blankMarketMacdActive!==false,vh=window.blankMarketVolumeActive===true?48:0,mh=macd?68:0,g=macd?44:0;
+    const h=c.clientHeight||300,pt=16,pb=18+vh+mh+g,ch=h-pt-pb;
+    return pt+ch/2-((price-(hi+lo)/2)/rng)*ch+blankChartPanY;
+  }
+  function render(w){
+    const a=q(w);if(!a.ov)return;a.ov.innerHTML='';
+    const yf=w==='main'?yMain:yBlank;
+    a.s.a.forEach((p,i)=>{
+      const y=yf(p);if(!Number.isFinite(y))return;
+      const d=document.createElement('div');
+      d.className='chart-mark-line'+(i%2?' alt':'');
+      d.style.top=Math.round(y)+'px';
+      d.innerHTML='<span class="chart-mark-label">หมาย '+(i+1)+'</span>';
+      d.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();a.s.a.splice(i,1);render(w)},true);
+      a.ov.appendChild(d);
+    });
+  }
+  function put(w,clientY,e){
+    const a=q(w);if(!a.s.on)return;
+    const r=a.wrap.getBoundingClientRect();
+    // หน้าเพจถูกย่อสเกลด้วย CSS transform (ดู fitToScreen) จึงต้องแปลงพิกัดที่แตะ
+    // จากพิกัดหน้าจอจริง (rect ที่ถูกสเกลแล้ว) กลับเป็นพิกัด local ของกล่องกราฟ
+    // ก่อนคำนวณราคา ไม่งั้นเส้นจะไปวางผิดตำแหน่ง/หลุดกรอบ
+    const scaleY=(r.height||1)/(a.wrap.offsetHeight||r.height||1);
+    const y=(clientY-r.top)/(scaleY||1);
+    if(y<0||y>a.wrap.offsetHeight)return;
+    const p=w==='main'?priceMain(y):priceBlank(y);
+    if(!Number.isFinite(p))return;
+    if(a.s.a.length>=M)a.s.a.shift();
+    a.s.a.push(p);render(w);
+    if(e){e.preventDefault();e.stopPropagation();}
+  }
+  function inside(el,x,y){
+    const r=el.getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom;
+  }
+  function init(){
+    const m=q('main'),b=q('blank');
+    if(!m.wrap||!b.wrap||!m.btn||!b.btn){requestAnimationFrame(init);return;}
+    m.btn.onclick=e=>{e.preventDefault();e.stopPropagation();set('main',!m.s.on)};
+    b.btn.onclick=e=>{e.preventDefault();e.stopPropagation();set('blank',!b.s.on)};
+    m.clear.onclick=e=>{e.preventDefault();e.stopPropagation();m.s.a=[];render('main')};
+    b.clear.onclick=e=>{e.preventDefault();e.stopPropagation();b.s.a=[];render('blank')};
+
+    // รับแตะจากทั้งหน้าจอใน capture phase ก่อนโค้ดลากกราฟ
+    document.addEventListener('touchend',e=>{
+      const t=e.changedTouches?.[0];if(!t)return;
+      if(m.s.on&&inside(m.wrap,t.clientX,t.clientY)){put('main',t.clientY,e);return;}
+      if(b.s.on&&inside(b.wrap,t.clientX,t.clientY)){put('blank',t.clientY,e);return;}
+    },{capture:true,passive:false});
+    document.addEventListener('pointerup',e=>{
+      if(e.pointerType==='touch')return;
+      if(m.s.on&&inside(m.wrap,e.clientX,e.clientY)){put('main',e.clientY,e);return;}
+      if(b.s.on&&inside(b.wrap,e.clientX,e.clientY)){put('blank',e.clientY,e);return;}
+    },{capture:true});
+    window.addEventListener('resize',()=>{render('main');render('blank')});
+  }
+  init();
+})();
+</script>
 </body>
 </html>
 <style id="market-check-real-blue-fix">
@@ -7931,3 +8590,1019 @@ document.addEventListener('DOMContentLoaded', updateGavinSnake);
   #graph2SymbolQuote{width:50px !important;}
 }
 </style>
+
+<style id="graph1-horizontal-full-width-v8">
+/* GRAPH 1 — ขยาย "พื้นที่กราฟด้านใน" ให้เต็มความกว้างเท่ากราฟ 2
+   ไม่เปลี่ยนระบบแท่งเทียน เวลา หรือการออกออเดอร์ */
+#chartWrap.chart-canvas-wrap{
+  position:relative !important;
+  box-sizing:border-box !important;
+  width:100vw !important;
+  min-width:100vw !important;
+  max-width:none !important;
+  margin-left:calc(50% - 50vw) !important;
+  margin-right:calc(50% - 50vw) !important;
+  padding:0 !important;
+  overflow:hidden !important;
+}
+#chartWrap.chart-canvas-wrap > #chartCanvas,
+#chartWrap.chart-canvas-wrap canvas#chartCanvas{
+  display:block !important;
+  position:relative !important;
+  left:0 !important;
+  width:100% !important;
+  min-width:100% !important;
+  max-width:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  box-sizing:border-box !important;
+}
+</style>
+
+
+<style id="FINAL-GRAPH1-MATCH-GENERATED-PREVIEW">
+/* ทำกราฟตัวที่ 1 ให้มีหน้าตาใกล้ภาพตัวอย่าง: กรอบกว้าง เต็มพื้นที่ และไม่ทับข้อความ */
+.chart-card{
+  width:calc(100vw - 32px) !important;
+  max-width:none !important;
+  margin-left:calc((100% - 100vw)/2 + 16px) !important;
+  margin-right:0 !important;
+  box-sizing:border-box !important;
+  padding:10px 10px 12px !important;
+  border:1px solid rgba(59,130,246,.28) !important;
+  border-radius:18px !important;
+  background:linear-gradient(180deg,rgba(30,41,59,.82),rgba(5,15,30,.96)) !important;
+  box-shadow:0 10px 28px rgba(0,0,0,.28), inset 0 1px rgba(255,255,255,.04) !important;
+  overflow:hidden !important;
+}
+.chart-header{
+  min-height:38px !important;
+  margin-bottom:8px !important;
+  padding:0 2px !important;
+}
+.chart-canvas-wrap#chartWrap{
+  width:100% !important;
+  max-width:none !important;
+  margin:0 !important;
+  border-radius:12px !important;
+  overflow:hidden !important;
+}
+.chart-card canvas#chartCanvas{
+  width:100% !important;
+  height:420px !important;
+  display:block !important;
+}
+/* แถว Volume ให้เห็นคำว่า VOLUME ทางซ้ายและปุ่มอยู่ข้าง ๆ โดยไม่ชนกัน */
+#chartWrap #chartVolumeLabel{
+  left:8px !important;
+  bottom:8px !important;
+  width:50px !important;
+  text-align:left !important;
+  white-space:nowrap !important;
+  pointer-events:none !important;
+}
+#chartWrap #chartVolumeToggle{
+  left:64px !important;
+  bottom:8px !important;
+  max-width:calc(100% - 72px) !important;
+  white-space:nowrap !important;
+}
+.trend-signal-panel{
+  margin:7px 0 8px !important;
+  border-radius:0 0 11px 11px !important;
+  border-left:0 !important;
+  border-right:0 !important;
+}
+@media(max-width:600px){
+  .chart-card{width:calc(100vw - 24px) !important;margin-left:calc((100% - 100vw)/2 + 12px) !important;}
+  .chart-card canvas#chartCanvas{height:400px !important;}
+  #chartWrap #chartVolumeLabel{left:8px !important;width:50px !important;}
+  #chartWrap #chartVolumeToggle{left:64px !important;}
+}
+</style>
+
+<style id="keep-graph1-price-axis-visible">
+/* GRAPH 1 — keep the price labels on the right side visible */
+#chartWrap.chart-canvas-wrap{
+  overflow:visible !important;
+  padding-right:10px !important;
+  box-sizing:border-box !important;
+}
+#chartWrap.chart-canvas-wrap > canvas#chartCanvas{
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+}
+#chartWrap.chart-canvas-wrap #trendSignalPanel{
+  position:relative !important;
+  z-index:3 !important;
+}
+</style>
+
+<style id="volume-button-exact-left-final">
+/* FINAL: วางปุ่ม Volume เป็นจุดเล็กทางซ้ายของคำว่า VOLUME ตามตำแหน่งในภาพ */
+#blankMarketChartCard #graph2-volume-switch-row{
+  display:flex !important;
+  flex-direction:row !important;
+  justify-content:flex-start !important;
+  align-items:center !important;
+  gap:6px !important;
+  padding:7px 12px !important;
+  min-height:40px !important;
+}
+#blankMarketChartCard #graph2-volume-switch-row .graph2-volume-title{
+  order:2 !important;
+  flex:0 0 auto !important;
+  margin:0 !important;
+  padding:0 !important;
+  color:#dce8f1 !important;
+  font:900 11px/1 Arial,sans-serif !important;
+  letter-spacing:1.2px !important;
+}
+#blankMarketChartCard #graph2-volume-switch{
+  order:1 !important;
+  position:relative !important;
+  flex:0 0 18px !important;
+  width:18px !important;
+  min-width:18px !important;
+  max-width:18px !important;
+  height:18px !important;
+  min-height:18px !important;
+  max-height:18px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:50% !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  font-size:0 !important;
+  line-height:0 !important;
+  overflow:visible !important;
+}
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-track,
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-text{
+  display:none !important;
+}
+#blankMarketChartCard #graph2-volume-switch::before{
+  content:"" !important;
+  position:absolute !important;
+  left:2px !important;
+  top:2px !important;
+  width:14px !important;
+  height:14px !important;
+  border-radius:50% !important;
+  background:#ef4444 !important;
+  box-shadow:0 0 5px rgba(239,68,68,.75) !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-on::before{
+  background:#22c55e !important;
+  box-shadow:0 0 5px rgba(34,197,94,.75) !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-off::before{
+  background:#ef4444 !important;
+  box-shadow:0 0 5px rgba(239,68,68,.75) !important;
+}
+</style>
+
+<style id="volume-button-smaller-no-overlap">
+/* ปุ่ม Volume ขนาดเล็กมาก เพื่อไม่ให้ทับข้อความอื่น */
+#blankMarketChartCard #graph2-volume-switch-row{
+  gap:4px !important;
+  padding:5px 8px !important;
+  min-height:30px !important;
+  height:30px !important;
+  overflow:visible !important;
+}
+#blankMarketChartCard #graph2-volume-switch-row .graph2-volume-title{
+  font-size:10px !important;
+  letter-spacing:1px !important;
+}
+#blankMarketChartCard #graph2-volume-switch{
+  flex:0 0 12px !important;
+  width:12px !important;
+  min-width:12px !important;
+  max-width:12px !important;
+  height:12px !important;
+  min-height:12px !important;
+  max-height:12px !important;
+}
+#blankMarketChartCard #graph2-volume-switch::before{
+  left:2px !important;
+  top:2px !important;
+  width:8px !important;
+  height:8px !important;
+  box-shadow:0 0 3px rgba(239,68,68,.65) !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-on::before{
+  box-shadow:0 0 3px rgba(34,197,94,.65) !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-off::before{
+  box-shadow:0 0 3px rgba(239,68,68,.65) !important;
+}
+</style>
+<style id="volume-button-above-volume-final">
+/* FINAL: จุดเปิด/ปิด Volume อยู่ในช่องว่างเหนือคำว่า VOLUME */
+#blankMarketChartCard #graph2-volume-switch-row{
+  position:relative !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  overflow:visible !important;
+}
+#blankMarketChartCard #graph2-volume-switch-row .graph2-volume-title{
+  position:relative !important;
+  margin-left:0 !important;
+  z-index:2 !important;
+}
+#blankMarketChartCard #graph2-volume-switch{
+  position:absolute !important;
+  left:8px !important;
+  top:-11px !important;
+  z-index:10 !important;
+  width:10px !important;
+  min-width:10px !important;
+  max-width:10px !important;
+  height:10px !important;
+  min-height:10px !important;
+  max-height:10px !important;
+  margin:0 !important;
+  padding:0 !important;
+  flex:none !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  border-radius:50% !important;
+}
+#blankMarketChartCard #graph2-volume-switch::before{
+  content:"" !important;
+  position:absolute !important;
+  left:1px !important;
+  top:1px !important;
+  width:8px !important;
+  height:8px !important;
+  border-radius:50% !important;
+  background:#ef4444 !important;
+  box-shadow:0 0 3px rgba(239,68,68,.7) !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-on::before{
+  background:#22c55e !important;
+  box-shadow:0 0 3px rgba(34,197,94,.7) !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-off::before{
+  background:#ef4444 !important;
+  box-shadow:0 0 3px rgba(239,68,68,.7) !important;
+}
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-track,
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-text{
+  display:none !important;
+}
+</style>
+<style id="REAL_VOLUME_CONTROL_V22">
+/* REAL V22: แสดงปุ่ม Volume ใหม่จริง ๆ ข้างคำว่า VOLUME */
+#blankMarketChartCard #graph2-volume-switch-row{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  position:relative !important;
+  width:100% !important;
+  height:30px !important;
+  min-height:30px !important;
+  box-sizing:border-box !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:5px !important;
+  padding:4px 8px !important;
+  overflow:visible !important;
+  background:#061525 !important;
+  border:0 !important;
+}
+#blankMarketChartCard #graph2-volume-switch{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  position:relative !important;
+  left:auto !important;
+  top:auto !important;
+  order:1 !important;
+  flex:0 0 12px !important;
+  width:12px !important;
+  min-width:12px !important;
+  max-width:12px !important;
+  height:12px !important;
+  min-height:12px !important;
+  max-height:12px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:50% !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+  font-size:0 !important;
+}
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-track,
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-text{
+  display:none !important;
+}
+#blankMarketChartCard #graph2-volume-switch::before{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  left:1px !important;
+  top:1px !important;
+  width:10px !important;
+  height:10px !important;
+  border-radius:50% !important;
+  background:#ef4444 !important;
+  box-shadow:0 0 3px rgba(239,68,68,.7) !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-on::before{
+  background:#22c55e !important;
+  box-shadow:0 0 3px rgba(34,197,94,.7) !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-off::before{
+  background:#ef4444 !important;
+  box-shadow:0 0 3px rgba(239,68,68,.7) !important;
+}
+#blankMarketChartCard #graph2-volume-switch-row .graph2-volume-title{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  order:2 !important;
+  position:relative !important;
+  margin:0 !important;
+  padding:0 !important;
+  width:auto !important;
+  height:auto !important;
+  color:#dce8f1 !important;
+  background:transparent !important;
+  font:900 11px/1 Arial,sans-serif !important;
+  letter-spacing:1.2px !important;
+}
+</style>
+<script>
+(function(){
+  function initRealVolume(){
+    const btn=document.getElementById('graph2-volume-switch');
+    if(!btn || btn.dataset.realV22==='1') return;
+    btn.dataset.realV22='1';
+    btn.addEventListener('click',function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      const on=!btn.classList.contains('is-on');
+      btn.classList.toggle('is-on',on);
+      btn.classList.toggle('is-off',!on);
+      btn.setAttribute('aria-pressed',String(on));
+      window.blankMarketVolumeActive=on;
+      const panel=document.getElementById('blankVolumePanel');
+      if(panel) panel.classList.toggle('volume-hidden',!on);
+      document.querySelectorAll('.blank-chart-volume-label').forEach(el=>el.style.display=on?'':'none');
+      if(typeof window.drawBlankMarketChart==='function') window.drawBlankMarketChart();
+      if(typeof window.drawMarketChart==='function') window.drawMarketChart();
+    });
+    btn.classList.add('is-on');
+    btn.classList.remove('is-off');
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initRealVolume);
+  else initRealVolume();
+  setTimeout(initRealVolume,300);
+  setTimeout(initRealVolume,1000);
+})();
+</script>
+
+
+<style id="FINAL_VISIBLE_VOLUME_BUTTON">
+/* FINAL FIX: ปุ่มเปิด/ปิด Volume ต้องมองเห็นชัดและกดได้ */
+#blankMarketChartWrap{
+  position:relative !important;
+  overflow:visible !important;
+}
+
+#graph2-volume-switch-row{
+  position:relative !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:8px !important;
+  width:100% !important;
+  min-height:42px !important;
+  height:42px !important;
+  padding:5px 10px !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+  z-index:9999 !important;
+}
+
+#graph2-volume-switch{
+  position:relative !important;
+  left:auto !important;
+  top:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  width:78px !important;
+  min-width:78px !important;
+  max-width:78px !important;
+  height:30px !important;
+  min-height:30px !important;
+  max-height:30px !important;
+  padding:0 9px !important;
+  margin:0 !important;
+  border:1px solid rgba(148,163,184,.65) !important;
+  border-radius:9px !important;
+  background:linear-gradient(180deg,#26364a,#111c2b) !important;
+  color:#f8fafc !important;
+  box-shadow:0 3px 10px rgba(0,0,0,.35) !important;
+  cursor:pointer !important;
+  pointer-events:auto !important;
+  z-index:10000 !important;
+  font:800 11px/1 Arial,sans-serif !important;
+  letter-spacing:.2px !important;
+}
+
+#graph2-volume-switch.is-on{
+  border-color:rgba(34,197,94,.9) !important;
+  background:linear-gradient(180deg,#166534,#14532d) !important;
+}
+
+#graph2-volume-switch.is-off{
+  border-color:rgba(239,68,68,.9) !important;
+  background:linear-gradient(180deg,#991b1b,#7f1d1d) !important;
+}
+
+#graph2-volume-switch .graph2-switch-track{
+  display:block !important;
+  position:relative !important;
+  width:11px !important;
+  min-width:11px !important;
+  height:11px !important;
+  min-height:11px !important;
+  flex:0 0 11px !important;
+  border-radius:50% !important;
+  background:#ef4444 !important;
+  box-shadow:0 0 6px rgba(239,68,68,.8) !important;
+}
+
+#graph2-volume-switch.is-on .graph2-switch-track{
+  background:#22c55e !important;
+  box-shadow:0 0 7px rgba(34,197,94,.85) !important;
+}
+
+#graph2-volume-switch .graph2-switch-knob{
+  display:none !important;
+}
+
+#graph2-volume-switch .graph2-switch-text{
+  display:inline-block !important;
+  color:#fff !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  font-size:11px !important;
+  font-weight:900 !important;
+}
+
+#graph2-volume-switch .graph2-switch-text::after{
+  content:" Volume" !important;
+}
+
+#graph2-volume-switch:active{
+  transform:scale(.97) !important;
+}
+
+#graph2-volume-switch:focus-visible{
+  outline:2px solid #38bdf8 !important;
+  outline-offset:2px !important;
+}
+
+#graph2-volume-switch-row .graph2-volume-title{
+  position:relative !important;
+  display:block !important;
+  margin:0 !important;
+  color:#dce8f1 !important;
+  font:900 11px/30px Arial,sans-serif !important;
+  letter-spacing:1.1px !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+
+/* ไม่ให้ปุ่มเดิมซ้อนกับปุ่มใหม่ */
+#blankMarketVolumeToggle{
+  display:none !important;
+}
+</style>
+
+
+<script id="FINAL_VISIBLE_VOLUME_BUTTON_JS">
+(function(){
+  function initVisibleVolumeButton(){
+    const sw = document.getElementById('graph2-volume-switch');
+    if(!sw || sw.dataset.visibleVolumeFix === '1') return;
+
+    sw.dataset.visibleVolumeFix = '1';
+
+    function getState(){
+      return window.blankMarketVolumeActive !== false;
+    }
+
+    function redraw(on){
+      window.blankMarketVolumeActive = on;
+
+      const panel = document.getElementById('blankVolumePanel');
+      if(panel) panel.classList.toggle('volume-hidden', !on);
+
+      sw.classList.toggle('is-on', on);
+      sw.classList.toggle('is-off', !on);
+      sw.setAttribute('aria-pressed', String(on));
+
+      const text = sw.querySelector('.graph2-switch-text');
+      if(text) text.textContent = on ? 'เปิด' : 'ปิด';
+
+      const old = document.getElementById('blankMarketVolumeToggle');
+      if(old){
+        old.classList.toggle('on', on);
+        old.setAttribute('aria-pressed', String(on));
+      }
+
+      if(typeof drawBlankVolumePanel === 'function') drawBlankVolumePanel();
+      if(typeof drawBlankMarketChart === 'function'){
+        drawBlankMarketChart();
+        requestAnimationFrame(function(){ drawBlankMarketChart(); });
+      }
+    }
+
+    sw.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      redraw(!getState());
+    });
+
+    // แสดงสถานะจริงทันที
+    redraw(getState());
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initVisibleVolumeButton);
+  }else{
+    initVisibleVolumeButton();
+  }
+
+  window.addEventListener('load', initVisibleVolumeButton);
+  setTimeout(initVisibleVolumeButton, 300);
+  setTimeout(initVisibleVolumeButton, 1000);
+})();
+</script>
+
+
+<style id="FINAL_VOLUME_BUTTON_ABOVE_WORD">
+/* FINAL: ปุ่มเปิด/ปิด Volume อยู่เหนือคำว่า VOLUME และต้องมองเห็นชัด */
+#blankMarketChartCard #graph2-volume-switch-row{
+  position:relative !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  justify-content:flex-start !important;
+  gap:4px !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:58px !important;
+  padding:6px 10px 7px !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+  z-index:99999 !important;
+}
+#blankMarketChartCard #graph2-volume-switch{
+  position:relative !important;
+  order:1 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:28px !important;
+  min-width:28px !important;
+  max-width:28px !important;
+  height:28px !important;
+  min-height:28px !important;
+  max-height:28px !important;
+  margin:0 0 0 2px !important;
+  padding:0 !important;
+  border:1px solid rgba(148,163,184,.75) !important;
+  border-radius:8px !important;
+  background:#172235 !important;
+  box-shadow:0 2px 8px rgba(0,0,0,.45) !important;
+  cursor:pointer !important;
+  pointer-events:auto !important;
+  z-index:100000 !important;
+  font-size:0 !important;
+  overflow:visible !important;
+}
+#blankMarketChartCard #graph2-volume-switch::before{
+  content:"" !important;
+  position:absolute !important;
+  left:7px !important;
+  top:7px !important;
+  width:12px !important;
+  height:12px !important;
+  border-radius:50% !important;
+  background:#ef4444 !important;
+  box-shadow:0 0 6px rgba(239,68,68,.8) !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-on::before{
+  background:#22c55e !important;
+  box-shadow:0 0 7px rgba(34,197,94,.85) !important;
+}
+#blankMarketChartCard #graph2-volume-switch.is-off::before{
+  background:#ef4444 !important;
+  box-shadow:0 0 7px rgba(239,68,68,.8) !important;
+}
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-track,
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-knob,
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-text{
+  display:none !important;
+}
+#blankMarketChartCard #graph2-volume-switch:active{
+  transform:scale(.94) !important;
+}
+#blankMarketChartCard #graph2-volume-switch-row .graph2-volume-title{
+  order:2 !important;
+  display:block !important;
+  position:relative !important;
+  margin:0 !important;
+  padding:0 !important;
+  color:#dce8f1 !important;
+  font:900 11px/16px Arial,sans-serif !important;
+  letter-spacing:1.2px !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  z-index:100001 !important;
+}
+</style>
+
+
+<style id="GRAPH1_VOLUME_BUTTON_VISIBLE_FINAL">
+/* GRAPH 1: ปุ่ม Volume อยู่เหนือคำว่า VOLUME */
+#chartWrap{
+  position:relative !important;
+  overflow:visible !important;
+}
+
+#chartWrap #chartVolumeToggle{
+  position:absolute !important;
+  left:8px !important;
+  bottom:31px !important;
+  width:76px !important;
+  min-width:76px !important;
+  height:28px !important;
+  min-height:28px !important;
+  padding:0 8px !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  z-index:100 !important;
+  pointer-events:auto !important;
+  border:1px solid rgba(148,163,184,.7) !important;
+  border-radius:8px !important;
+  background:linear-gradient(180deg,#26364a,#111c2b) !important;
+  color:#fff !important;
+  box-shadow:0 3px 9px rgba(0,0,0,.35) !important;
+  cursor:pointer !important;
+  font:900 10px/1 Arial,sans-serif !important;
+}
+
+#chartWrap #chartVolumeToggle.on{
+  border-color:rgba(34,197,94,.9) !important;
+  background:linear-gradient(180deg,#166534,#14532d) !important;
+}
+
+#chartWrap #chartVolumeToggle:not(.on){
+  border-color:rgba(239,68,68,.9) !important;
+  background:linear-gradient(180deg,#991b1b,#7f1d1d) !important;
+}
+
+#chartWrap #chartVolumeToggle .vol-dot{
+  display:block !important;
+  width:9px !important;
+  height:9px !important;
+  min-width:9px !important;
+  min-height:9px !important;
+  border-radius:50% !important;
+  background:#ef4444 !important;
+  box-shadow:0 0 5px rgba(239,68,68,.8) !important;
+}
+
+#chartWrap #chartVolumeToggle.on .vol-dot{
+  background:#22c55e !important;
+  box-shadow:0 0 6px rgba(34,197,94,.85) !important;
+}
+
+#chartWrap #chartVolumeToggle::after{
+  content:"Volume" !important;
+  color:#fff !important;
+  font-weight:900 !important;
+}
+
+#chartWrap #chartVolumeToggle span:last-child{
+  display:none !important;
+}
+
+/* คำว่า VOLUME อยู่ใต้ปุ่ม */
+#chartWrap #chartVolumeLabel{
+  position:absolute !important;
+  left:8px !important;
+  bottom:5px !important;
+  width:76px !important;
+  height:20px !important;
+  line-height:20px !important;
+  margin:0 !important;
+  padding:0 !important;
+  text-align:center !important;
+  z-index:99 !important;
+  display:block !important;
+  color:#dce8f1 !important;
+  font:900 9px/20px Arial,sans-serif !important;
+  letter-spacing:1px !important;
+  pointer-events:none !important;
+}
+
+@media(max-width:600px){
+  #chartWrap #chartVolumeToggle{
+    left:8px !important;
+    bottom:31px !important;
+  }
+  #chartWrap #chartVolumeLabel{
+    left:8px !important;
+    bottom:5px !important;
+  }
+}
+</style>
+
+
+<style id="FINAL_VOLUME_OPEN_CLOSE_BOTH_GRAPHS">
+/* FINAL: ทั้ง 2 กราฟ — ปุ่มอยู่เหนือคำว่า VOLUME และข้อความเป็น เปิด / ปิด */
+#chartWrap #chartVolumeToggle{
+  bottom:38px !important;
+  width:58px !important;
+  min-width:58px !important;
+  max-width:58px !important;
+  height:24px !important;
+  min-height:24px !important;
+  padding:0 6px !important;
+  gap:4px !important;
+  border-radius:7px !important;
+  font-size:10px !important;
+}
+#chartWrap #chartVolumeToggle::after{
+  content:"เปิด" !important;
+  font-size:10px !important;
+  font-weight:900 !important;
+}
+#chartWrap #chartVolumeToggle:not(.on)::after{
+  content:"ปิด" !important;
+}
+#chartWrap #chartVolumeToggle .vol-dot{
+  width:7px !important;
+  height:7px !important;
+  min-width:7px !important;
+  min-height:7px !important;
+}
+
+#blankMarketChartCard #graph2-volume-switch-row{
+  transform:translateY(-7px) !important;
+  min-height:34px !important;
+  height:34px !important;
+  padding:2px 10px 3px !important;
+  gap:5px !important;
+}
+#blankMarketChartCard #graph2-volume-switch{
+  width:58px !important;
+  min-width:58px !important;
+  max-width:58px !important;
+  height:24px !important;
+  min-height:24px !important;
+  max-height:24px !important;
+  padding:0 6px !important;
+  gap:4px !important;
+  border-radius:7px !important;
+}
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-text{
+  display:inline-block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  font-size:10px !important;
+  line-height:1 !important;
+}
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-text::after{
+  content:none !important;
+  display:none !important;
+}
+#blankMarketChartCard #graph2-volume-switch .graph2-switch-track{
+  width:7px !important;
+  height:7px !important;
+  min-width:7px !important;
+  min-height:7px !important;
+  flex:0 0 7px !important;
+}
+#blankMarketChartCard #graph2-volume-switch-row .graph2-volume-title{
+  line-height:24px !important;
+}
+
+@media(max-width:600px){
+  #chartWrap #chartVolumeToggle{bottom:38px !important;}
+}
+</style>
+
+<script id="FINAL_VOLUME_OPEN_CLOSE_TEXT_BOTH">
+(function(){
+  function syncVolumeButtonText(){
+    const b1=document.getElementById('chartVolumeToggle');
+    if(b1){
+      b1.setAttribute('aria-label', b1.classList.contains('on') ? 'ปิด Volume' : 'เปิด Volume');
+      b1.setAttribute('title', b1.classList.contains('on') ? 'ปิด Volume' : 'เปิด Volume');
+    }
+    const b2=document.getElementById('graph2-volume-switch');
+    if(b2){
+      const t=b2.querySelector('.graph2-switch-text');
+      if(t) t.textContent=b2.classList.contains('is-on') ? 'เปิด' : 'ปิด';
+      b2.setAttribute('aria-label', b2.classList.contains('is-on') ? 'ปิด Volume' : 'เปิด Volume');
+    }
+  }
+  syncVolumeButtonText();
+  document.addEventListener('click',function(e){
+    if(e.target.closest('#chartVolumeToggle,#graph2-volume-switch')) setTimeout(syncVolumeButtonText,0);
+  },true);
+  setInterval(syncVolumeButtonText,500);
+})();
+</script>
+<style id="volume-label-centered-both-graphs">
+#chartWrap #chartVolumeLabel{left:50% !important;bottom:8px !important;transform:translateX(-50%) !important;width:auto !important;min-width:0 !important;text-align:center !important;white-space:nowrap !important;line-height:1 !important;font-size:11px !important;letter-spacing:1.2px !important;z-index:20 !important;}
+#blankMarketChartCard #graph2-volume-switch-row{position:relative !important;width:100% !important;box-sizing:border-box !important;align-items:center !important;text-align:center !important;padding:4px 10px 6px !important;min-height:44px !important;}
+#blankMarketChartCard #graph2-volume-switch + .graph2-volume-title{position:relative !important;left:auto !important;right:auto !important;order:2 !important;align-self:center !important;text-align:center !important;width:auto !important;margin:0 auto !important;font-size:11px !important;letter-spacing:1.2px !important;line-height:1 !important;}
+#blankMarketChartCard #graph2-volume-switch{position:absolute !important;left:calc(50% - 42px) !important;top:50% !important;transform:translateY(-50%) !important;margin:0 !important;}
+</style>
+
+<style id="volume-left-edge-both">
+#chartWrap #chartVolumeLabel{left:8px!important;bottom:8px!important;transform:none!important;width:auto!important;text-align:left!important;white-space:nowrap!important;margin:0!important;}
+#chartWrap #chartVolumeToggle{left:64px!important;bottom:8px!important;}
+#blankMarketChartCard #graph2-volume-switch-row{position:relative!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;padding:4px 10px 6px!important;min-height:36px!important;}
+#blankMarketChartCard #graph2-volume-switch + .graph2-volume-title{position:relative!important;left:auto!important;order:2!important;margin:0 0 0 8px!important;width:auto!important;text-align:left!important;align-self:center!important;}
+#blankMarketChartCard #graph2-volume-switch{position:relative!important;left:auto!important;top:auto!important;transform:none!important;order:1!important;margin:0!important;}
+</style>
+<style id="FINAL_GRAPH1_VOLUME_BUTTON_ABOVE_LABEL">
+/* GRAPH 1 ONLY — ปุ่มเปิด/ปิดอยู่เหนือคำว่า Volume */
+#chartWrap{position:relative !important;}
+#chartWrap #chartVolumeLabel{
+  position:absolute !important; left:8px !important; bottom:5px !important;
+  width:76px !important; height:20px !important; line-height:20px !important;
+  margin:0 !important; padding:0 !important; text-align:center !important;
+  z-index:99 !important; pointer-events:none !important;
+}
+#chartWrap #chartVolumeToggle{
+  position:absolute !important; left:17px !important; bottom:31px !important;
+  width:58px !important; min-width:58px !important; max-width:58px !important;
+  height:24px !important; min-height:24px !important; max-height:24px !important;
+  margin:0 !important; padding:0 6px !important; box-sizing:border-box !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  gap:4px !important; z-index:100 !important;
+}
+@media(max-width:600px){
+  #chartWrap #chartVolumeToggle{left:17px !important; bottom:31px !important;}
+  #chartWrap #chartVolumeLabel{left:8px !important; bottom:5px !important;}
+}
+</style>
+
+<style id="GRAPH1_VOLUME_SHIFT_LEFT_V2">
+/* กราฟ 1 — ขยับคำว่า Volume และปุ่ม เปิด/ปิด ไปทางซ้ายเล็กน้อย ไม่ให้ทับลูกศร */
+#chartWrap #chartVolumeLabel{
+  left:2px !important;
+}
+
+#chartWrap #chartVolumeToggle{
+  left:11px !important;
+}
+
+@media(max-width:600px){
+  #chartWrap #chartVolumeLabel{
+    left:2px !important;
+  }
+  #chartWrap #chartVolumeToggle{
+    left:11px !important;
+  }
+}
+</style>
+
+<style id="FINAL_RISK_DISCLAIMER_FRAME">
+/* กรอบคำเตือนใหม่ — แยกจากกราฟ และขนาดเท่ากับการ์ดอื่น */
+.graph-risk-disclaimer{
+  width:100% !important;
+  box-sizing:border-box !important;
+  margin:12px 0 16px !important;
+  padding:13px 14px !important;
+  border:1px solid rgba(56,189,248,.24) !important;
+  border-left:3px solid #38bdf8 !important;
+  border-radius:14px !important;
+  background:
+    linear-gradient(145deg,rgba(8,20,34,.96),rgba(9,27,45,.92)) !important;
+  box-shadow:
+    0 8px 24px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.035) !important;
+  color:#dbeafe !important;
+  font-size:11px !important;
+  line-height:1.65 !important;
+  overflow:hidden !important;
+}
+
+.graph-risk-disclaimer .risk-line{
+  display:block !important;
+  margin:0 !important;
+}
+
+.graph-risk-disclaimer .risk-line + .risk-line{
+  margin-top:7px !important;
+}
+
+.graph-risk-disclaimer strong{
+  color:#7dd3fc !important;
+  font-weight:800 !important;
+}
+
+/* กรอบกราฟไม่ถูกครอบด้วยกรอบคำเตือนอีกต่อไป */
+.blank-market-chart{
+  margin-top:10px !important;
+}
+</style>
+
+<style id="GRAPH2_VOLUME_BARS_TALLER_FINAL">
+/* กราฟ 2 เท่านั้น — เพิ่มพื้นที่ให้แท่ง Volume สูงขึ้นและพอดี */
+#blankMarketChartCard #blankVolumePanel{
+  height:60px !important;
+  padding:14px 2px 2px !important;
+  align-items:flex-end !important;
+  overflow:hidden !important;
+}
+
+#blankMarketChartCard #blankVolumePanel .vbar{
+  min-height:4px !important;
+  max-height:40px !important;
+}
+</style>
+
+<style id="GRAPH2_VOLUME_BARS_TALLER_V3">
+/* กราฟ 2 เท่านั้น — เพิ่มความสูงแท่ง Volume อีก */
+#blankMarketChartCard #blankVolumePanel{
+  height:70px !important;
+  padding:14px 2px 2px !important;
+  align-items:flex-end !important;
+  overflow:hidden !important;
+}
+#blankMarketChartCard #blankVolumePanel .vbar{
+  min-height:4px !important;
+  max-height:50px !important;
+}
+</style>
+
+<style id="GRAPH2_REMOVE_VOLUME_LABEL_INSIDE">
+/* กราฟ 2 — ซ่อนชื่อ VOLUME ที่อยู่ในพื้นที่แท่ง Volume
+   เหลือชื่อ VOLUME เพียง 1 ชื่อแถวปุ่มเปิด/ปิด */
+#blankMarketChartCard #blankVolumePanel .vlabel{
+  display:none !important;
+}
+</style>
+
+<style id="GRAPH2_MACD_BARS_SLIGHTLY_TALLER">
+/* กราฟ 2 — แผง MACD สูงขึ้นเล็กน้อย ทำให้แท่ง Histogram สูงขึ้นพอดี */
+#blankMarketChartCard{
+  --graph2-macd-height:100px;
+}
+</style>
+
+<style id="WARNING_RED_BOTTOM_FRAME">
+/* คำเตือนด้านล่าง — ใช้สีแดงให้เด่น */
+.graph-risk-disclaimer{
+  border:1px solid rgba(239,68,68,.45) !important;
+  border-left:3px solid #ef4444 !important;
+  background:linear-gradient(145deg,rgba(45,8,14,.96),rgba(34,10,16,.94)) !important;
+  box-shadow:0 8px 24px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+
+.graph-risk-disclaimer .risk-line{
+  color:#fecaca !important;
+}
+
+.graph-risk-disclaimer .risk-line + .risk-line{
+  color:#fca5a5 !important;
+}
+
+.graph-risk-disclaimer strong{
+  color:#ff4d5a !important;
+}
+
+.graph-risk-disclaimer .risk-line:last-child strong{
+  color:#ff303f !important;
+}
+</style>
+
