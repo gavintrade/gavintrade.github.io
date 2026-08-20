@@ -6282,7 +6282,14 @@ function updateTrendSignalLive(){
 
 let blankViewStart = 0;
 let blankVisibleBars = 40;
-const BLANK_LATEST_OFFSET = 0; // ใช้การคำนวณกึ่งกลางจริงด้านล่าง
+const BLANK_LATEST_OFFSET = 6; // เลื่อนแท่งเทียนกราฟ 2 ไปทางซ้ายเล็กน้อย (ค่ามากขึ้น = เลื่อนซ้ายมากขึ้น)
+// เผื่อพื้นที่ว่างด้านขวาของกราฟ 2 ไว้เสมอ ไม่งั้นการเลื่อนแท่งเทียนไปทางซ้ายจะโดนเพดาน (ติด)
+// เพราะระบบเดิมจำกัดไม่ให้กราฟแสดงเกินแท่งเทียนล่าสุด (ไม่มี "อนาคต" ให้เลื่อนไปทางขวาได้)
+function getBlankMaxViewStart(totalBars, visibleBars){
+  const noMarginMax = Math.max(0, totalBars - visibleBars);
+  const rightMargin = Math.max(10, Math.floor(visibleBars * 0.5));
+  return noMarginMax + rightMargin;
+}
 let blankPriceZoomFactor = 1;
 let blankChartPanY = 0;
 let blankTouchStartX = 0;
@@ -6367,14 +6374,14 @@ function drawBlankMarketChart(){
   ctx.textRendering = 'optimizeLegibility';
   ctx.imageSmoothingEnabled = true;
 
-  blankViewStart = Math.max(0, Math.min(blankViewStart, Math.max(0, bars30.length - blankVisibleBars)));
+  blankViewStart = Math.max(0, Math.min(blankViewStart, getBlankMaxViewStart(bars30.length, blankVisibleBars)));
   // เปิดแอปใหม่/เปลี่ยนคู่เงิน: ให้แท่งเทียนล่าสุดอยู่ตรงกลางแนวนอนของกราฟ 2
   // ไม่ขยายขนาดแท่งเทียน — ใช้ขนาดเดียวกับกราฟด้านบน
   if(!window.__blankUserMovedHorizontally) {
     const centerOffset = Math.floor(blankVisibleBars / 2);
     const latestIndex = bars30.length - 1;
     blankViewStart = Math.max(0, Math.min(
-      Math.max(0, bars30.length - blankVisibleBars),
+      getBlankMaxViewStart(bars30.length, blankVisibleBars),
       latestIndex - centerOffset + BLANK_LATEST_OFFSET
     ));
   }
@@ -6854,10 +6861,10 @@ function resetBlankChartView(){
   window.__blankUserVerticalPan = false;
   blankChartPanY = 0;
   blankVisibleBars = 40;
-  // Keep the latest candle around 76% from the left, leaving useful space on the right.
-  const latestOffset = Math.floor((blankVisibleBars - 1) * 0.76);
+  // Keep the latest candle around 62% from the left, leaving useful space on the right.
+  const latestOffset = Math.floor((blankVisibleBars - 1) * 0.62);
   blankViewStart = Math.max(0, Math.min(
-    Math.max(0, bars30.length - blankVisibleBars),
+    getBlankMaxViewStart(bars30.length, blankVisibleBars),
     bars30.length - 1 - latestOffset
   ));
   blankPriceZoomFactor = 1.73;
@@ -6875,7 +6882,7 @@ function resetBlankChartView(){
   if(!wrap) return;
 
   const clampView = ()=>{
-    blankViewStart = Math.max(0, Math.min(Math.max(0, bars30.length - blankVisibleBars), blankViewStart));
+    blankViewStart = Math.max(0, Math.min(getBlankMaxViewStart(bars30.length, blankVisibleBars), blankViewStart));
   };
 
   const syncScale = v=>{
@@ -6929,7 +6936,7 @@ function resetBlankChartView(){
       const scale = Math.pow(rawScale, 0.42);
       blankVisibleBars = Math.max(BLANK_MIN_VISIBLE, Math.min(BLANK_MAX_VISIBLE, Math.round(blankStartVisibleBars * scale)));
       // ไม่ย้อนกลับไปหาแท่งเก่า ให้พื้นที่ล่าสุดของกราฟยังอยู่เหมือนเดิม
-      blankViewStart = Math.max(0, Math.min(Math.max(0, bars30.length - blankVisibleBars), blankStartViewStart));
+      blankViewStart = Math.max(0, Math.min(getBlankMaxViewStart(bars30.length, blankVisibleBars), blankStartViewStart));
       clampView();
       drawBlankMarketChart();
     }else if(!blankIsPinching && pts.length === 1){
@@ -6942,7 +6949,7 @@ function resetBlankChartView(){
       }else{
         const slotPx = (wrap.clientWidth - 24) / Math.max(1, blankVisibleBars);
         window.__blankUserMovedHorizontally = true;
-        blankViewStart = Math.max(0, Math.min(Math.max(0, bars30.length-blankVisibleBars), blankStartViewStart - Math.round(dx/slotPx)));
+        blankViewStart = Math.max(0, Math.min(getBlankMaxViewStart(bars30.length, blankVisibleBars), blankStartViewStart - Math.round(dx/slotPx)));
       }
       drawBlankMarketChart();
     }
@@ -6971,7 +6978,7 @@ function resetBlankChartView(){
       blankChartPanY = Math.max(-120, Math.min(120, blankMouseStartChartPanY + dy));
     }else{
       const slotPx = (wrap.clientWidth - 24) / Math.max(1, blankVisibleBars);
-      blankViewStart = Math.max(0, Math.min(Math.max(0, bars30.length-blankVisibleBars), blankMouseStartView - Math.round(dx/slotPx)));
+      blankViewStart = Math.max(0, Math.min(getBlankMaxViewStart(bars30.length, blankVisibleBars), blankMouseStartView - Math.round(dx/slotPx)));
     }
     drawBlankMarketChart();
   });
@@ -7668,8 +7675,9 @@ async function tick(){
 
     // ใช้เวลาจริง (wall-clock) กำหนดรอบนับถอยหลังเสมอ แทนการนับติ๊กทีละ 1 วิ
     // เพื่อให้ตัวเลขวิ่งตรงตามเวลาจริงของตลาด แม้ปิดแอป/สลับหน้าจอไปนานแค่ไหนก็ตาม พอกลับมาจะซิงค์ให้ถูกต้องทันที
-    const nowSec = Math.floor(Date.now()/1000);
-    const cyclePos = nowSec % 30;
+    const TIME_SYNC_OFFSET_SEC = 5; // ปรับตัวเลขนี้ถ้ายังคลาดเคลื่อนกับโบรกเกอร์ที่เทียบ
+    const nowSec = Math.floor(Date.now()/1000) - TIME_SYNC_OFFSET_SEC;
+    const cyclePos = ((nowSec % 30) + 30) % 30;
     const newCycleId = Math.floor(nowSec/30);
     countdown = cyclePos === 0 ? 30 : (30 - cyclePos);
     // สลับบทบาทรอบด้วยความคี่/คู่ของรอบ (อิงเวลาจริง จึงคงที่แม้รีเฟรชหน้า): รอบคู่ = รอบออกสัญญาณ (ยิงช่วง 5 วินาทีสุดท้ายก่อนหมดรอบ), รอบคี่ = รอบรอผล (ไม่มีสัญญาณใหม่ จนกว่าจะถึง 00)
@@ -8463,8 +8471,8 @@ document.addEventListener('DOMContentLoaded', updateGavinSnake);
         const visible = (typeof blankVisibleBars !== 'undefined' && blankVisibleBars > 0)
           ? blankVisibleBars : Math.min(60, bars30.length);
         const latest = bars30.length - 1;
-        const offset = Math.floor((visible - 1) * 0.76);
-        const maxStart = Math.max(0, bars30.length - visible);
+        const offset = Math.floor((visible - 1) * 0.62);
+        const maxStart = getBlankMaxViewStart(bars30.length, visible);
         const desired = latest - offset;
         if(typeof blankViewStart !== 'undefined'){
           blankViewStart = Math.max(0, Math.min(maxStart, desired));
@@ -8847,7 +8855,7 @@ document.addEventListener('DOMContentLoaded', updateGavinSnake);
   }
   function priceBlank(y){
     const c=document.getElementById('blankMarketChart');if(!c||!bars30?.length)return null;
-    const s=Math.max(0,Math.min(blankViewStart,Math.max(0,bars30.length-blankVisibleBars)));
+    const s=Math.max(0,Math.min(blankViewStart,getBlankMaxViewStart(bars30.length, blankVisibleBars)));
     const v=bars30.slice(s,s+blankVisibleBars),p=v.flatMap(b=>[+b.o,+b.h,+b.l,+b.c]).filter(Number.isFinite);
     const hi=Math.max(...p),lo=Math.min(...p),rng=((hi-lo)||hi*.002||1)*1.16*blankPriceZoomFactor;
     const macd=window.blankMarketMacdActive!==false, vh=window.blankMarketVolumeActive===true?48:0, mh=macd?68:0,g=macd?44:0;
@@ -8864,7 +8872,7 @@ document.addEventListener('DOMContentLoaded', updateGavinSnake);
   }
   function yBlank(price){
     const c=document.getElementById('blankMarketChart');if(!c||!bars30?.length)return null;
-    const s=Math.max(0,Math.min(blankViewStart,Math.max(0,bars30.length-blankVisibleBars)));
+    const s=Math.max(0,Math.min(blankViewStart,getBlankMaxViewStart(bars30.length, blankVisibleBars)));
     const v=bars30.slice(s,s+blankVisibleBars),p=v.flatMap(b=>[+b.o,+b.h,+b.l,+b.c]).filter(Number.isFinite);
     const hi=Math.max(...p),lo=Math.min(...p),rng=((hi-lo)||hi*.002||1)*1.16*blankPriceZoomFactor;
     const macd=window.blankMarketMacdActive!==false,vh=window.blankMarketVolumeActive===true?48:0,mh=macd?68:0,g=macd?44:0;
