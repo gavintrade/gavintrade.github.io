@@ -669,6 +669,186 @@
   .macd-signal-alert.show{display:block}
   .macd-signal-alert.macd-buy{background:linear-gradient(135deg,#00c853,#008f3d);border-color:#69f0ae;box-shadow:0 0 14px rgba(0,230,118,.42)}
   .macd-signal-alert.macd-sell{background:linear-gradient(135deg,#ff1744,#b91c1c);border-color:#ff6b6b;box-shadow:0 0 14px rgba(255,23,68,.38)}
+
+  /* SR BREAKOUT ALERT: ขึ้นเตือนเมื่อแท่งเขียวทะลุแนวต้านหลัก หรือแท่งแดงทะลุแนวรับหลัก */
+  .sr-breakout-alert{
+    display:none;
+    margin:6px 0 8px;
+    padding:5px 8px;
+    border-radius:9px;
+    text-align:center;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.3px;
+    color:#fff;
+    animation:macdSignalPop .25s ease-out;
+  }
+  .sr-breakout-alert.show{display:block}
+  .sr-breakout-alert.breakout-up{background:linear-gradient(135deg,#FFD600,#FF9800);color:#1a1200;border:1px solid #FFE082;box-shadow:0 0 14px rgba(255,214,0,.45)}
+  .sr-breakout-alert.breakout-down{background:linear-gradient(135deg,#FF6D00,#B91C1C);border:1px solid #FFAB40;box-shadow:0 0 14px rgba(255,109,0,.4)}
+
+  /* SR BREAKOUT PANEL: กล่องอธิบาย + แจ้งเตือน วางไว้ใต้กราฟที่ 2 */
+  .sr-breakout-panel{
+    margin:10px auto 0;
+    max-width:520px;
+    padding:10px 12px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#111827dd,#0b1220dd);
+    border:1px solid #FFD60055;
+    box-shadow:0 0 14px rgba(255,214,0,.12);
+  }
+  .sr-breakout-panel .srb-title{
+    font-size:12px;
+    font-weight:900;
+    color:#FBBF24;
+    margin-bottom:6px;
+    letter-spacing:.3px;
+  }
+  .sr-breakout-panel .srb-legend-row{
+    display:flex;
+    align-items:flex-start;
+    gap:6px;
+    padding:4px 0;
+  }
+  .sr-breakout-panel .srb-star{
+    color:#FFD600;
+    text-shadow:0 0 6px rgba(255,214,0,.6);
+    font-size:13px;
+    line-height:1.5;
+    flex:0 0 auto;
+  }
+  .sr-breakout-panel .srb-star-down{
+    color:#FF6D00;
+    text-shadow:0 0 6px rgba(255,109,0,.6);
+  }
+  .sr-breakout-panel .srb-text{
+    font-size:10.5px;
+    line-height:1.5;
+    color:#CBD5E1;
+  }
+  @media (max-width:480px){
+    .sr-breakout-panel .srb-title{font-size:11px;}
+    .sr-breakout-panel .srb-text{font-size:9.5px;}
+  }
+
+  /* MACD GUIDE PANEL: กล่องอธิบายวิธีดูเส้น MACD/Signal + จุดตัด + แจ้งเตือน */
+  .macd-guide-panel{
+    margin:10px auto 0;
+    max-width:520px;
+    padding:10px 12px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#111827dd,#0b1220dd);
+    border:1px solid #0E749055;
+    box-shadow:0 0 14px rgba(14,116,144,.12);
+  }
+  .macd-guide-panel .mgp-title{
+    font-size:12px;
+    font-weight:900;
+    color:#22D3EE;
+    margin-bottom:6px;
+    letter-spacing:.3px;
+  }
+  .macd-guide-panel .mgp-row{
+    display:flex;
+    align-items:flex-start;
+    gap:6px;
+    padding:4px 0;
+  }
+  .macd-guide-panel .mgp-dot{
+    flex:0 0 auto;
+    font-size:11px;
+    line-height:1.6;
+    color:#0E7490;
+  }
+  .macd-guide-panel .mgp-dot-signal{ color:#BE185D; }
+  .macd-guide-panel .mgp-dot-cross-up{ color:#22C55E; text-shadow:0 0 6px rgba(34,197,94,.6); }
+  .macd-guide-panel .mgp-dot-cross-down{ color:#FF1744; text-shadow:0 0 6px rgba(255,23,68,.6); }
+  .macd-guide-panel .mgp-text{
+    font-size:10.5px;
+    line-height:1.5;
+    color:#CBD5E1;
+  }
+  @media (max-width:480px){
+    .macd-guide-panel .mgp-title{font-size:11px;}
+    .macd-guide-panel .mgp-text{font-size:9.5px;}
+  }
+
+  /* MACD CROSS ALERT: ขึ้นเตือนเมื่อเส้น MACD ตัดเส้น Signal ขึ้น/ลง */
+  .macd-cross-alert{
+    display:none;
+    margin:6px 0 0;
+    padding:5px 8px;
+    border-radius:9px;
+    text-align:center;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.3px;
+    color:#fff;
+    animation:macdSignalPop .25s ease-out;
+  }
+  .macd-cross-alert.show{display:block}
+  .macd-cross-alert.cross-buy{background:linear-gradient(135deg,#00c853,#008f3d);border:1px solid #69f0ae;box-shadow:0 0 14px rgba(0,230,118,.42)}
+  .macd-cross-alert.cross-sell{background:linear-gradient(135deg,#ff1744,#b91c1c);border:1px solid #ff6b6b;box-shadow:0 0 14px rgba(255,23,68,.38)}
+
+  /* VWAP / EMA9 / EMA21 GUIDE PANEL: กล่องอธิบายวิธีดู + จุดตัด + แจ้งเตือน */
+  .vwap-ema-guide-panel{
+    margin:10px auto 0;
+    max-width:520px;
+    padding:10px 12px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#111827dd,#0b1220dd);
+    border:1px solid #CA8A0455;
+    box-shadow:0 0 14px rgba(202,138,4,.12);
+  }
+  .vwap-ema-guide-panel .vgp-title{
+    font-size:12px;
+    font-weight:900;
+    color:#FACC15;
+    margin-bottom:6px;
+    letter-spacing:.3px;
+  }
+  .vwap-ema-guide-panel .vgp-row{
+    display:flex;
+    align-items:flex-start;
+    gap:6px;
+    padding:4px 0;
+  }
+  .vwap-ema-guide-panel .vgp-dot{
+    flex:0 0 auto;
+    font-size:11px;
+    line-height:1.6;
+    color:#CA8A04;
+  }
+  .vwap-ema-guide-panel .vgp-dot-ema9{ color:#0284C7; }
+  .vwap-ema-guide-panel .vgp-dot-ema21{ color:#EA580C; }
+  .vwap-ema-guide-panel .vgp-mark{
+    flex:0 0 auto;
+    font-size:12px;
+    line-height:1.6;
+    font-weight:900;
+  }
+  .vwap-ema-guide-panel .vgp-mark-vwap-up,
+  .vwap-ema-guide-panel .vgp-mark-ema-up{ color:#22C55E; text-shadow:0 0 6px rgba(34,197,94,.6); }
+  .vwap-ema-guide-panel .vgp-mark-vwap-down,
+  .vwap-ema-guide-panel .vgp-mark-ema-down{ color:#FF1744; text-shadow:0 0 6px rgba(255,23,68,.6); }
+  .vwap-ema-guide-panel .vgp-text{
+    font-size:10.5px;
+    line-height:1.5;
+    color:#CBD5E1;
+  }
+  .vwap-ema-guide-panel .vgp-note{
+    margin-top:6px;
+    padding-top:6px;
+    border-top:1px dashed #33415555;
+    font-size:9.5px;
+    line-height:1.5;
+    color:#94A3B8;
+  }
+  @media (max-width:480px){
+    .vwap-ema-guide-panel .vgp-title{font-size:11px;}
+    .vwap-ema-guide-panel .vgp-text{font-size:9.5px;}
+    .vwap-ema-guide-panel .vgp-note{font-size:8.8px;}
+  }
   @keyframes macdSignalPop{
     0%{opacity:0;transform:scale(.94)}
     100%{opacity:1;transform:scale(1)}
@@ -2965,6 +3145,54 @@ canvas#blankMarketChart {
 </style>
 
 
+<style id="indicator-lean-banner-style">
+.indicator-lean-banner{
+  margin:10px 0 14px;
+  padding:12px 16px;
+  border-radius:14px;
+  border:2px solid #334155;
+  background:linear-gradient(135deg,#0f172acc,#1e293bcc);
+  text-align:center;
+  transition:border-color .3s,background .3s;
+}
+.indicator-lean-banner.lean-buy{
+  border-color:#22C55E;
+  background:linear-gradient(135deg,#052e1acc,#0b3a22cc);
+  box-shadow:0 0 18px #22c55e33;
+}
+.indicator-lean-banner.lean-sell{
+  border-color:#FF1744;
+  background:linear-gradient(135deg,#3a0512cc,#4a0a1acc);
+  box-shadow:0 0 18px #ff174433;
+}
+.indicator-lean-banner .lean-title{
+  font-size:15px;
+  font-weight:900;
+  color:#fbbf24;
+  margin-bottom:6px;
+  letter-spacing:.3px;
+}
+.indicator-lean-banner .lean-line1{
+  font-size:15px;
+  font-weight:900;
+  color:#e2e8f0;
+}
+.indicator-lean-banner.lean-buy .lean-line1{ color:#4ADE80; }
+.indicator-lean-banner.lean-sell .lean-line1{ color:#FF6B81; }
+.indicator-lean-banner .lean-line2{
+  font-size:12px;
+  font-weight:600;
+  color:#94a3b8;
+  margin-top:4px;
+}
+@media (max-width:480px){
+  .indicator-lean-banner{padding:10px 12px;}
+  .indicator-lean-banner .lean-title{font-size:13px;}
+  .indicator-lean-banner .lean-line1{font-size:13px;}
+  .indicator-lean-banner .lean-line2{font-size:11px;}
+}
+</style>
+
 <style id="graph1-frame-same-as-graph2">
 /* GRAPH 1 — ใช้กรอบเดียวกับกราฟ 2 */
 #chartWrap.chart-canvas-wrap{
@@ -4320,6 +4548,14 @@ canvas#blankMarketChart {
       <span class="howto-tag">⚠️ ไม่ตรงกัน</span>
       <span class="howto-text">สัญญาณบอก<b class="sell-word">ขาย</b> แต่ลูกศรบอก<b class="buy-word">ซื้อ</b> → ให้ตามลูกศร (กด<b class="buy-word">ซื้อ</b>) หรืองดออกออเดอร์ เพราะยืนยันไม่ชัดพอ</span>
     </div>
+    <div class="howto-row howto-buy">
+      <span class="howto-tag">🚀 Breakout</span>
+      <span class="howto-text">แท่งเทียน<b style="color:#22C55E">เขียว</b>ทะลุ<b>แนวต้านหลัก</b> (เส้นแดงในกราฟที่ 2) → มีโอกาส<b class="buy-word">ขึ้นต่อ</b> ระบบจะขึ้นแจ้งเตือนและติดดาว ★ ให้บนกราฟ</span>
+    </div>
+    <div class="howto-row howto-sell">
+      <span class="howto-tag">🔻 Breakout</span>
+      <span class="howto-text">แท่งเทียน<b style="color:#FF1744">แดง</b>ทะลุ<b>แนวรับหลัก</b> (เส้นเขียวในกราฟที่ 2) → มีโอกาส<b class="sell-word">ลงต่อ</b> ระบบจะขึ้นแจ้งเตือนและติดดาว ★ ให้บนกราฟ</span>
+    </div>
   </div>
 
   <div class="grid">
@@ -4405,6 +4641,80 @@ canvas#blankMarketChart {
     <input id="blankPriceScaleSlider" type="range" min="10" max="300" value="173" step="1" aria-label="เลื่อนขึ้นลงเพื่อปรับขนาด">
     <span class="blank-scale-value" id="blankPriceScaleValue">173%</span>
   </div>
+</div>
+
+<div id="indicatorLeanBanner" class="indicator-lean-banner" aria-live="polite">
+  <div class="lean-title">📖 วิธีใช้งานสคริป</div>
+  <div class="lean-line1">⏳ กำลังวิเคราะห์อินดิเคเตอร์...</div>
+  <div class="lean-line2">รอดูลูกศรยืนยันก่อนตัดสินใจ</div>
+</div>
+
+<div class="sr-breakout-panel" id="srBreakoutPanel">
+  <div class="srb-title">📌 สัญญาณ Breakout แนวรับ/แนวต้านหลัก</div>
+  <div class="srb-legend-row srb-up">
+    <span class="srb-star">★</span>
+    <span class="srb-text">ถ้าเห็น <b style="color:#FFD600">ดาวทอง</b> ขึ้นบนกราฟ → แท่ง<b style="color:#22C55E">เขียว</b>ทะลุ<b>แนวต้านหลัก</b>แล้ว หมายความว่ามีโอกาสราคา<b style="color:#22C55E">ขึ้นต่อ</b></span>
+  </div>
+  <div class="srb-legend-row srb-down">
+    <span class="srb-star srb-star-down">★</span>
+    <span class="srb-text">ถ้าเห็น <b style="color:#FF6D00">ดาวส้ม</b> ขึ้นบนกราฟ → แท่ง<b style="color:#FF1744">แดง</b>ทะลุ<b>แนวรับหลัก</b>แล้ว หมายความว่ามีโอกาสราคา<b style="color:#FF1744">ลงต่อ</b></span>
+  </div>
+  <div id="srBreakoutAlert" class="sr-breakout-alert" aria-live="polite"></div>
+</div>
+
+<div class="macd-guide-panel" id="macdGuidePanel">
+  <div class="mgp-title">📘 วิธีดูเส้น MACD (12,26,9) กับเส้น Signal</div>
+  <div class="mgp-row">
+    <span class="mgp-dot mgp-dot-macd"></span>
+    <span class="mgp-text"><b style="color:#0E7490">เส้น MACD สีฟ้า</b> = ผลต่างระหว่าง EMA12 กับ EMA26 ใช้ดูแรงส่งของราคาระยะสั้น</span>
+  </div>
+  <div class="mgp-row">
+    <span class="mgp-dot mgp-dot-signal"></span>
+    <span class="mgp-text"><b style="color:#BE185D">เส้น Signal สีชมพู</b> = เส้นเฉลี่ย 9 ช่วงของเส้น MACD ใช้จับจังหวะที่เส้น MACD ตัดผ่าน</span>
+  </div>
+  <div class="mgp-row mgp-buy">
+    <span class="mgp-dot mgp-dot-cross-up">●</span>
+    <span class="mgp-text">เส้น <b style="color:#0E7490">MACD</b> ตัด<b style="color:#22C55E">ขึ้นเหนือ</b>เส้น <b style="color:#BE185D">Signal</b> → ระบบจะติดวงกลม<b style="color:#22C55E">เขียว</b>ตรงจุดตัดในกราฟ MACD หมายถึงสัญญาณ<b class="buy-word">ซื้อ</b> (Golden Cross)</span>
+  </div>
+  <div class="mgp-row mgp-sell">
+    <span class="mgp-dot mgp-dot-cross-down">●</span>
+    <span class="mgp-text">เส้น <b style="color:#0E7490">MACD</b> ตัด<b style="color:#FF1744">ลงใต้</b>เส้น <b style="color:#BE185D">Signal</b> → ระบบจะติดวงกลม<b style="color:#FF1744">แดง</b>ตรงจุดตัดในกราฟ MACD หมายถึงสัญญาณ<b class="sell-word">ขาย</b> (Dead Cross)</span>
+  </div>
+  <div id="macdCrossAlert" class="macd-cross-alert" aria-live="polite"></div>
+</div>
+
+<div class="vwap-ema-guide-panel" id="vwapEmaGuidePanel">
+  <div class="vgp-title">📗 วิธีดูเส้น VWAP · EMA 9 · EMA 21</div>
+  <div class="vgp-row">
+    <span class="vgp-dot vgp-dot-vwap">┄</span>
+    <span class="vgp-text"><b style="color:#CA8A04">เส้น VWAP สีเหลืองประ</b> = ราคาเฉลี่ยถ่วงน้ำหนักด้วยปริมาณซื้อขาย 30 แท่งล่าสุด ถือเป็นจุดอ้างอิง "ราคายุติธรรม" ของตลาด</span>
+  </div>
+  <div class="vgp-row">
+    <span class="vgp-dot vgp-dot-ema9">━</span>
+    <span class="vgp-text"><b style="color:#0284C7">เส้น EMA 9 สีฟ้า</b> = ค่าเฉลี่ยราคาแบบถ่วงน้ำหนัก 9 แท่ง วิ่งไวตามราคาปัจจุบัน (เทรนด์ระยะสั้น)</span>
+  </div>
+  <div class="vgp-row">
+    <span class="vgp-dot vgp-dot-ema21">━</span>
+    <span class="vgp-text"><b style="color:#EA580C">เส้น EMA 21 สีส้ม</b> = ค่าเฉลี่ยราคาแบบถ่วงน้ำหนัก 21 แท่ง วิ่งช้ากว่า (เทรนด์ระยะกลาง) ใช้คู่กับ EMA 9 เพื่อจับจังหวะตัดกัน</span>
+  </div>
+  <div class="vgp-row vgp-buy">
+    <span class="vgp-mark vgp-mark-vwap-up">◆</span>
+    <span class="vgp-text">ราคาปิด<b>ตัดขึ้นเหนือ</b>เส้น <b style="color:#CA8A04">VWAP</b> → ระบบติดไดมอนด์<b style="color:#22C55E">เขียว</b> "VWAP ซื้อ" แปลว่าราคาเริ่มแพงกว่าค่าเฉลี่ย มีโอกาส<b class="buy-word">ขึ้นต่อ</b></span>
+  </div>
+  <div class="vgp-row vgp-sell">
+    <span class="vgp-mark vgp-mark-vwap-down">◆</span>
+    <span class="vgp-text">ราคาปิด<b>ตัดลงใต้</b>เส้น <b style="color:#CA8A04">VWAP</b> → ระบบติดไดมอนด์<b style="color:#FF1744">แดง</b> "VWAP ขาย" แปลว่าราคาเริ่มถูกกว่าค่าเฉลี่ย มีโอกาส<b class="sell-word">ลงต่อ</b></span>
+  </div>
+  <div class="vgp-row vgp-buy">
+    <span class="vgp-mark vgp-mark-ema-up">✕</span>
+    <span class="vgp-text">เส้น <b style="color:#0284C7">EMA 9</b> ตัด<b style="color:#22C55E">ขึ้นเหนือ</b>เส้น <b style="color:#EA580C">EMA 21</b> → ระบบติดกากบาท<b style="color:#22C55E">เขียว</b> "EMA ซื้อ" หมายถึงสัญญาณ<b class="buy-word">ซื้อ</b> (Golden Cross)</span>
+  </div>
+  <div class="vgp-row vgp-sell">
+    <span class="vgp-mark vgp-mark-ema-down">✕</span>
+    <span class="vgp-text">เส้น <b style="color:#0284C7">EMA 9</b> ตัด<b style="color:#FF1744">ลงใต้</b>เส้น <b style="color:#EA580C">EMA 21</b> → ระบบติดกากบาท<b style="color:#FF1744">แดง</b> "EMA ขาย" หมายถึงสัญญาณ<b class="sell-word">ขาย</b> (Dead Cross)</span>
+  </div>
+  <div class="vgp-note">📌 ทุกจุดที่เคยเกิดสัญญาณจะติดสัญลักษณ์ค้างอยู่บนกราฟถาวร ไม่ถูกลบออก ย้อนดูภายหลังได้ตลอด</div>
+  <div id="vwapEmaCrossAlert" class="macd-cross-alert" aria-live="polite"></div>
 </div>
 
 <div class="disclaimer-box graph-risk-disclaimer">
@@ -4892,6 +5202,14 @@ let startPriceZoom = 1;
 const PRICE_AXIS_WIDTH = 54; // ต้องตรงกับ padR ใน drawChart
 
 
+// เวลาที่เหลือ (ms) จนกว่ารอบปัจจุบันจะจบ (รอบซิงค์ 30 วิ ตามนาฬิกาเครื่อง) — ใช้ให้กล่องแจ้งเตือนค้างแสดงจนกว่าจะรู้ผลของรอบ
+function msUntilRoundEnd(){
+  const nowMs = Date.now();
+  const secInRound = (nowMs / 1000) % 30;
+  const remainingSec = 30 - secInRound;
+  return Math.max(300, remainingSec * 1000);
+}
+
 let macdSignalTimer = null;
 function showMacdSignalHighlight(dir, name){
   const alert = document.getElementById('macdSignalAlert');
@@ -4911,7 +5229,205 @@ function showMacdSignalHighlight(dir, name){
   macdSignalTimer = setTimeout(()=>{
     alert.classList.remove('show');
     grid.classList.remove('macd-signal-active','macd-buy','macd-sell');
-  }, 8000);
+  }, msUntilRoundEnd());
+}
+
+// ===== SR BREAKOUT: แท่งเขียวทะลุแนวต้านหลัก (โอกาสขึ้นต่อ) / แท่งแดงทะลุแนวรับหลัก (โอกาสลงต่อ) =====
+let breakoutMarkers = [];
+let srBreakoutTimer = null;
+function showSRBreakoutAlert(dir){
+  const alert = document.getElementById('srBreakoutAlert');
+  if(!alert || !dir) return;
+  const isUp = dir === 'UP';
+  alert.textContent = isUp
+    ? '🚀 BREAKOUT — แท่งเขียวทะลุแนวต้านหลัก! มีโอกาสขึ้นต่อ'
+    : '🔻 BREAKOUT — แท่งแดงทะลุแนวรับหลัก! มีโอกาสลงต่อ';
+  alert.classList.toggle('breakout-up', isUp);
+  alert.classList.toggle('breakout-down', !isUp);
+  alert.classList.remove('show');
+  void alert.offsetWidth;
+  alert.classList.add('show');
+  clearTimeout(srBreakoutTimer);
+  srBreakoutTimer = setTimeout(()=>{ alert.classList.remove('show'); }, msUntilRoundEnd());
+  if(navigator.vibrate) navigator.vibrate([30,40,30]);
+}
+// ตรวจแท่งเทียนล่าสุดที่เพิ่งปิดว่าทะลุแนวรับ/แนวต้านหลัก (30 แท่งก่อนหน้า ไม่รวมแท่งปัจจุบัน) หรือไม่
+function checkSRBreakout(){
+  const idx = bars30.length - 1;
+  if(idx < SR_LINE_PERIOD) return;
+  let hi = -Infinity, lo = Infinity;
+  for(let j = idx - SR_LINE_PERIOD; j < idx; j++){
+    if(bars30[j].h > hi) hi = bars30[j].h;
+    if(bars30[j].l < lo) lo = bars30[j].l;
+  }
+  if(!isFinite(hi) || !isFinite(lo)) return;
+  const bar = bars30[idx];
+  const isGreen = bar.c > bar.o;
+  const isRed = bar.c < bar.o;
+  let dir = null;
+  if(isGreen && bar.c > hi) dir = 'UP';
+  else if(isRed && bar.c < lo) dir = 'DOWN';
+  if(!dir) return;
+  breakoutMarkers.push({ barIndex: idx, dir });
+  if(breakoutMarkers.length > 120) breakoutMarkers.shift();
+  showSRBreakoutAlert(dir);
+}
+function drawBreakoutStar(ctx, x, y, up){
+  const color = up ? '#FFD600' : '#FF6D00';
+  const s = 6;
+  ctx.beginPath();
+  for(let k=0;k<5;k++){
+    const angle = -Math.PI/2 + k*(2*Math.PI/5);
+    const angle2 = angle + Math.PI/5;
+    const xo = x + s*Math.cos(angle), yo = y + s*Math.sin(angle);
+    const xi = x + (s*0.45)*Math.cos(angle2), yi = y + (s*0.45)*Math.sin(angle2);
+    if(k===0) ctx.moveTo(xo,yo); else ctx.lineTo(xo,yo);
+    ctx.lineTo(xi,yi);
+  }
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 6;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
+
+// ===== MACD CROSS: เส้น MACD ตัดเส้น Signal ขึ้น (ซื้อ) / ตัดลง (ขาย) =====
+let macdCrossMarkers = [];
+let macdCrossTimer = null;
+function showMACDCrossAlert(dir){
+  const alert = document.getElementById('macdCrossAlert');
+  if(!alert || !dir) return;
+  const isBuy = dir === 'BUY';
+  alert.textContent = isBuy
+    ? '🟢 MACD ตัด Signal ขึ้น — สัญญาณซื้อ (Golden Cross)'
+    : '🔴 MACD ตัด Signal ลง — สัญญาณขาย (Dead Cross)';
+  alert.classList.toggle('cross-buy', isBuy);
+  alert.classList.toggle('cross-sell', !isBuy);
+  alert.classList.remove('show');
+  void alert.offsetWidth;
+  alert.classList.add('show');
+  clearTimeout(macdCrossTimer);
+  macdCrossTimer = setTimeout(()=>{ alert.classList.remove('show'); }, msUntilRoundEnd());
+  if(navigator.vibrate) navigator.vibrate([25,35,25]);
+}
+// ตรวจแท่งเทียนล่าสุดที่เพิ่งปิดว่าเส้น MACD ตัดผ่านเส้น Signal หรือไม่ (เทียบกับแท่งก่อนหน้า)
+function checkMACDCross(){
+  if(!Array.isArray(bars30) || bars30.length < 35) return;
+  const closesAll = bars30.map(b=>Number(b.c));
+  const macd = calcMACD(closesAll, 12, 26, 9);
+  if(!macd) return;
+  const len = macd.macdLine.length;
+  const m1 = macd.macdLine[len-1], s1 = macd.signalLine[len-1];
+  const m0 = macd.macdLine[len-2], s0 = macd.signalLine[len-2];
+  if(m1==null || s1==null || m0==null || s0==null) return;
+  let dir = null;
+  if(m0 <= s0 && m1 > s1) dir = 'BUY';
+  else if(m0 >= s0 && m1 < s1) dir = 'SELL';
+  if(!dir) return;
+  macdCrossMarkers.push({ barIndex: len-1, dir });
+  if(macdCrossMarkers.length > 120) macdCrossMarkers.shift();
+  showMACDCrossAlert(dir);
+}
+
+// ===== VWAP CROSS: ราคาปิดตัดผ่านเส้น VWAP ขึ้น (ซื้อ) / ตัดลง (ขาย) =====
+let vwapCrossMarkers = [];
+let vwapCrossTimer = null;
+function showVWAPCrossAlert(dir){
+  const alert = document.getElementById('vwapEmaCrossAlert');
+  if(!alert || !dir) return;
+  const isBuy = dir === 'BUY';
+  alert.textContent = isBuy
+    ? '🟢 ราคาตัดเส้น VWAP ขึ้น — สัญญาณซื้อ'
+    : '🔴 ราคาตัดเส้น VWAP ลง — สัญญาณขาย';
+  alert.classList.toggle('cross-buy', isBuy);
+  alert.classList.toggle('cross-sell', !isBuy);
+  alert.classList.remove('show');
+  void alert.offsetWidth;
+  alert.classList.add('show');
+  clearTimeout(vwapCrossTimer);
+  vwapCrossTimer = setTimeout(()=>{ alert.classList.remove('show'); }, msUntilRoundEnd());
+  if(navigator.vibrate) navigator.vibrate([20,30,20]);
+}
+function checkVWAPCross(){
+  if(!Array.isArray(bars30) || bars30.length < VWAP_PERIOD + 1) return;
+  const vwapArr = rollingVWAPSeries(bars30, VWAP_PERIOD);
+  const len = bars30.length;
+  const v1 = vwapArr[len-1], v0 = vwapArr[len-2];
+  if(v1==null || v0==null) return;
+  const c1 = bars30[len-1].c, c0 = bars30[len-2].c;
+  let dir = null;
+  if(c0 <= v0 && c1 > v1) dir = 'BUY';
+  else if(c0 >= v0 && c1 < v1) dir = 'SELL';
+  if(!dir) return;
+  vwapCrossMarkers.push({ barIndex: len-1, dir });
+  if(vwapCrossMarkers.length > 120) vwapCrossMarkers.shift();
+  showVWAPCrossAlert(dir);
+}
+
+// ===== EMA 9/21 CROSS: Golden Cross (ซื้อ) / Dead Cross (ขาย) =====
+let emaCrossMarkers = [];
+let emaCrossTimer = null;
+function showEMACrossAlert(dir){
+  const alert = document.getElementById('vwapEmaCrossAlert');
+  if(!alert || !dir) return;
+  const isBuy = dir === 'BUY';
+  alert.textContent = isBuy
+    ? '🟢 EMA9 ตัด EMA21 ขึ้น — สัญญาณซื้อ (Golden Cross)'
+    : '🔴 EMA9 ตัด EMA21 ลง — สัญญาณขาย (Dead Cross)';
+  alert.classList.toggle('cross-buy', isBuy);
+  alert.classList.toggle('cross-sell', !isBuy);
+  alert.classList.remove('show');
+  void alert.offsetWidth;
+  alert.classList.add('show');
+  clearTimeout(emaCrossTimer);
+  emaCrossTimer = setTimeout(()=>{ alert.classList.remove('show'); }, msUntilRoundEnd());
+  if(navigator.vibrate) navigator.vibrate([20,30,20]);
+}
+function checkEMACross(){
+  if(!Array.isArray(bars30) || bars30.length < 22) return;
+  const ema9Arr = emaVals(bars30, 9);
+  const ema21Arr = emaVals(bars30, 21);
+  const len = bars30.length;
+  const f1 = ema9Arr[len-1], s1 = ema21Arr[len-1];
+  const f0 = ema9Arr[len-2], s0 = ema21Arr[len-2];
+  if(f1==null || s1==null || f0==null || s0==null) return;
+  let dir = null;
+  if(f0 <= s0 && f1 > s1) dir = 'BUY';
+  else if(f0 >= s0 && f1 < s1) dir = 'SELL';
+  if(!dir) return;
+  emaCrossMarkers.push({ barIndex: len-1, dir });
+  if(emaCrossMarkers.length > 120) emaCrossMarkers.shift();
+  showEMACrossAlert(dir);
+}
+function drawDiamondMark(ctx, x, y, color){
+  const s = 5;
+  ctx.beginPath();
+  ctx.moveTo(x, y-s);
+  ctx.lineTo(x+s, y);
+  ctx.lineTo(x, y+s);
+  ctx.lineTo(x-s, y);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 6;
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 0.8;
+  ctx.shadowBlur = 0;
+  ctx.stroke();
+}
+function drawEmaCrossMark(ctx, x, y, color){
+  const s = 5;
+  ctx.beginPath();
+  ctx.moveTo(x-s, y-s); ctx.lineTo(x+s, y+s);
+  ctx.moveTo(x+s, y-s); ctx.lineTo(x-s, y+s);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 6;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
 }
 
 function updatePairPremiumLogo(){
@@ -5666,6 +6182,38 @@ function renderIndicatorDashboard(bars){
   updateIndicatorCountdown();
 }
 
+// คำนวณ "แนวเอียง" ของอินดิเคเตอร์ทั้งหมด (ถ่วงน้ำหนักตาม weight) แล้วแสดงข้อความบอกผู้ใช้
+// ว่าตอนนี้อินดิเคเตอร์ส่วนใหญ่เอนไปทางไหน เพื่อให้รอดูสัญญาณลูกศรยืนยันในกราฟที่ 2 ก่อนตัดสินใจ
+function updateIndicatorLeanBanner(bars){
+  const banner = document.getElementById('indicatorLeanBanner');
+  if(!banner || !bars || !bars.length) return;
+  let buyW = 0, sellW = 0, buyN = 0, sellN = 0;
+  for(const ind of INDICATOR_POOL){
+    let r = null;
+    try{ r = ind.calc(bars); }catch(e){}
+    if(!r || !r.dir) continue;
+    const w = ind.weight || 5;
+    if(r.dir === 'BUY'){ buyW += w; buyN++; }
+    else if(r.dir === 'SELL'){ sellW += w; sellN++; }
+  }
+  const total = buyN + sellN;
+  if(total === 0){
+    banner.className = 'indicator-lean-banner';
+    banner.innerHTML = '<div class="lean-title">📖 วิธีใช้งานสคริป</div><div class="lean-line1">⏳ กำลังวิเคราะห์อินดิเคเตอร์...</div><div class="lean-line2">รอดูลูกศรยืนยันก่อนตัดสินใจ</div>';
+    return;
+  }
+  const isBuy = buyW >= sellW;
+  const pct = Math.round((isBuy ? buyW : sellW) / (buyW + sellW) * 100);
+  banner.className = 'indicator-lean-banner ' + (isBuy ? 'lean-buy' : 'lean-sell');
+  const dirTh = isBuy ? 'ซื้อ (BUY)' : 'ขาย (SELL)';
+  const dirIcon = isBuy ? '🟢▲' : '🔴▼';
+  const arrowTh = isBuy ? 'ลูกศรสีเขียว ↑' : 'ลูกศรสีแดง ↓';
+  banner.innerHTML =
+    `<div class="lean-title">📖 วิธีใช้งานสคริป</div>` +
+    `<div class="lean-line1">${dirIcon} ตอนนี้อินดิเคเตอร์ส่วนใหญ่เอนไปทาง <u>${dirTh}</u> (${isBuy?buyN:sellN}/${total} ตัว ~${pct}%)</div>` +
+    `<div class="lean-line2">⚠️ อย่าเพิ่งรีบเข้า — รอดู${arrowTh}ยืนยันแท่งเทียนก่อนตัดสินใจ</div>`;
+}
+
 function updateIndicatorCountdown(){
   const nowSec=Math.floor(Date.now()/1000);
   const syncCountdown = 30 - (nowSec % 30);
@@ -5954,6 +6502,34 @@ function drawBlankMarketChart(){
     };
     drawLineLegend(padT + 18, '#16A34A', '= แนวรับหลัก');
     drawLineLegend(padT + 28, '#DC2626', '= แนวต้านหลัก');
+
+    // ===== BREAKOUT MARK: ดาวทองคำ = แท่งเขียวทะลุแนวต้านหลัก, ดาวส้ม = แท่งแดงทะลุแนวรับหลัก =====
+    let hasBreakoutInView = false;
+    vis.forEach((b,i)=>{
+      const idx = blankViewStart + i;
+      const m = breakoutMarkers.find(bm => bm.barIndex === idx);
+      if(!m) return;
+      hasBreakoutInView = true;
+      const x = padL + slotW*(i) + slotW/2;
+      const up = m.dir === 'UP';
+      const y = up ? yScale(Number(b.h)) - 16 : yScale(Number(b.l)) + 16;
+      drawBreakoutStar(ctx, Math.round(x), Math.round(y), up);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = 'bold 6px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+      ctx.fillStyle = up ? '#FFD600' : '#FF6D00';
+      ctx.shadowBlur = 0;
+      ctx.fillText(up ? 'BREAK ขึ้น' : 'BREAK ลง', Math.round(x), Math.round(y) + (up?-9:9));
+    });
+    if(hasBreakoutInView){
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.font = 'bold 7px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+      const bx = srLegendX, by = padT + 38;
+      drawBreakoutStar(ctx, bx + 5, by, true);
+      ctx.fillStyle = 'rgba(0,0,0,0.95)';
+      ctx.fillText('= ทะลุแนวต้าน/แนวรับหลัก (Breakout)', bx + 14, by);
+    }
   }
 
   // ===== VWAP (30 แท่ง) + EMA 9/21 — เพิ่มเพื่อความแม่นยำในการออกออเดอร์ 30 วิ =====
@@ -5980,6 +6556,25 @@ function drawBlankMarketChart(){
       ctx.stroke();
       ctx.setLineDash([]);
     }
+
+    // ===== VWAP CROSS MARK: ไดมอนด์เขียว/แดง ตรงจุดที่ราคาปิดตัดผ่านเส้น VWAP =====
+    vis.forEach((b,i)=>{
+      const idx = blankViewStart + i;
+      const vm = vwapCrossMarkers.find(x=>x.barIndex===idx);
+      if(!vm) return;
+      const val = vwapArr[idx];
+      if(val==null) return;
+      const x = padL + slotW*(i) + slotW/2;
+      const y = yScale(val);
+      const color = vm.dir==='BUY' ? '#22C55E' : '#FF1744';
+      drawDiamondMark(ctx, Math.round(x), Math.round(y), color);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = 'bold 6px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+      ctx.fillStyle = color;
+      ctx.shadowBlur = 0;
+      ctx.fillText(vm.dir==='BUY' ? 'VWAP ซื้อ' : 'VWAP ขาย', Math.round(x), Math.round(y) + (vm.dir==='BUY' ? 10 : -10));
+    });
   }
 
   if(emaCrossEnabled && bars30.length >= 21){
@@ -6005,6 +6600,25 @@ function drawBlankMarketChart(){
     };
     drawEmaLine(ema9Arr, '#38BDF8');
     drawEmaLine(ema21Arr, '#FB923C');
+
+    // ===== EMA9/21 CROSS MARK: กากบาทเขียว/แดง ตรงจุดตัดของเส้น EMA9 กับ EMA21 =====
+    vis.forEach((b,i)=>{
+      const idx = blankViewStart + i;
+      const em = emaCrossMarkers.find(x=>x.barIndex===idx);
+      if(!em) return;
+      const val = ema9Arr[idx];
+      if(val==null) return;
+      const x = padL + slotW*(i) + slotW/2;
+      const y = yScale(val);
+      const color = em.dir==='BUY' ? '#22C55E' : '#FF1744';
+      drawEmaCrossMark(ctx, Math.round(x), Math.round(y), color);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = 'bold 6px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+      ctx.fillStyle = color;
+      ctx.shadowBlur = 0;
+      ctx.fillText(em.dir==='BUY' ? 'EMA ซื้อ' : 'EMA ขาย', Math.round(x), Math.round(y) + (em.dir==='BUY' ? 12 : -12));
+    });
   }
 
   if((vwapEnabled && bars30.length >= VWAP_PERIOD) || (emaCrossEnabled && bars30.length >= 21)){
@@ -6187,6 +6801,28 @@ function drawBlankMarketChart(){
         };
         drawMacdLine(macd.macdLine, '#0E7490');
         drawMacdLine(macd.signalLine, '#BE185D');
+
+        // ===== MACD CROSS MARK: วงกลมเขียว/แดง ตรงจุดที่เส้น MACD ตัดเส้น Signal =====
+        vis.forEach((b,i)=>{
+          const idx = blankViewStart + i;
+          const cm = macdCrossMarkers.find(x=>x.barIndex===idx);
+          if(!cm) return;
+          const val = macd.macdLine[idx];
+          if(val==null) return;
+          const x = padL + slotW*(i) + slotW/2;
+          const y = macdYScale(val);
+          const color = cm.dir==='BUY' ? '#22C55E' : '#FF1744';
+          ctx.beginPath();
+          ctx.arc(x, y, 4.5, 0, Math.PI*2);
+          ctx.fillStyle = color;
+          ctx.shadowColor = color;
+          ctx.shadowBlur = 6;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = '#fff';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        });
 
         // ป้ายชื่อพาแนล + ค่าล่าสุด
         const lastI = closesAll.length - 1;
@@ -6802,9 +7438,17 @@ function makeBar(){
   const prevV = bars30.length ? (bars30[bars30.length-1].v || 0) : 0;
   bars30.push({o,h,l,c,v:prevV});
   closes30.push(c);
+  checkSRBreakout();
+  checkMACDCross();
+  checkVWAPCross();
+  checkEMACross();
   if(bars30.length>120){
     bars30.shift(); closes30.shift();
     signalMarkers = signalMarkers.map(m=>({...m, barIndex:m.barIndex-1})).filter(m=>m.barIndex>=0);
+    breakoutMarkers = breakoutMarkers.map(m=>({...m, barIndex:m.barIndex-1})).filter(m=>m.barIndex>=0);
+    macdCrossMarkers = macdCrossMarkers.map(m=>({...m, barIndex:m.barIndex-1})).filter(m=>m.barIndex>=0);
+    vwapCrossMarkers = vwapCrossMarkers.map(m=>({...m, barIndex:m.barIndex-1})).filter(m=>m.barIndex>=0);
+    emaCrossMarkers = emaCrossMarkers.map(m=>({...m, barIndex:m.barIndex-1})).filter(m=>m.barIndex>=0);
   }
 
   const total = bars30.length;
@@ -7145,6 +7789,7 @@ async function tick(){
     if(typeof drawBlankMarketChart === 'function') drawBlankMarketChart();
     updateGavinSnake();
     renderIndicatorDashboard(bars30);
+    updateIndicatorLeanBanner(bars30);
     obTickCounter++;
     if(obTickCounter % 3 === 0 || !obPctInitialized){
       obTickCounter = 0; obPctInitialized = true;
