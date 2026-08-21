@@ -4565,7 +4565,10 @@ canvas#blankMarketChart {
   </div>
   <div id="macdSignalAlert" class="macd-signal-alert" aria-live="polite"></div>
 
-  <div class="indicator-title">📊 TECHNICAL INDICATORS — GAVIN TRADE</div>
+  <div class="indicator-title-row">
+    <div class="indicator-title">📊 TECHNICAL INDICATORS — GAVIN TRADE</div>
+    <button type="button" class="rsi-settings-open" id="rsiSettingsOpen">⚙️ RSI</button>
+  </div>
   <div class="indicator-grid" id="indicatorGrid"></div>
 
   
@@ -6104,7 +6107,73 @@ async function backfillLatestปริมาณการซื้อขาย(){
 function lastClose(b){ return b.length ? b[b.length-1].c : null; }
 function smaVals(b,n){ const a=[]; for(let i=0;i<b.length;i++){ if(i<n-1){a.push(null);continue;} let s=0; for(let j=i-n+1;j<=i;j++)s+=b[j].c; a.push(s/n);} return a; }
 function emaVals(b,n){ const a=new Array(b.length).fill(null); if(b.length<n)return a; let s=0; for(let i=0;i<n;i++)s+=b[i].c; let e=s/n; a[n-1]=e; const k=2/(n+1); for(let i=n;i<b.length;i++){e=b[i].c*k+e*(1-k);a[i]=e;} return a; }
-function calcRSI(b,n=14){ if(b.length<n+1)return null; let g=0,l=0; for(let i=b.length-n;i<b.length;i++){const d=b[i].c-b[i-1].c;if(d>0)g+=d;else l-=d;} const rs=l===0?100:g/l; const rsi=100-(100/(1+rs)); return {dir:rsi>=50?'BUY':'SELL',value:rsi};}
+// ===== RSI SETTINGS (ตามรูปแบบ RSI ของ TradingView) =====
+const RSI_SETTINGS = {
+  length: 14,
+  smoothingLine: 'SMA',
+  smoothingLength: 14,
+  upperLimit: 70,
+  middleLimit: 50,
+  lowerLimit: 30,
+  plot: true,
+  smoothedMA: false,
+  upperVisible: true,
+  middleVisible: true,
+  lowerVisible: true,
+  hlinesBackground: true
+};
+
+function calcRSISeries(closes, n){
+  if(!Array.isArray(closes) || closes.length < n + 1) return [];
+  const out = new Array(closes.length).fill(null);
+  let gain = 0, loss = 0;
+  for(let i=1;i<=n;i++){
+    const d = Number(closes[i]) - Number(closes[i-1]);
+    if(d > 0) gain += d; else loss -= d;
+  }
+  gain /= n;
+  loss /= n;
+  out[n] = loss === 0 ? 100 : 100 - (100 / (1 + gain / loss));
+  for(let i=n+1;i<closes.length;i++){
+    const d = Number(closes[i]) - Number(closes[i-1]);
+    const g = d > 0 ? d : 0;
+    const l = d < 0 ? -d : 0;
+    gain = ((gain * (n - 1)) + g) / n;
+    loss = ((loss * (n - 1)) + l) / n;
+    out[i] = loss === 0 ? 100 : 100 - (100 / (1 + gain / loss));
+  }
+  return out;
+}
+
+function calcRSISmoothing(values, type, n){
+  const valid = values.filter(v => v != null && Number.isFinite(Number(v))).map(Number);
+  if(valid.length < n) return null;
+  if(type === 'SMA') return valid.slice(-n).reduce((a,v)=>a+v,0) / n;
+  if(type === 'EMA'){
+    let e = valid.slice(0,n).reduce((a,v)=>a+v,0) / n;
+    const k = 2 / (n + 1);
+    for(let i=n;i<valid.length;i++) e = valid[i] * k + e * (1-k);
+    return e;
+  }
+  return valid.at(-1);
+}
+
+function calcRSI(b,n=RSI_SETTINGS.length){
+  n = Math.max(1, Number(n) || 14);
+  if(!b || b.length < n + 1) return null;
+  const series = calcRSISeries(b.map(x=>Number(x.c)), n);
+  const rsi = series.at(-1);
+  if(rsi == null) return null;
+  const smooth = calcRSISmoothing(series, RSI_SETTINGS.smoothingLine, Math.max(1, Number(RSI_SETTINGS.smoothingLength)||14));
+  return {
+    dir: rsi >= Number(RSI_SETTINGS.middleLimit) ? 'BUY' : 'SELL',
+    value: rsi,
+    smoothValue: smooth,
+    upper: Number(RSI_SETTINGS.upperLimit),
+    middle: Number(RSI_SETTINGS.middleLimit),
+    lower: Number(RSI_SETTINGS.lowerLimit)
+  };
+}
 function calcStoch(b,n=14){ if(b.length<n)return null; const x=b.slice(-n), hi=Math.max(...x.map(z=>z.h)),lo=Math.min(...x.map(z=>z.l)); const k=hi===lo?50:((x[x.length-1].c-lo)/(hi-lo))*100; return {dir:k>=50?'BUY':'SELL',value:k};}
 function calcWilliamsR(b,n=14){if(b.length<n)return null;const x=b.slice(-n),hi=Math.max(...x.map(z=>z.h)),lo=Math.min(...x.map(z=>z.l));const w=hi===lo?-50:((hi-x.at(-1).c)/(hi-lo))*-100;return {dir:w>-50?'BUY':'SELL',value:w};}
 function calcCCI(b,n=20){if(b.length<n)return null;const x=b.slice(-n),tp=x.map(z=>(z.h+z.l+z.c)/3),m=tp.reduce((a,v)=>a+v,0)/n,md=tp.reduce((a,v)=>a+Math.abs(v-m),0)/n;const cci=md? (tp.at(-1)-m)/(.015*md):0;return {dir:cci>=0?'BUY':'SELL',value:cci};}
@@ -6167,12 +6236,15 @@ function renderIndicatorDashboard(bars){
     const dir=r?.dir||'WAIT';
     const value=r?.value;
     const val=typeof value==='number' ? (Math.abs(value)>=1000?value.toFixed(0):Math.abs(value)>=1?value.toFixed(2):value.toFixed(4)) : (value??'—');
+    const displayValue = ind.key === 'rsi' && r?.smoothValue != null
+      ? `${val} <span class=\"rsi-smooth-mini\">SMA ${Number(r.smoothValue).toFixed(2)}</span>`
+      : val;
     const dc=dir==='BUY'?'#22C55E':dir==='SELL'?'#FF1744':'#94A3B8';
     const signalClass = dir==='BUY' ? 'signal-buy' : dir==='SELL' ? 'signal-sell' : '';
     const syncCountdown = (typeof countdown === 'number' && countdown >= 1 && countdown <= 30) ? countdown : (30 - (Math.floor(Date.now()/1000) % 30));
-    html.push(`<div class="indicator-card ${signalClass}" style="border-color:${ind.color}55">
+    html.push(`<div class="indicator-card ${signalClass}" data-indicator-key="${ind.key}" style="border-color:${ind.color}55">
       <div class="iname" style="color:${ind.color}">${ind.icon} ${ind.label}</div>
-      <div class="ivalue">${val}</div>
+      <div class="ivalue">${displayValue}</div>
       <div class="idir" style="color:${dc}">${dir}</div>
       <div class="indicator-countdown" data-indicator-countdown>⏱ ${syncCountdown}s</div>
     </div>`);
@@ -7132,7 +7204,7 @@ function drawChart(){
 
   // เส้นอินดิเคเตอร์จริงทับบนกราฟแท่งเทียน — แสดงเฉพาะช่วงที่มีสัญญาณซื้อ/ขาย
   const overlayLegend = [];
-  if(indicatorOverlayActive) CHART_OVERLAY_INDICATORS.forEach(ind=>{
+  if(false && indicatorOverlayActive) CHART_OVERLAY_INDICATORS.forEach(ind=>{
     let s;
     try{ s = ind.series(bars30); }catch(e){ s = null; }
     if(!s || !s.main) return;
@@ -7176,7 +7248,7 @@ function drawChart(){
   // ไม่แสดงชื่ออินดิเคเตอร์ทับอยู่มุมซ้ายของกราฟอีกต่อไป
   const chartLineBox = document.getElementById('chartLineIndicatorBox');
   if(chartLineBox){
-    const activeIndicators = indicatorOverlayActive ? overlayLegend : [];
+    const activeIndicators = [];
     chartLineBox.style.display = activeIndicators.length ? 'flex' : 'none';
     chartLineBox.innerHTML = '';
     activeIndicators.forEach(ind=>{
@@ -8932,6 +9004,263 @@ document.addEventListener('DOMContentLoaded', updateGavinSnake);
     window.addEventListener('resize',()=>{render('main');render('blank')});
   }
   init();
+})();
+</script>
+
+
+<!-- ===== RSI SETTINGS PANEL ===== -->
+<div class="rsi-settings-overlay" id="rsiSettingsOverlay" aria-hidden="true">
+  <div class="rsi-settings-modal" role="dialog" aria-modal="true" aria-labelledby="rsiSettingsTitle">
+    <div class="rsi-settings-head">
+      <div class="rsi-settings-title" id="rsiSettingsTitle">RSI</div>
+      <button type="button" class="rsi-settings-close" id="rsiSettingsClose" aria-label="ปิด">×</button>
+    </div>
+    <div class="rsi-tabs">
+      <button type="button" class="rsi-tab active" data-rsi-tab="inputs">Inputs</button>
+      <button type="button" class="rsi-tab" data-rsi-tab="style">Style</button>
+      <button type="button" class="rsi-tab" data-rsi-tab="visibility">Visibility</button>
+    </div>
+
+    <div class="rsi-tab-panel active" data-rsi-panel="inputs">
+      <label class="rsi-field"><span>Length</span><input id="rsiLengthInput" type="number" min="1" max="200" step="1"></label>
+      <label class="rsi-field"><span>Smoothing Line</span><select id="rsiSmoothingInput"><option value="SMA">SMA</option><option value="EMA">EMA</option><option value="None">None</option></select></label>
+      <label class="rsi-field"><span>Smoothing Length</span><input id="rsiSmoothingLengthInput" type="number" min="1" max="200" step="1"></label>
+    </div>
+
+    <div class="rsi-tab-panel" data-rsi-panel="style">
+      <div class="rsi-style-row"><label><input id="rsiPlotInput" type="checkbox"> <span>Plot</span></label><span class="rsi-color-chip plot"></span></div>
+      <div class="rsi-style-row"><label><input id="rsiSmoothedMAInput" type="checkbox"> <span>Smoothed MA</span></label><span class="rsi-color-chip smooth"></span></div>
+      <div class="rsi-style-row"><label><input id="rsiUpperVisibleInput" type="checkbox"> <span>UpperLimit</span></label><span class="rsi-line-chip"></span><input class="rsi-limit-input" id="rsiUpperInput" type="number" min="0" max="100"></div>
+      <div class="rsi-style-row"><label><input id="rsiMiddleVisibleInput" type="checkbox"> <span>MiddleLimit</span></label><span class="rsi-line-chip"></span><input class="rsi-limit-input" id="rsiMiddleInput" type="number" min="0" max="100"></div>
+      <div class="rsi-style-row"><label><input id="rsiLowerVisibleInput" type="checkbox"> <span>LowerLimit</span></label><span class="rsi-line-chip"></span><input class="rsi-limit-input" id="rsiLowerInput" type="number" min="0" max="100"></div>
+      <div class="rsi-style-row"><label><input id="rsiBackgroundInput" type="checkbox"> <span>Hlines Background</span></label><span class="rsi-bg-chip"></span></div>
+    </div>
+
+    <div class="rsi-tab-panel" data-rsi-panel="visibility">
+      <div class="rsi-visibility-note">ตั้งค่า RSI ให้แสดงผลตามช่วงเวลาเดียวกับกราฟ และใช้ค่า 14 / SMA 14 / 70 / 50 / 30 เป็นค่าเริ่มต้น</div>
+      <div class="rsi-visibility-grid">
+        <span>Minutes</span><b>1 – 59</b>
+        <span>Hours</span><b>1 – 24</b>
+        <span>Days</span><b>1 – 366</b>
+        <span>Weeks</span><b>1 – 52</b>
+        <span>Months</span><b>1 – 12</b>
+      </div>
+    </div>
+
+    <div class="rsi-settings-footer">
+      <button type="button" class="rsi-cancel" id="rsiSettingsCancel">Cancel</button>
+      <button type="button" class="rsi-ok" id="rsiSettingsSave">OK</button>
+    </div>
+  </div>
+</div>
+
+<style id="rsi-settings-ui-css">
+.indicator-title-row{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px 0 7px}
+.indicator-title-row .indicator-title{margin:0}
+.rsi-settings-open{border:1px solid rgba(96,165,250,.38);background:rgba(15,23,42,.92);color:#dbeafe;border-radius:9px;padding:5px 9px;font-size:10px;font-weight:900;cursor:pointer;box-shadow:0 0 10px rgba(59,130,246,.12)}
+.rsi-settings-open:active{transform:scale(.97)}
+.rsi-smooth-mini{display:block;font-size:8px;color:#94a3b8;font-weight:800;margin-top:2px}
+.rsi-settings-overlay{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.70);align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+.rsi-settings-overlay.open{display:flex}
+.rsi-settings-modal{width:min(560px,96vw);max-height:90vh;overflow:auto;background:#242329;color:#e5e7eb;border:1px solid rgba(148,163,184,.25);border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.6);font-family:Arial,sans-serif}
+.rsi-settings-head{height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid rgba(148,163,184,.14)}
+.rsi-settings-title{font-size:26px;font-weight:700}.rsi-settings-close{border:0;background:none;color:#d1d5db;font-size:34px;line-height:1;cursor:pointer}
+.rsi-tabs{display:flex;gap:24px;padding:0 20px;border-bottom:1px solid rgba(148,163,184,.18)}
+.rsi-tab{border:0;background:none;color:#cbd5e1;padding:16px 0 13px;font-size:16px;font-weight:800;cursor:pointer;border-bottom:3px solid transparent}
+.rsi-tab.active{color:#f8fafc;border-bottom-color:#f8fafc}
+.rsi-tab-panel{display:none;padding:20px;min-height:280px}.rsi-tab-panel.active{display:block}
+.rsi-field{display:grid;grid-template-columns:1fr 180px;align-items:center;gap:14px;margin-bottom:18px;font-size:15px;font-weight:700}
+.rsi-field input,.rsi-field select,.rsi-limit-input{width:100%;height:44px;border:1px solid rgba(148,163,184,.35);border-radius:10px;background:#25242b;color:#f8fafc;padding:0 12px;font-size:16px;outline:none}
+.rsi-field input:focus,.rsi-field select:focus,.rsi-limit-input:focus{border-color:#60a5fa;box-shadow:0 0 0 2px rgba(96,165,250,.14)}
+.rsi-style-row{display:grid;grid-template-columns:minmax(180px,1fr) 62px 62px 110px;gap:10px;align-items:center;margin-bottom:12px}
+.rsi-style-row label{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700}.rsi-style-row input[type=checkbox]{width:19px;height:19px;accent-color:#3b82f6}
+.rsi-color-chip{height:38px;border-radius:8px;border:1px solid rgba(148,163,184,.3);position:relative}.rsi-color-chip.plot{background:#8b5cf6}.rsi-color-chip.smooth{background:#2477b6}
+.rsi-line-chip{height:38px;border-radius:8px;border:1px solid rgba(148,163,184,.3);position:relative;background:linear-gradient(transparent 48%,#9ca3af 49%,#9ca3af 52%,transparent 53%)}
+.rsi-bg-chip{width:48px;height:38px;border-radius:8px;border:1px solid rgba(148,163,184,.3);background:repeating-linear-gradient(45deg,#15131e 0,#15131e 5px,#29263a 5px,#29263a 10px)}
+.rsi-limit-input{height:38px;font-size:14px}
+.rsi-visibility-note{padding:12px 14px;border:1px solid rgba(96,165,250,.22);border-radius:10px;background:rgba(15,23,42,.5);color:#cbd5e1;font-size:12px;line-height:1.5;margin-bottom:18px}
+.rsi-visibility-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px}.rsi-visibility-grid span,.rsi-visibility-grid b{padding:11px 12px;border-radius:8px;background:rgba(15,23,42,.45);border:1px solid rgba(148,163,184,.12)}
+.rsi-visibility-grid b{color:#f8fafc;text-align:right}
+.rsi-settings-footer{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;border-top:1px solid rgba(148,163,184,.14);position:sticky;bottom:0;background:#242329}
+.rsi-cancel,.rsi-ok{height:44px;padding:0 22px;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer}.rsi-cancel{background:transparent;color:#60a5fa;border:1px solid #2563eb}.rsi-ok{background:#2563eb;color:#fff;border:1px solid #3b82f6}
+@media(max-width:480px){.rsi-settings-modal{width:100%;max-height:92vh}.rsi-settings-head{height:56px}.rsi-settings-title{font-size:24px}.rsi-tabs{gap:18px}.rsi-tab{font-size:14px}.rsi-field{grid-template-columns:1fr 145px}.rsi-style-row{grid-template-columns:minmax(145px,1fr) 42px 42px 78px}.rsi-style-row label{font-size:12px}.rsi-settings-footer{padding:12px}.rsi-tab-panel{padding:16px}}
+</style>
+
+<script id="rsi-settings-ui-js">
+(function(){
+  const overlay=document.getElementById('rsiSettingsOverlay');
+  const openBtn=document.getElementById('rsiSettingsOpen');
+  const closeBtn=document.getElementById('rsiSettingsClose');
+  const cancelBtn=document.getElementById('rsiSettingsCancel');
+  const saveBtn=document.getElementById('rsiSettingsSave');
+  if(!overlay || !openBtn) return;
+  const $=id=>document.getElementById(id);
+  function syncForm(){
+    $('rsiLengthInput').value=RSI_SETTINGS.length;
+    $('rsiSmoothingInput').value=RSI_SETTINGS.smoothingLine;
+    $('rsiSmoothingLengthInput').value=RSI_SETTINGS.smoothingLength;
+    $('rsiPlotInput').checked=RSI_SETTINGS.plot;
+    $('rsiSmoothedMAInput').checked=RSI_SETTINGS.smoothedMA;
+    $('rsiUpperVisibleInput').checked=RSI_SETTINGS.upperVisible;
+    $('rsiMiddleVisibleInput').checked=RSI_SETTINGS.middleVisible;
+    $('rsiLowerVisibleInput').checked=RSI_SETTINGS.lowerVisible;
+    $('rsiBackgroundInput').checked=RSI_SETTINGS.hlinesBackground;
+    $('rsiUpperInput').value=RSI_SETTINGS.upperLimit;
+    $('rsiMiddleInput').value=RSI_SETTINGS.middleLimit;
+    $('rsiLowerInput').value=RSI_SETTINGS.lowerLimit;
+  }
+  function open(){syncForm();overlay.classList.add('open');overlay.setAttribute('aria-hidden','false')}
+  function close(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true')}
+  function save(){
+    RSI_SETTINGS.length=Math.max(1,Math.min(200,parseInt($('rsiLengthInput').value,10)||14));
+    RSI_SETTINGS.smoothingLine=$('rsiSmoothingInput').value;
+    RSI_SETTINGS.smoothingLength=Math.max(1,Math.min(200,parseInt($('rsiSmoothingLengthInput').value,10)||14));
+    RSI_SETTINGS.plot=$('rsiPlotInput').checked;
+    RSI_SETTINGS.smoothedMA=$('rsiSmoothedMAInput').checked;
+    RSI_SETTINGS.upperVisible=$('rsiUpperVisibleInput').checked;
+    RSI_SETTINGS.middleVisible=$('rsiMiddleVisibleInput').checked;
+    RSI_SETTINGS.lowerVisible=$('rsiLowerVisibleInput').checked;
+    RSI_SETTINGS.hlinesBackground=$('rsiBackgroundInput').checked;
+    RSI_SETTINGS.upperLimit=Math.max(0,Math.min(100,Number($('rsiUpperInput').value)||70));
+    RSI_SETTINGS.middleLimit=Math.max(0,Math.min(100,Number($('rsiMiddleInput').value)||50));
+    RSI_SETTINGS.lowerLimit=Math.max(0,Math.min(100,Number($('rsiLowerInput').value)||30));
+    if(typeof renderIndicatorDashboard==='function' && typeof bars30!=='undefined') renderIndicatorDashboard(bars30);
+    if(typeof updateIndicatorLeanBanner==='function' && typeof bars30!=='undefined') updateIndicatorLeanBanner(bars30);
+    close();
+  }
+  openBtn.addEventListener('click',open); closeBtn.addEventListener('click',close); cancelBtn.addEventListener('click',close); saveBtn.addEventListener('click',save);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape' && overlay.classList.contains('open'))close()});
+  document.querySelectorAll('[data-rsi-tab]').forEach(tab=>tab.addEventListener('click',()=>{
+    const name=tab.dataset.rsiTab;
+    document.querySelectorAll('[data-rsi-tab]').forEach(x=>x.classList.toggle('active',x===tab));
+    document.querySelectorAll('[data-rsi-panel]').forEach(x=>x.classList.toggle('active',x.dataset.rsiPanel===name));
+  }));
+  // การกดการ์ด RSI ใช้สำหรับเปิดกราฟอินดิเคเตอร์แยกโดยตรงแล้ว
+  // การตั้งค่า RSI ให้กดปุ่ม ⚙️ RSI ด้านบนแทน
+})();
+</script>
+
+
+<!-- ===== GAVIN TRADE — INDEPENDENT INDICATOR GRAPH ===== -->
+<style id="gavin-independent-indicator-graph-style">
+  .gavin-independent-indicator{
+    display:none; width:100%; margin:12px 0 16px; box-sizing:border-box;
+    border:1px solid rgba(71,85,105,.55); border-radius:14px; overflow:hidden;
+    background:#0b1220; box-shadow:0 10px 28px rgba(0,0,0,.28);
+  }
+  .gavin-independent-indicator.show{display:block;animation:gavinIndOpen .18s ease-out}
+  @keyframes gavinIndOpen{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+  .gii-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 10px 7px;background:linear-gradient(180deg,#111827,#0b1220)}
+  .gii-brand{font-size:12px;font-weight:950;letter-spacing:.2px;color:#f8fafc}
+  .gii-brand .g{color:#22c55e}.gii-brand .t{color:#ef4444}
+  .gii-live{font-size:8px;font-weight:900;color:#67e8f9;letter-spacing:.7px}
+  .gii-toolbar{display:flex;align-items:center;gap:6px;padding:0 10px 8px;overflow-x:auto;scrollbar-width:none}
+  .gii-toolbar::-webkit-scrollbar{display:none}
+  .gii-tool{flex:0 0 auto;border:1px solid rgba(148,163,184,.25);background:#111827;color:#cbd5e1;border-radius:8px;padding:5px 8px;font-size:8px;font-weight:900;cursor:pointer}
+  .gii-tool.active{background:rgba(255,23,68,.14);border-color:#ff1744;color:#fff;box-shadow:0 0 9px rgba(255,23,68,.18)}
+  .gii-close{margin-left:auto;flex:0 0 auto;border:1px solid rgba(148,163,184,.25);background:#111827;color:#cbd5e1;border-radius:8px;padding:5px 8px;font-size:9px;font-weight:900;cursor:pointer}
+  .gii-info{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;padding:6px 10px;background:#0f172a;border-top:1px solid rgba(148,163,184,.10);border-bottom:1px solid rgba(148,163,184,.10)}
+  .gii-name{font-size:10px;font-weight:950;color:#ff5a6f}.gii-value{font:900 12px var(--mono);color:#fff}.gii-price{font:900 9px var(--mono);color:#67e8b0;white-space:nowrap}
+  .gii-chart-wrap{position:relative;height:310px;background:#0b1220}
+  #gavinIndependentIndicatorCanvas{display:block;width:100%;height:310px;touch-action:none}
+  .gii-note{padding:6px 10px;text-align:center;font-size:8px;line-height:1.35;color:#94a3b8;background:#0b1220}
+  @media(max-width:600px){.gii-chart-wrap,#gavinIndependentIndicatorCanvas{height:290px}.gii-info{grid-template-columns:1fr auto}.gii-price{grid-column:1/-1;text-align:right}.gii-head{padding:8px}.gii-toolbar{padding-bottom:7px}}
+</style>
+
+<div class="gavin-independent-indicator" id="gavinIndependentIndicator" aria-hidden="true">
+  <div class="gii-head">
+    <div class="gii-brand"><span class="g">GAVIN</span> <span class="t">TRADE</span> — INDICATOR</div>
+    <div class="gii-live">LIVE • 30S</div>
+  </div>
+  <div class="gii-toolbar" id="giiToolbar">
+    <button class="gii-tool active" data-gii="rsi">RSI 14</button>
+    <button class="gii-tool" data-gii="macd">MACD</button>
+    <button class="gii-tool" data-gii="stoch">STOCH 14</button>
+    <button class="gii-tool" data-gii="cci">CCI 20</button>
+    <button class="gii-tool" data-gii="williams">WILLIAMS %R</button>
+    <button class="gii-tool" data-gii="mfi">MFI 14</button>
+    <button class="gii-tool" data-gii="obv">OBV</button>
+    <button class="gii-tool" data-gii="atr">ATR 14</button>
+    <button class="gii-tool" data-gii="adx">ADX 14</button>
+    <button class="gii-close" id="giiClose">× ปิด</button>
+  </div>
+  <div class="gii-info">
+    <div class="gii-name" id="giiName">RSI 14</div>
+    <div class="gii-value" id="giiValue">—</div>
+    <div class="gii-price" id="giiPrice">PRICE —</div>
+  </div>
+  <div class="gii-chart-wrap"><canvas id="gavinIndependentIndicatorCanvas"></canvas></div>
+  <div class="gii-note">กราฟนี้เป็นกราฟอินดิเคเตอร์แยกโดยเฉพาะ • ไม่วาดทับกราฟ 1/กราฟ 2 • กดเลือกอินดิเคเตอร์เพื่อเปลี่ยนกราฟนี้ทันที</div>
+</div>
+
+<script id="gavin-independent-indicator-graph-script">
+(function(){
+  const panel=document.getElementById('gavinIndependentIndicator');
+  const canvas=document.getElementById('gavinIndependentIndicatorCanvas');
+  const ctx=canvas&&canvas.getContext('2d');
+  const nameEl=document.getElementById('giiName'), valueEl=document.getElementById('giiValue'), priceEl=document.getElementById('giiPrice');
+  if(!panel||!canvas||!ctx)return;
+  const state={key:'rsi'};
+  const defs={
+    rsi:{name:'RSI 14',min:0,max:100,refs:[70,50,30],series:b=>calcRSISeries(b.map(x=>Number(x.c)),14),fmt:v=>Number(v).toFixed(2)},
+    macd:{name:'MACD 12 / 26 / 9',min:null,max:null,refs:[0],series:b=>{const m=calcMACD(b.map(x=>Number(x.c)),12,26,9);return m?m.macdLine:[]},fmt:v=>Number(v).toFixed(5)},
+    stoch:{name:'Stochastic 14',min:0,max:100,refs:[80,50,20],series:b=>{const a=Array(b.length).fill(null),n=14;for(let i=n-1;i<b.length;i++){const x=b.slice(i-n+1,i+1),hi=Math.max(...x.map(z=>+z.h)),lo=Math.min(...x.map(z=>+z.l));a[i]=hi===lo?50:((+b[i].c-lo)/(hi-lo))*100}return a},fmt:v=>Number(v).toFixed(2)},
+    cci:{name:'CCI 20',min:-300,max:300,refs:[100,0,-100],series:b=>{const a=Array(b.length).fill(null),n=20;for(let i=n-1;i<b.length;i++){const x=b.slice(i-n+1,i+1),tp=x.map(z=>(+z.h + +z.l + +z.c)/3),m=tp.reduce((q,v)=>q+v,0)/n,md=tp.reduce((q,v)=>q+Math.abs(v-m),0)/n;a[i]=md?(tp.at(-1)-m)/(.015*md):0}return a},fmt:v=>Number(v).toFixed(2)},
+    williams:{name:'Williams %R 14',min:-100,max:0,refs:[-20,-50,-80],series:b=>{const a=Array(b.length).fill(null),n=14;for(let i=n-1;i<b.length;i++){const x=b.slice(i-n+1,i+1),hi=Math.max(...x.map(z=>+z.h)),lo=Math.min(...x.map(z=>+z.l));a[i]=hi===lo?-50:((hi-+b[i].c)/(hi-lo))*-100}return a},fmt:v=>Number(v).toFixed(2)},
+    mfi:{name:'Money Flow Index 14',min:0,max:100,refs:[80,50,20],series:b=>{const a=Array(b.length).fill(null),n=14;for(let i=n;i<b.length;i++){let p=0,q=0;for(let j=i-n+1;j<=i;j++){const tp=(+b[j].h + +b[j].l + +b[j].c)/3,py=(+b[j-1].h + +b[j-1].l + +b[j-1].c)/3,m=tp*(+b[j].v||0);if(tp>py)p+=m;else if(tp<py)q+=m}a[i]=q===0?100:100-(100/(1+p/q))}return a},fmt:v=>Number(v).toFixed(2)},
+    obv:{name:'On-Balance Volume',min:null,max:null,refs:[0],series:b=>{const a=Array(b.length).fill(null);let o=0;if(!b.length)return a;a[0]=0;for(let i=1;i<b.length;i++){if(+b[i].c>+b[i-1].c)o+=+b[i].v||0;else if(+b[i].c<+b[i-1].c)o-=+b[i].v||0;a[i]=o}return a},fmt:v=>Math.abs(+v)>=1000?(+v).toLocaleString(undefined,{maximumFractionDigits:0}):(+v).toFixed(0)},
+    atr:{name:'ATR 14',min:0,max:null,refs:[],series:b=>{const a=Array(b.length).fill(null),n=14;for(let i=n;i<b.length;i++){let s=0;for(let j=i-n+1;j<=i;j++){const pc=+b[j-1].c;s+=Math.max(+b[j].h-+b[j].l,Math.abs(+b[j].h-pc),Math.abs(+b[j].l-pc))}a[i]=s/n}return a},fmt:v=>Number(v).toFixed(6)},
+    adx:{name:'ADX 14',min:0,max:100,refs:[25],series:b=>{const a=Array(b.length).fill(null),n=14;for(let i=n;i<b.length;i++){let tr=0,p=0,q=0;for(let j=i-n+1;j<=i;j++){const x=b[j],pr=b[j-1],dh=+x.h-+pr.h,dl=+pr.l-+x.l;tr+=Math.max(+x.h-+x.l,Math.abs(+x.h-+pr.c),Math.abs(+x.l-+pr.c));if(dh>dl&&dh>0)p+=dh;if(dl>dh&&dl>0)q+=dl}const pdi=tr?p/tr*100:0,mdi=tr?q/tr*100:0;a[i]=(pdi+mdi)?Math.abs(pdi-mdi)/(pdi+mdi)*100:0}return a},fmt:v=>Number(v).toFixed(2)}
+  };
+  function priceFmt(v){return typeof fmtAxisPrice==='function'?fmtAxisPrice(v):(+v).toFixed(2)}
+  function show(key){
+    if(!defs[key])key='rsi';state.key=key;panel.classList.add('show');panel.setAttribute('aria-hidden','false');
+    document.querySelectorAll('.gii-tool').forEach(b=>b.classList.toggle('active',b.dataset.gii===key));
+    draw();
+    setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),30);
+  }
+  document.querySelectorAll('[data-gii]').forEach(btn=>btn.addEventListener('click',()=>show(btn.dataset.gii)));
+  document.getElementById('giiClose')?.addEventListener('click',()=>{panel.classList.remove('show');panel.setAttribute('aria-hidden','true')});
+
+  // กดการ์ดอินดิเคเตอร์ตัวไหน = เปิดกราฟอินดิเคเตอร์ตัวนั้นทันที
+  const grid=document.getElementById('indicatorGrid');
+  if(grid)grid.addEventListener('click',e=>{const card=e.target.closest('[data-indicator-key]');if(card)show(card.dataset.indicatorKey)});
+
+  function draw(){
+    if(!panel.classList.contains('show'))return;
+    const b=Array.isArray(window.bars30)?window.bars30:[];const d=defs[state.key]||defs.rsi;
+    const w=Math.max(280,canvas.clientWidth||320),h=canvas.clientHeight||310,dpr=Math.min(window.devicePixelRatio||2,4);
+    canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+    nameEl.textContent=d.name;
+    const lp=b.length?+b.at(-1).c:null;priceEl.textContent=lp!=null?'PRICE '+priceFmt(lp):'PRICE —';
+    let arr=[];try{arr=d.series(b)||[]}catch(e){arr=[]}
+    const valid=arr.filter(v=>Number.isFinite(+v)).map(v=>+v);const latest=valid.at(-1);valueEl.textContent=latest==null?'—':d.fmt(latest);
+    // พื้นที่กราฟสไตล์กราฟ 1: กริดชัด + แกนขวา + เส้นเวลา + เส้นอินดิเคเตอร์สีแดง
+    const L=8,R=68,T=14,B=25,W=w-L-R,H=h-T-B;
+    const start=Math.max(0,arr.length-70),end=arr.length;
+    if(!valid.length){ctx.fillStyle='#94a3b8';ctx.font='900 11px Arial';ctx.textAlign='center';ctx.fillText('กำลังรอข้อมูลอินดิเคเตอร์…',w/2,h/2);return}
+    let min=d.min,max=d.max;
+    if(min==null||max==null){min=Math.min(...valid);max=Math.max(...valid);const pad=(max-min||Math.max(1,Math.abs(max)*.02))*.16;min-=pad;max+=pad}
+    if(max<=min)max=min+1;
+    const y=v=>T+(1-(v-min)/(max-min))*H;
+    ctx.fillStyle='#0b1220';ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle='rgba(148,163,184,.12)';ctx.lineWidth=1;ctx.font='9px Arial';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle='rgba(203,213,225,.72)';
+    for(let i=0;i<=5;i++){const yy=T+i/5*H;ctx.beginPath();ctx.moveTo(L,Math.round(yy)+.5);ctx.lineTo(w-R,Math.round(yy)+.5);ctx.stroke();const vv=max-i/5*(max-min);ctx.fillText(Math.abs(vv)>=100?vv.toFixed(0):vv.toFixed(2),w-R+7,yy)}
+    for(let i=0;i<=6;i++){const xx=L+i/6*W;ctx.beginPath();ctx.moveTo(Math.round(xx)+.5,T);ctx.lineTo(Math.round(xx)+.5,T+H);ctx.stroke();}
+    (d.refs||[]).forEach(ref=>{if(ref<min||ref>max)return;const yy=y(ref);ctx.save();ctx.setLineDash([5,4]);ctx.strokeStyle='rgba(203,213,225,.38)';ctx.beginPath();ctx.moveTo(L,yy+.5);ctx.lineTo(w-R,yy+.5);ctx.stroke();ctx.restore();ctx.fillStyle='rgba(203,213,225,.62)';ctx.fillText(String(ref),L+4,Math.max(T+8,Math.min(T+H-8,yy-7)))});
+    // เส้นหลักสีแดง — เป็นของกราฟอินดิเคเตอร์นี้เท่านั้น
+    ctx.save();ctx.beginPath();let started=false;for(let i=start;i<end;i++){const v=arr[i];if(!Number.isFinite(+v)){started=false;continue}const x=L+(i-start)/Math.max(1,end-start-1)*W,yy=y(+v);if(!started){ctx.moveTo(x,yy);started=true}else ctx.lineTo(x,yy)}ctx.strokeStyle='#FF1744';ctx.lineWidth=2.25;ctx.shadowColor='rgba(255,23,68,.45)';ctx.shadowBlur=5;ctx.stroke();ctx.restore();
+    // จุดล่าสุด + ป้ายค่า
+    const li=arr.length-1,lv=arr[li];if(Number.isFinite(+lv)){const xx=w-R,yy=y(+lv);ctx.fillStyle='#FF1744';ctx.beginPath();ctx.arc(xx,yy,3.5,0,Math.PI*2);ctx.fill();ctx.font='900 9px Arial';ctx.textAlign='right';ctx.fillStyle='#fff';ctx.fillText(d.fmt(+lv),w-R-7,Math.max(T+9,Math.min(T+H-8,yy-9)))}
+    // เส้นราคาอ้างอิงแยกด้านบน ไม่ปะปนกับค่าอินดิเคเตอร์
+    if(lp!=null){ctx.fillStyle='#67e8b0';ctx.font='900 9px var(--mono)';ctx.textAlign='left';ctx.fillText('PRICE '+priceFmt(lp),L,T-3)}
+    // เวลาแบบกราฟจริงด้านล่าง
+    ctx.fillStyle='rgba(148,163,184,.68)';ctx.font='8px Arial';ctx.textAlign='center';ctx.textBaseline='top';
+    for(let k=0;k<5;k++){const idx=start+Math.round(k/4*Math.max(0,end-start-1));const xx=L+(idx-start)/Math.max(1,end-start-1)*W;const ts=b[idx]?.t||b[idx]?.time;let label='—';if(ts){const dt=new Date(Number(ts)<1e12?Number(ts)*1000:Number(ts));if(!isNaN(dt))label=dt.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}ctx.fillText(label,xx,T+H+7)}
+  }
+  window.addEventListener('resize',draw,{passive:true});
+  setInterval(draw,1000);
 })();
 </script>
 </body>
