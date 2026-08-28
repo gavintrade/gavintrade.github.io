@@ -5225,6 +5225,15 @@ canvas#blankMarketChart {
   50%{transform:scale(1.35);opacity:1;}
 }
 </style>
+<style id="gavin-platform-support">
+.platform-support{
+  position:relative;z-index:1;text-align:center;margin:0 0 10px;
+  font-size:8.5px;font-weight:600;letter-spacing:.2px;color:#94a3b8;
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
+  gap:4px 8px;padding:6px 8px;border-radius:10px;
+  background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.14);
+}
+</style>
 </head>
 <body>
 <button id="graph1SignalSoundToggle" type="button" aria-pressed="true" title="ເປີດ/ປິດສຽງແຈ້ງເຕືອນສັນຍານຊື້ຂາຍກຣາຟ 1">🔔 ສັນຍານ: ເປີດ</button>
@@ -5252,6 +5261,7 @@ canvas#blankMarketChart {
     <div class="g-signature">𝒢<span>avin Trade</span></div>
     <div style="position:relative;z-index:1;text-align:center;margin:0 0 8px;font-size:9px;color:#64748b;letter-spacing:1.5px;font-weight:700;">ລະບົບການຊື້ຂາຍແບບມືອາຊີບ</div>
     <p>-ສະຫງວນລິຂະສິດ Gavin Trader ເປັນເຈົ້າຂອງແຕ່ຜູ້ດຽວ ຫ້າມບຸກຄົນອື່ນລອກແບບ ເອົາໄປເຜີຍແຜ່ໂດຍບໍ່ໄດ້ຮັບອະນຸຍາດ</p>
+    <div class="platform-support">ລະບົບແອັບຮ້ອງຮັບທຸກລະບົບ&nbsp;&nbsp;📱 Android&nbsp;&nbsp;🍎 iPhone / iPad&nbsp;&nbsp;💻 Windows&nbsp;&nbsp;🖥️ MacBook / macOS</div>
     <input type="password" id="passInput" placeholder="ປ້ອນລະຫັດຜ່ານ" autocomplete="off">
     <button id="passBtn">ເຂົ້າໃຊ້ງານລະບົບ</button>
     <div class="login-error" id="loginErr"></div>
