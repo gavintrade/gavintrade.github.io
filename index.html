@@ -1,6 +1,50 @@
 <!DOCTYPE html>
 <html lang="lo">
 <head>
+<!-- GAVIN TRADE MOBILE COMPATIBILITY PATCH: preserves existing UI/features -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<style id="gavin-mobile-compatibility">
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { min-height: 100vh; min-height: 100dvh; overscroll-behavior-x: none; }
+  img, canvas, video { max-width: 100%; }
+  @media (prefers-reduced-motion: reduce) {
+    *,*::before,*::after { animation-duration:.001ms!important; animation-iteration-count:1!important; scroll-behavior:auto!important; transition-duration:.001ms!important; }
+  }
+</style>
+<script>
+(function(){
+  'use strict';
+  // Keep the original application unchanged; only add defensive mobile handling.
+  var lowMemory = false;
+  try { lowMemory = !!(navigator.deviceMemory && navigator.deviceMemory <= 2); } catch(e) {}
+  window.GAVIN_MOBILE_LOW_MEMORY = lowMemory;
+
+  // Prevent one unexpected resource error from hiding the page completely.
+  window.addEventListener('error', function(e){
+    try { console.warn('[GAVIN mobile compatibility]', e && (e.message || e.type)); } catch(_) {}
+  }, true);
+  window.addEventListener('unhandledrejection', function(e){
+    try { console.warn('[GAVIN promise warning]', e && e.reason); } catch(_) {}
+  });
+
+  // Decode images asynchronously when supported to reduce first-render pressure.
+  document.addEventListener('DOMContentLoaded', function(){
+    var imgs = document.images || [];
+    for (var i=0;i<imgs.length;i++) {
+      try { imgs[i].decoding = 'async'; } catch(e) {}
+    }
+  });
+
+  // Expose page visibility so existing animation code can optionally use it.
+  document.addEventListener('visibilitychange', function(){
+    window.GAVIN_PAGE_HIDDEN = !!document.hidden;
+  }, false);
+})();
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <meta name="theme-color" content="#050714">
