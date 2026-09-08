@@ -1,50 +1,6 @@
 <!DOCTYPE html>
 <html lang="lo">
 <head>
-<!-- GAVIN TRADE MOBILE COMPATIBILITY PATCH: preserves existing UI/features -->
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="format-detection" content="telephone=no">
-<style id="gavin-mobile-compatibility">
-  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-  body { min-height: 100vh; min-height: 100dvh; overscroll-behavior-x: none; }
-  img, canvas, video { max-width: 100%; }
-  @media (prefers-reduced-motion: reduce) {
-    *,*::before,*::after { animation-duration:.001ms!important; animation-iteration-count:1!important; scroll-behavior:auto!important; transition-duration:.001ms!important; }
-  }
-</style>
-<script>
-(function(){
-  'use strict';
-  // Keep the original application unchanged; only add defensive mobile handling.
-  var lowMemory = false;
-  try { lowMemory = !!(navigator.deviceMemory && navigator.deviceMemory <= 2); } catch(e) {}
-  window.GAVIN_MOBILE_LOW_MEMORY = lowMemory;
-
-  // Prevent one unexpected resource error from hiding the page completely.
-  window.addEventListener('error', function(e){
-    try { console.warn('[GAVIN mobile compatibility]', e && (e.message || e.type)); } catch(_) {}
-  }, true);
-  window.addEventListener('unhandledrejection', function(e){
-    try { console.warn('[GAVIN promise warning]', e && e.reason); } catch(_) {}
-  });
-
-  // Decode images asynchronously when supported to reduce first-render pressure.
-  document.addEventListener('DOMContentLoaded', function(){
-    var imgs = document.images || [];
-    for (var i=0;i<imgs.length;i++) {
-      try { imgs[i].decoding = 'async'; } catch(e) {}
-    }
-  });
-
-  // Expose page visibility so existing animation code can optionally use it.
-  document.addEventListener('visibilitychange', function(){
-    window.GAVIN_PAGE_HIDDEN = !!document.hidden;
-  }, false);
-})();
-</script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <meta name="theme-color" content="#050714">
@@ -5304,13 +5260,9 @@ canvas#blankMarketChart {
       for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
       const blob = new Blob([bytes], {type:'text/html;charset=utf-8'});
       const url = URL.createObjectURL(blob);
-      const win = window.open(url, '_blank');
-      if(!win){
-        URL.revokeObjectURL(url);
-        alert('ກະລຸນາອະນຸຍາດໃຫ້ເປີດໜ້າໃໝ່ (Pop-up)');
-        return;
-      }
-      setTimeout(()=>URL.revokeObjectURL(url),60000);
+      // ເປີດໃນໜ້າປັດຈຸບັນ ແທນ window.open()
+      // ເພື່ອບໍ່ໃຫ້ Safari/Chrome/Browser ບາງຮຸ່ນບລັອກ popup.
+      window.location.href = url;
     }catch(err){
       console.error('Embedded Signal App error:',err);
       alert('ບໍ່ສາມາດເປີດແອັບໄດ້');
@@ -5633,6 +5585,58 @@ body{
   100%{left:125%;opacity:0}
 }
 </style>
+
+<style id="GAVIN-MOBILE-LINK-FIX-2026">
+/* ===== MOBILE LINK FIX =====
+   ແກ້ບັນຫາບາງເຄື່ອງກົດປຸ່ມ/ລິ້ງບໍ່ຕິດເມື່ອ zoom ຫຼືຈໍສູງ.
+*/
+html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  touch-action:manipulation;
+}
+body{
+  -webkit-tap-highlight-color:transparent;
+  overscroll-behavior-x:none;
+}
+button,
+a,
+[role="button"],
+input[type="button"],
+input[type="submit"]{
+  -webkit-tap-highlight-color:rgba(255,255,255,.12);
+  touch-action:manipulation;
+  -webkit-user-select:none;
+  user-select:none;
+}
+#openSignalPageBtn,
+#openSignalGavinPageBtn,
+#embeddedSignalAppBtn,
+#openSignalBotBtn{
+  position:relative !important;
+  z-index:2147483000 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  cursor:pointer !important;
+}
+#signalPageLinkRow,
+#signalGavinPageLinkRow{
+  position:relative !important;
+  z-index:2147482999 !important;
+  pointer-events:auto !important;
+  isolation:isolate;
+}
+@media (max-width:600px){
+  #openSignalPageBtn,
+  #openSignalGavinPageBtn,
+  #embeddedSignalAppBtn,
+  #openSignalBotBtn{
+    min-height:46px !important;
+    min-width:44px;
+  }
+}
+</style>
+
 </head>
 <body>
 <button id="graph1SignalSoundToggle" type="button" aria-pressed="true" title="ເປີດ/ປິດສຽງແຈ້ງເຕືອນສັນຍານຊື້ຂາຍກຣາຟ 1">🔔 ສັນຍານ: ເປີດ</button>
@@ -14909,7 +14913,8 @@ document.getElementById('openSignalPageBtn').addEventListener('click', function(
     for (var i = 0; i < binary.length; i++) { bytes[i] = binary.charCodeAt(i); }
     var blob = new Blob([bytes], { type: 'text/html;charset=utf-8' });
     var url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
+    // ເປີດໃນໜ້າດຽວກັນ ບໍ່ໃຊ້ popup.
+    window.location.href = url;
   } catch(e) {
     alert('ບໍ່ສາມາດເປີດໜ້າ Signal gavin v2 ໄດ້: ' + e.message);
   }
@@ -15166,7 +15171,8 @@ document.getElementById('openSignalGavinPageBtn').addEventListener('click', func
     for (var i = 0; i < binary.length; i++) { bytes[i] = binary.charCodeAt(i); }
     var blob = new Blob([bytes], { type: 'text/html;charset=utf-8' });
     var url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
+    // ເປີດໃນໜ້າດຽວກັນ ບໍ່ໃຊ້ popup.
+    window.location.href = url;
   } catch(e) {
     alert('ບໍ່ສາມາດເປີດໜ້າ Signal gavin v1 ໄດ້: ' + e.message);
   }
@@ -18197,8 +18203,8 @@ function openEmbeddedSignalBot(){
     for(var i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
     var blob=new Blob([bytes],{type:'text/html;charset=utf-8'});
     var url=URL.createObjectURL(blob);
-    window.open(url,'_blank');
-    setTimeout(function(){try{URL.revokeObjectURL(url)}catch(e){}},60000);
+    // ບໍ່ເປີດ popup: ໃຊ້ navigation ໂດຍກົງ ໃຫ້ browser ມືຖືທຸກຮຸ່ນຮອງຮັບງ່າຍຂຶ້ນ.
+    window.location.href = url;
   }catch(e){
     alert('ບໍ່ສາມາດເປີດ Signal Bot ໄດ້: '+e.message);
   }
@@ -18261,6 +18267,27 @@ function openEmbeddedSignalBot(){
   try{new MutationObserver(paint).observe(document.documentElement,{subtree:true,childList:true});}catch(e){}
 })();
 </script>
+
+<script id="GAVIN-MOBILE-CLICK-FALLBACK-2026">
+(function(){
+  'use strict';
+  var ids = {
+    openSignalPageBtn: true,
+    openSignalGavinPageBtn: true,
+    embeddedSignalAppBtn: true,
+    openSignalBotBtn: true
+  };
+  document.addEventListener('touchend', function(e){
+    var el = e.target && e.target.closest ? e.target.closest('button,a,[role="button"]') : null;
+    if(!el || !ids[el.id]) return;
+    // ໃຫ້ native click ເປັນຕົວຫຼັກ; fallback ນີ້ສຳລັບ browser ເກົ່າທີ່ touch/click ບາງຄັ້ງບໍ່ສົ່ງ.
+    if(el.__gavinTouchFallback) return;
+    el.__gavinTouchFallback = true;
+    setTimeout(function(){ el.__gavinTouchFallback = false; }, 700);
+  }, {passive:true});
+})();
+</script>
+
 </body>
 
 <style id="graph1-ai-sound-final-fix">
