@@ -10603,64 +10603,6 @@ window.graph3RemoveIndicator=window.graph3RemoveIndicator||function(){};
   </button>
 </div>
 
-<style id="pocketOptionStyle">
-#pocketOptionLinkRow{
-  position:relative !important;
-  z-index:2;
-}
-#pocketOptionLinkRow button{
-  width:calc(100% - 28px) !important;
-  max-width:540px !important;
-  min-height:52px !important;
-  margin:7px auto 12px !important;
-  padding:12px 18px !important;
-  border-radius:16px !important;
-  font-size:15px !important;
-  font-weight:900 !important;
-  letter-spacing:.1px !important;
-  color:#eafff2 !important;
-  border:1.7px solid #22c55e !important;
-  background:linear-gradient(135deg,#052e17 0%,#0a7a3d 48%,#052e17 100%) !important;
-  box-shadow:0 0 8px rgba(34,197,94,.75),0 0 26px rgba(34,197,94,.30),inset 0 1px 0 rgba(255,255,255,.26) !important;
-  text-shadow:0 0 8px rgba(200,255,220,.45) !important;
-  cursor:pointer;
-  transition:transform .18s ease,filter .18s ease,box-shadow .18s ease !important;
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-}
-#pocketOptionLinkRow button:hover{
-  filter:brightness(1.15) saturate(1.08);
-  transform:translateY(-1px);
-}
-#pocketOptionLinkRow button:active{
-  transform:scale(.985);
-}
-</style>
-<script id="pocketOptionScript">
-(function(){
-  const pocketOptionBase64 = "PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9InRoIj4KPGhlYWQ+CjxtZXRhIGNoYXJzZXQ9IlVURi04Ij4KPG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xLjAiPgo8dGl0bGU+UG9ja2V0IE9wdGlvbjwvdGl0bGU+CjxtZXRhIGh0dHAtZXF1aXY9InJlZnJlc2giIGNvbnRlbnQ9IjA7dXJsPWh0dHBzOi8vbS5wb2NrZXRvcHRpb24uY29tL3RoL2NhYmluZXQ/c291cmNlPXB3YSI+CjxzdHlsZT4KICAqe2JveC1zaXppbmc6Ym9yZGVyLWJveH0KICBib2R5ewogICAgbWFyZ2luOjA7CiAgICBtaW4taGVpZ2h0OjEwMHZoOwogICAgZGlzcGxheTpmbGV4OwogICAgYWxpZ24taXRlbXM6Y2VudGVyOwogICAganVzdGlmeS1jb250ZW50OmNlbnRlcjsKICAgIGZvbnQtZmFtaWx5OkFyaWFsLHNhbnMtc2VyaWY7CiAgICBjb2xvcjojZmZmOwogICAgYmFja2dyb3VuZDpsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCMwNjE1MTMsIzBiMmEyNCwjMDYxNTEzKTsKICB9CiAgLmJveHsKICAgIHRleHQtYWxpZ246Y2VudGVyOwogICAgcGFkZGluZzoyNHB4OwogIH0KICAuc3Bpbm5lcnsKICAgIHdpZHRoOjQycHg7aGVpZ2h0OjQycHg7CiAgICBtYXJnaW46MCBhdXRvIDE2cHg7CiAgICBib3JkZXI6NHB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsLjIpOwogICAgYm9yZGVyLXRvcC1jb2xvcjojNDJmZjhkOwogICAgYm9yZGVyLXJhZGl1czo1MCU7CiAgICBhbmltYXRpb246c3BpbiAuOHMgbGluZWFyIGluZmluaXRlOwogIH0KICBAa2V5ZnJhbWVzIHNwaW57dG97dHJhbnNmb3JtOnJvdGF0ZSgzNjBkZWcpfX0KICBhe2NvbG9yOiM0MmZmOGQ7Zm9udC13ZWlnaHQ6Ym9sZDt0ZXh0LWRlY29yYXRpb246bm9uZX0KPC9zdHlsZT4KPC9oZWFkPgo8Ym9keT4KPGRpdiBjbGFzcz0iYm94Ij4KICA8ZGl2IGNsYXNzPSJzcGlubmVyIj48L2Rpdj4KICA8ZGl2PuC6geC6s+C6peC6seC6h+C7gOC6m+C6teC6lCBQb2NrZXQgT3B0aW9uLi4uPC9kaXY+CiAgPGRpdiBzdHlsZT0ibWFyZ2luLXRvcDoxMHB4O2ZvbnQtc2l6ZToxM3B4O2NvbG9yOiNhYWI4YWU7Ij4KICAgIOC6q+C6suC6geC6muC7jeC7iOC7hOC6m+C6reC6seC6lOC6leC6sOC7guC6meC6oeC6seC6lCDguoHgurvgupQgPGEgaHJlZj0iaHR0cHM6Ly9tLnBvY2tldG9wdGlvbi5jb20vdGgvY2FiaW5ldD9zb3VyY2U9cHdhIj7gupfgurXgu4jgupngurXgu4k8L2E+CiAgPC9kaXY+CjwvZGl2Pgo8c2NyaXB0PgogIHdpbmRvdy5sb2NhdGlvbi5yZXBsYWNlKCJodHRwczovL20ucG9ja2V0b3B0aW9uLmNvbS90aC9jYWJpbmV0P3NvdXJjZT1wd2EiKTsKPC9zY3JpcHQ+CjwvYm9keT4KPC9odG1sPgo=";
-  window.openPocketOption = function(){
-    try{
-      const binary = atob(pocketOptionBase64);
-      const bytes = new Uint8Array(binary.length);
-      for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
-      const blob = new Blob([bytes], {type:'text/html;charset=utf-8'});
-      const url = URL.createObjectURL(blob);
-      window.open(url,'_blank');
-      setTimeout(()=>URL.revokeObjectURL(url),60000);
-    }catch(err){
-      console.error('Pocket Option error:',err);
-      alert('ບໍ່ສາມາດເປີດແອັບໄດ້');
-    }
-  };
-})();
-</script>
-
-<div class="risk-line" id="pocketOptionLinkRow" style="text-align:center; margin:0 0 12px;">
-  <button type="button" id="openPocketOptionBtn" onclick="openPocketOption()">
-    💹 ກົດເຂົ້າໃຊ້ Pocket Option
-  </button>
-</div>
 
 <div class="disclaimer-box graph-risk-disclaimer" id="graphRiskDisclaimer">
   <div class="risk-line">
