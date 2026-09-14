@@ -7809,90 +7809,6 @@ button, a, [role="button"] {
   </button>
 </div>
 
-<style id="trade-signal-app-premium-2026">
-/* ===== Trading app w/ built-in signals — premium green glow ===== */
-.trade-signal-heading{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:2px;
-  margin:14px auto 6px;
-  width:calc(100% - 20px);
-  max-width:420px;
-  text-align:center;
-}
-.trade-signal-heading-text{
-  font:900 20px -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
-  color:#f8fafc;
-  letter-spacing:.3px;
-  text-shadow:0 0 10px rgba(255,255,255,.3);
-}
-.trade-signal-heading-arrow{
-  font-size:34px;
-  font-weight:900;
-  color:#34d399;
-  line-height:1;
-  animation:tradeSignalArrowBounce 1s ease-in-out infinite;
-}
-@keyframes tradeSignalArrowBounce{
-  0%,100%{ transform:translateY(0); opacity:1; }
-  50%{ transform:translateY(5px); opacity:.6; }
-}
-#tradeSignalAppLinkRow{
-  position:relative !important;
-  z-index:5 !important;
-  width:100%;
-  text-align:center;
-  margin:0 auto 10px !important;
-}
-#tradeSignalAppBtn{
-  position:relative;
-  overflow:hidden;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:calc(100% - 28px);
-  max-width:540px;
-  min-height:54px;
-  padding:13px 20px;
-  border:2px solid #6ee7b7;
-  border-radius:17px;
-  cursor:pointer;
-  text-decoration:none;
-  color:#052e1b;
-  font-size:16px;
-  font-weight:900;
-  letter-spacing:.2px;
-  background:
-    radial-gradient(circle at 20% 50%,rgba(255,255,255,.38),transparent 28%),
-    linear-gradient(135deg,#34d399 0%,#059669 45%,#6ee7b7 72%,#047857 100%);
-  box-shadow:
-    0 0 8px rgba(52,211,153,.95),
-    0 0 22px rgba(52,211,153,.58),
-    0 0 42px rgba(52,211,153,.28),
-    inset 0 1px 0 rgba(255,255,255,.55);
-  transition:transform .16s ease, filter .16s ease, box-shadow .16s ease;
-}
-#tradeSignalAppBtn:hover{ filter:brightness(1.08); transform:translateY(-1px); }
-#tradeSignalAppBtn:active{ transform:scale(.985); }
-@media (max-width:480px){
-  #tradeSignalAppBtn{width:calc(100% - 20px);min-height:52px;font-size:14px;padding:12px 14px;}
-  .trade-signal-heading-text{font-size:18px;}
-}
-</style>
-
-<div class="trade-signal-heading" id="tradeSignalAppHeading">
-  <span class="trade-signal-heading-text">ກົດສະໝັກແອັບເທຣດ ມີສັນຍານເທຣດໃນຕົວແບບທັນສະໄໝ</span>
-  <span class="trade-signal-heading-arrow">↓</span>
-</div>
-
-<div class="risk-line" id="tradeSignalAppLinkRow">
-  <a id="tradeSignalAppBtn" href="https://pocket-friends.co/r/w40zstm0mm" target="_blank" rel="noopener noreferrer" aria-label="ກົດສະໝັກແອັບເທຣດ ມີສັນຍານເທຣດໃນຕົວແບບທັນສະໄໝ">
-    📈 ກົດສະໝັກແອັບເທຣດ
-  </a>
-</div>
-
 <div class="link-entry-heading" id="linkEntryHeading">
   <span class="link-entry-heading-text">ທາງເຂົ້າໃຊ້ງານເທັກນິກຕ່າງໆ</span>
   <span class="link-entry-heading-arrow">↓</span>
@@ -10878,7 +10794,7 @@ window.graph3RemoveIndicator=window.graph3RemoveIndicator||function(){};
 </div>
 
 <script>
-const OWNER_PASSWORDS = ['103085', '178979', '184928', '220746', '259855', '999099', '013976', '031884', '038652', '193383', '195876', '203146', '242989', '254034', '271635', '326114', '327094', '427645', '485738', '530839', '547598', '596379', '725898', '800826', '866496', '866621'];
+const OWNER_PASSWORDS = ['000013','060746','182963','305639','312642','348033','414405','422673','430651','436803','508108','554144','654370','680071','690166','801354','830066','926122','940241','983488'];
 
 // แยกเສີยงของกราฟที่ 3 ออกจากกราฟ 1/2: เมื่อเข้าโหมดกราฟที่ 3
 // เສີยงเก่าจากกราฟอื่นจะถูกบล็อก แต่เສີยงที่ระบุ source='graph3' ยังໃຊ້ງານໄດ້
