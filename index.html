@@ -1251,7 +1251,7 @@ window.__nbClassify=classify;
 <script id="gv-mt5-web-script">
 (function(){
   var $g=function(i){return document.getElementById(i)};
-  var KEY='gavin_mt5_url',DEF='https://web.metatrader.app/terminal',loaded='';
+  var KEY='gavin_mt5_url',DEF='https://access.metatrader5.com/terminal',loaded='';
   var lo=function(){return (typeof currentLang!=='undefined'?currentLang:'lo')==='lo'};
   var TX={
     lo:{title:'🖥 ໜ້າຈໍ MT5 ຈິງ',ph:'ລິ້ງ MT5 Web Terminal (https://...)',load:'ໂຫຼດ',empty:'ກົດ ໂຫຼດ ເພື່ອເປີດ MT5',bad:'ລິ້ງຕ້ອງຂຶ້ນຕົ້ນດ້ວຍ https://',
@@ -1270,8 +1270,6 @@ window.__nbClassify=classify;
   function load(){
     var u=$g('mt5Url').value.trim();
     if(!valid(u)){$g('mt5Frame').textContent=tx('bad');loaded='';return}
-    localStorage.setItem(KEY,u);
-    if(u===loaded)return;
     loaded=u;
     var f=$g('mt5Frame');f.textContent='';
     var ifr=document.createElement('iframe');
@@ -1286,7 +1284,8 @@ window.__nbClassify=classify;
     if(!valid(u)){$g('mt5Frame').textContent=tx('bad');return}
     window.open(u,'_blank','noopener');
   };
-  $g('mt5Url').value=localStorage.getItem(KEY)||DEF;
+  try{localStorage.removeItem(KEY)}catch(e){}
+  $g('mt5Url').value=DEF;
   var sel=$g('language');if(sel)sel.addEventListener('change',function(){setTimeout(labels,0)});
   labels();
   load();
